@@ -17,8 +17,8 @@ export function parseMPT(arrayBuffer: TextData) {
   const data = lines.slice(i);
 
   const meta = parseHeader(header);
-  console.log(meta);
   const variables = parseData(data);
+  return { meta, variables };
 }
 
 function parseHeader(header: string[]) {
@@ -60,9 +60,5 @@ function parseData(data: string[]) {
     };
   }
 
-  return {
-    x: variables['I/mA'],
-    y: variables['Ewe/V'],
-    t: variables['time/s'],
-  };
+  return variables;
 }
