@@ -47,6 +47,8 @@
     "typescript": "^4.5.5"
   },
   "dependencies": {
-    "ensure-string": "^1.1.0"
+    "cheminfo-types": "^1.1.0",
+    "ensure-string": "^1.1.0",
+    "iobuffer": "^5.1.0"
   }
 }

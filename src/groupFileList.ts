@@ -9,9 +9,9 @@ interface GroupedFiles {
   id: string;
   name: string;
   extension: string;
-  mpr: undefined;
-  mps: undefined;
-  mpt: undefined;
+  mpr?: File;
+  mps?: File;
+  mpt?: File;
   [key: string]: any;
 }
 
@@ -26,9 +26,9 @@ export function groupFileList(fileList: File[]): GroupedFiles[] {
         id,
         name,
         extension,
-        mpr: undefined,
-        mps: undefined,
-        mpt: undefined,
+        mpr: File,
+        mps: File,
+        mpt: File,
       };
     }
     results[id][extension] = file;

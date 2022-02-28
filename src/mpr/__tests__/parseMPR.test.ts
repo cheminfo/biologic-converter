@@ -1,0 +1,11 @@
+import { readFileSync } from 'fs';
+import { join } from 'path';
+
+import { parseMPR } from '../parseMPR';
+
+describe('parseMPR', () => {
+  it('test', async () => {
+    const arrayBuffer = readFileSync(join(__dirname, 'data/test/test.mpr'));
+    parseMPR(arrayBuffer);
+  });
+});

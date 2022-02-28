@@ -1,7 +1,7 @@
 import { groupFileList } from './groupFileList';
-import { parseMPR } from './parseMPR';
-import { parseMPS } from './parseMPS';
-import { parseMPT } from './parseMPT';
+import { parseMPR } from './mpr/parseMPR';
+import { parseMPS } from './mps/parseMPS';
+import { parseMPT } from './mpt/parseMPT';
 
 /**
  * Convert an array of files to an array of measurements
@@ -13,13 +13,13 @@ export async function convert(fileList: File[]): Promise<any> {
 
   for (let group of groups) {
     if (group.mpt) {
-      await parseMPT(group.mpt);
+      parseMPT(await group.mpt.arrayBuffer());
     }
     if (group.mps) {
-      await parseMPS(group.mps);
+      parseMPS(await group.mps.arrayBuffer());
     }
     if (group.mpr) {
-      await parseMPR(group.mpr);
+      parseMPR(await group.mpr.arrayBuffer());
     }
   }
 }
