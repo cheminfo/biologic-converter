@@ -5,5 +5,4 @@ export function parseMPS(arrayBuffer: TextData) {
   const lines = ensureString(arrayBuffer, {
     encoding: 'latin1',
   }).split(/\r?\n/);
-  console.log(lines);
 }

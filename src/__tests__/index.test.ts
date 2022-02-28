@@ -8,7 +8,7 @@ describe('convert', () => {
   it('test', async () => {
     const fileList = fileListFromPath(join(__dirname, 'data/test'));
 
-    const result = await convert(fileList);
-    expect(result).toBe(42);
+    const measurements = await convert(fileList);
+    expect(measurements).toHaveLength(1);
   });
 });

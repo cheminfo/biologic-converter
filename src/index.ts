@@ -11,15 +11,16 @@ import { parseMPT } from './mpt/parseMPT';
 export async function convert(fileList: File[]): Promise<any> {
   const groups = groupFileList(fileList);
 
+  const measurements = [];
+
   for (let group of groups) {
-    if (group.mpt) {
-      parseMPT(await group.mpt.arrayBuffer());
-    }
-    if (group.mps) {
-      parseMPS(await group.mps.arrayBuffer());
-    }
-    if (group.mpr) {
-      parseMPR(await group.mpr.arrayBuffer());
-    }
+    let mpt = group.mpt && parseMPT(await group.mpt.arrayBuffer());
+    let mps = group.mps && parseMPS(await group.mps.arrayBuffer());
+    let mpr = group.mpr && parseMPR(await group.mpr.arrayBuffer());
+    // this is just some temporary code
+    // we need to extract correct meta and check how mpt compares with mps
+
+    measurements.push({ mpt, mps, mpr });
   }
+  return measurements;
 }

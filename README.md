@@ -7,6 +7,12 @@
 
 Convert biologic file format.
 
+There are 3 possible extensions:
+
+- .mpr : a binary file containing the data
+- .mps : a text file containing the header
+- .mpt : a text file containing the data
+
 ## Installation
 
 `$ npm i biologic-converter`

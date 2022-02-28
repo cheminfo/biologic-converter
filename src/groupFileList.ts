@@ -26,9 +26,6 @@ export function groupFileList(fileList: File[]): GroupedFiles[] {
         id,
         name,
         extension,
-        mpr: File,
-        mps: File,
-        mpt: File,
       };
     }
     results[id][extension] = file;
