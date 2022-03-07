@@ -1,0 +1,39 @@
+<html>
+  <head> </head>
+  <body>
+    <input
+      type="file"
+      id="filepicker"
+      name="fileList"
+      webkitdirectory
+      multiple
+    />
+    <div id="listing"></div>
+    <script>
+      document.getElementById('filepicker').addEventListener(
+        'change',
+        function (event) {
+          let listing = document.getElementById('listing');
+          let files = event.target.files;
+
+          let html = [];
+          html.push('<table>');
+          html.push('<tr><th>webkitRelativePath</th><th>name</th></tr>');
+          for (let file of files) {
+            html.push(
+              '<tr><td>' +
+                file.webkitRelativePath +
+                '</td><td>' +
+                file.name +
+                '</td></tr>',
+            );
+          }
+          html.push('</table>');
+          listing.innerHTML = html.join('\n');
+        },
+        false,
+      );
+    </script>
+    <ul id="listing"></ul>
+  </body>
+</html>
