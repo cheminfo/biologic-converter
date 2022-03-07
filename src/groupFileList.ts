@@ -18,13 +18,12 @@ interface GroupedFiles {
 export function groupFileList(fileList: File[]): GroupedFiles[] {
   const results: { [key: string]: any } = {};
   for (const file of fileList) {
-    const name = file.name.replace(/^.*\//, '');
     const extension = file.name.replace(/^.*\./, '');
     const id = `${file.webkitRelativePath}/${file.name}`.replace(/\..*?$/, '');
     if (!results[id]) {
       results[id] = {
         id,
-        name,
+        name: file.name,
         extension,
       };
     }
