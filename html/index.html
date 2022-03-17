@@ -10,12 +10,30 @@
     />
     <div id="listing"></div>
     <script>
-      document.getElementById('filepicker').addEventListener(
-        'change',
+
+function groupFileList(fileList) {
+  console.log("executing")
+  const results = {};
+  for (const file of fileList) {
+    const extension = file.name.replace(/.*\./, '');
+    const id = file.webkitRelativePath.replace(/\.[^.]+$/, '');
+    if (!results[id]) {
+      results[id] = {
+        id,
+        name: file.name,
+        extension,
+      };
+    }
+    results[id][extension] = file;
+  }
+  return Object.keys(results).map((key) => results[key]);
+}
+
+      document.getElementById('filepicker').addEventListener('change',
         function (event) {
           let listing = document.getElementById('listing');
           let files = event.target.files;
-
+          console.log(groupFileList(files))
           let html = [];
           html.push('<table>');
           html.push('<tr><th>webkitRelativePath</th><th>name</th></tr>');

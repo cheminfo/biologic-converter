@@ -2,7 +2,7 @@
 import { MeasurementVariable } from 'cheminfo-types';
 import { ensureString } from 'ensure-string';
 
-import { Analysis } from '../..';
+//import { Analysis } from '../..';
 /**
  * @param binary - File to be parsed
  */
@@ -20,25 +20,35 @@ export function fromBiologic(binary: string | ArrayBuffer | Uint8Array) {
 
   const meta = parseHeader(header);
   const variables = parseData(data);
-  let analysis = new Analysis({});
-  analysis.pushMeasurement(variables, { meta, dataType: 'IV analysis' });
+  console.log(meta,variables)
+  // let analysis = new Analysis({});
+  // analysis.pushMeasurement(variables, { meta, dataType: 'IV analysis' });
 
-  return analysis;
+  // return analysis;
 }
 
-function parseHeader(header: string[]) {
-  header = header.filter((line) => line);
+/**
+ * Parses MPS file or MPT file header
+ * @param header - header lines in a string array
+ * @returns object with keys & string values
+ */
+export function parseHeader(header: string[]) : Record<string,string>{
+//  header = header.filter((line) => line);
   const meta: Record<string, string> = {};
   let currentKey = '';
-  for (let line of header) {
-    if (line.match(' : ')) {
-      currentKey = line.replace(/:.*/, '').trim();
-      const value = line.replace(/.*?:/, '').trim();
-      if (value) {
-        meta[currentKey] = value;
-      }
+  for (const line of header) {
+    // key : value
+    if (line.match(':')) {
+      const kV = line.split(':'); 
+      currentKey = kV[0].trim(); 
+      const val = kV[1].trim()
+      //replace value
+      //currentKey = line.replace(/:.*/, '').trim();
+      //after the :
+      //const value = line.replace(/.*:/, '').trim();
+        meta[currentKey] = val;
     } else {
-      if (currentKey) {
+      if (currentKey) {//for multiline 
         meta[currentKey] += `\n${line}`;
       }
     }

@@ -5,13 +5,13 @@
 [![Test coverage][codecov-image]][codecov-url]
 [![npm download][download-image]][download-url]
 
-Convert biologic file format.
+Convert BioLogic file format.
 
 There are 3 possible extensions:
 
-- .mpr : a binary file containing the data
-- .mps : a text file containing the header
-- .mpt : a text file containing the data
+- .mpr : _Raw_ binary file containing the data
+- .mpt : .mpr into _Text_ file
+- .mps : experiment _Settings_ text file.
 
 ## Installation
 
