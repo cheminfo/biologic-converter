@@ -30,11 +30,11 @@ const result = myModule(args);
 
 [MIT](./LICENSE)
 
-[npm-image]: https://img.shields.io/npm/v/biologic-converter.svg
-[npm-url]: https://www.npmjs.com/package/biologic-converter
 [ci-image]: https://github.com/cheminfo/biologic-converter/workflows/Node.js%20CI/badge.svg?branch=main
 [ci-url]: https://github.com/cheminfo/biologic-converter/actions?query=workflow%3A%22Node.js+CI%22
 [codecov-image]: https://img.shields.io/codecov/c/github/cheminfo/biologic-converter.svg
 [codecov-url]: https://codecov.io/gh/cheminfo/biologic-converter
+[npm-image]: https://img.shields.io/npm/v/biologic-converter.svg
+[npm-url]: https://www.npmjs.com/package/biologic-converter
 [download-image]: https://img.shields.io/npm/dm/biologic-converter.svg
 [download-url]: https://www.npmjs.com/package/biologic-converter

@@ -62,6 +62,6 @@ describe('parseMPS', () => {
       'Cycle Definition': 'Charge/Discharge alternance\nTurn to OCV between techniques'
     })
     const resultCopy:any = result
-    console.log(resultCopy["Filename"]);
+    console.log(resultCopy.Filename);
 });
 })
