@@ -1,6 +1,103 @@
 import { TextData } from "cheminfo-types";
 import { ensureString } from "ensure-string";
 
+import { PartialFileList } from "./index";
+
+/** 
+ * Interface for [[`groupFiles`]]
+ * which returns an array of these.
+ */
+export interface GroupedFiles {
+      /** group id used to group the files under same path */
+      gid: string,
+      /** file name as taken from [[`File`]] or compatible class.*/
+      name: string,
+      /** file extension if it has an extension */
+      extension?: string,
+      /** there is no other way atm, this will store the files */
+      [file:string]:any
+}
+
+/**
+ * Options for [[`groupFiles`]]
+ */
+export interface GroupFilesOptions {
+  /** A path like `./dir1/dir2/base.ext` will use `./dir1/dir2/base` as id. 
+   * Sets `useExtension:true`. Can segregate files. */
+  idWithBasename?:boolean,
+  /** The `./dir1/dir2/base.ext` file data be stored under `base.ext` key */
+  useFilename?:boolean,
+  /** The `./dir1/dir2/base.ext` will be stored under `base` key */
+  useBasename?:boolean,
+  /** The `./dir1/dir2/base.ext` will be stored under `ext` key. 
+   * If no extension is found in file, it will use the basename. */
+  useExtension?:boolean,
+  /** both extension and  basename are lowercased, it doesnt touch the `id` field. */
+  lowerCaseFileKey?:boolean,
+}
+
+/**
+ * Group files under same directory path
+ * i.e `[Dir1, Dir2, Dir3...]`  where each Dir object ooks like this
+ * ```
+ * { 
+ *   id,
+ *   extension,
+ *   name,
+ *   fileA,
+ *   fileB,...
+ *  }
+ *  ```
+ * See `[[GroupFilesOptions]]` for all options.
+ * Files _must be_ in the same directory to be grouped. 
+ * @param fileList
+ * @return - array that _may_ contain `{mpr, mps and mpt}` as [[`File`]] Objects.
+ */
+export function groupFiles(fileList: FileList | PartialFileList, options:GroupFilesOptions ={ }): GroupedFiles[] {
+
+  let { 
+      idWithBasename, 
+      useExtension,
+      useFilename,
+      useBasename,
+      lowerCaseFileKey
+  } = options; 
+
+  let results: Record<string, Partial<GroupedFiles>> = { };
+
+  for (const file of fileList) {
+    /* set up some variables */
+    let filename = file.name;
+    if(lowerCaseFileKey) filename=filename.toLowerCase();
+    const basename = filename.replace(/\.[^.]+$/,'');
+    const extension = filename.replace(/.*\./, '');
+    let gid;
+
+    /* set the unique grouping id */
+    if(idWithBasename){
+      gid = file.webkitRelativePath.replace(/\.[^\/]+$/, '');
+    } else {//just dir path
+      gid = file.webkitRelativePath.replace(/\.[^.]+$/, '');
+    }
+
+    /* create the partial group object inside results */
+    if (!results[gid]) {
+      Object.assign(results,{[gid]:{ gid, name: filename }});
+    }
+
+    /* place file under a particular group `results[gid]` */
+    if(useExtension){ //by extension | basename
+      Object.assign(results[gid], { [extension||basename]:file })
+    } else if(useBasename){ //by basename
+      Object.assign(results[gid], { [basename]:file })
+    }
+    else {// by fullname
+      Object.assign(results[gid], { [filename]:file })
+    }
+  }
+  return Object.keys(results).map((gid) => results[gid]) as GroupedFiles[];
+}
+
 /** Options for `[[LineReader]]` */
 export interface LineReaderOpts{
   /** end of line. default `/\r?\n/` */
@@ -11,7 +108,7 @@ export interface LineReaderOpts{
   encoding?:string;
 }
 
-/** Tool for reading lines off a file
+/** Tool for reading lines off a file or string
  * @param data - The file as a string,  ArrayBuffer, etc.
  * @param options - Default `{eol:'\n', index:0 }`
  */
@@ -25,20 +122,22 @@ export class LineReader{
   /** Current index in array. @see [[@link `options.index`]]. */
   public index: number;
   /** end of line as in `options.eol` */
-  public eol: RegExp|string;
+  public eol?: RegExp|string;
 
-  public constructor(data: TextData, options: LineReaderOpts = {}) {
+  public constructor(data: TextData|string[], options: LineReaderOpts = {}) {
     /*defaults in case user doesn't pass any*/
-    const { eol = /\r?\n/, index = 0, encoding } = options;
+    const { eol, index = 0, encoding } = options;
 
-    this.eol = eol;
+    if(!Array.isArray(data)){
+      this.eol = eol || /\r?\n/;
+      if(encoding) {
+        this._lines = ensureString(data, {encoding:encoding}).split(this.eol);
+      } else{
+        this._lines = ensureString(data).split(this.eol);
+      } } else { this._lines=data }
+
     this.index = index;
     this._record = 0; 
-    if(encoding) {
-      this._lines = ensureString(data, {encoding:encoding}).split(this.eol);
-    } else{
-      this._lines = ensureString(data).split(this.eol);
-    }
     this.length = this._lines.length;
   }
 
@@ -136,46 +235,4 @@ export class LineReader{
     this.index = 0;
     return this;
   }
-
 }
-
-/** Useful Interface for [[`groupFileList`]]
- * which returns an array of these.
- */
-export interface GroupedFiles {
-id: string;
-name: string;
-extension: FiletypesOfInterest;
-           mpr?: File;
-           mps?: File;
-           mpt?: File;
-}
-
-export type FiletypesOfInterest = "mpr"|"mps"|"mpt";
-/**
- * Group files under same directory path
- * The files _must be_ in the same directory to be grouped.
- * @param fileList
- * @return - array that _may_ contain `{mpr, mps and mpt}` as [[`File`]] Objects.
- */
-export function groupFileList(fileList: File[]): GroupedFiles[] {
-
-  let results: {[id:string]: Partial<GroupedFiles>} = {};
-
-  for (const file of fileList) {
-    const extension = file.name.replace(/.*\./, '');
-    const id = file.webkitRelativePath.replace(/\.[^.]+$/, '');
-
-    if (!results[id]) {
-      Object.assign(results,{[id]:{ id, name: file.name }});
-    }
-    switch(extension){/*only analyze those extensions*/
-      case "mpr":
-      case "mps":
-      case "mpt":
-        Object.assign(results[id], {[extension]:file})
-    }
-  }
-  return Object.keys(results).map((id) => results[id]) as GroupedFiles[];
-}
-

@@ -8,6 +8,6 @@ describe('parseMPT', () => {
     const arrayBuffer = readFileSync(
       join(__dirname, '../../__tests__/data/test/test.mpt'),
     );
-    parseMPT(arrayBuffer);
+    console.log(parseMPT(arrayBuffer));
   });
 });

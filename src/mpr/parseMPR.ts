@@ -1,7 +1,8 @@
 import { BinaryData } from 'cheminfo-types';
 import { IOBuffer } from 'iobuffer';
 
-export function parseMPR(arrayBuffer: BinaryData) {
-  const buffer = new IOBuffer(arrayBuffer);
-  // todo
+export type MPR = IOBuffer;
+
+export function parseMPR(arrayBuffer: BinaryData):MPR {
+  return (new IOBuffer(arrayBuffer));
 }

@@ -2,10 +2,9 @@ import { TextData } from 'cheminfo-types';
 import { ensureString } from 'ensure-string';
 
 import { LineReader } from '../utils';
+import { StringObject, DNested } from '../index';
 
-export type StringObject = Record<string,string>;
-export type Nested = Record<string,string|StringObject>;
-export type ParseMPS = Record<string,string|Nested>;
+export type MPS = DNested;
 /** For example, an object like:
  * ```
  * {
@@ -29,24 +28,24 @@ export type ParseMPS = Record<string,string|Nested>;
 
 /**
  * Parses technique from the _.mps_ file
- * @param mpsRaw - LineReader (see [[`LineReader`]]) object so we can use readLine()
- * @return object with all the properties
+ * @param i - index to start reading
+ * @param lines - lines to read
+ * @return [new technique, new index] tuple
  */
-export function addTechnique(mpsRaw:LineReader): StringObject{
-  const name = mpsRaw.readLine().trim();
-  let temp:StringObject = {name:name};
-  let it = true;
-  while(it){ //2. we read the k-v pairs for this technique
-    const kV = mpsRaw.readLine().split(/\s{2,}/);
+export function parseTechnique(lines:string[], i:number): [StringObject, number]{
+  const name = lines[i++].trim();//1. technique name
+  let temp:StringObject = { name };
+
+  while(i<lines.length){ //2. k-v pairs for this technique
+    const kV = lines[i++].split(/\s{2,}/);
     if(kV.length===1 && kV[0]==="") {
-      it = false;
       break
     }
     const k = kV[0].trim();
     const v = kV[1].trim();
     temp[k]=v
   }
-  return temp;
+  return [temp,i];
 }
 
 /**
@@ -54,32 +53,34 @@ export function addTechnique(mpsRaw:LineReader): StringObject{
  * @param arrayBuffer - pass the file as string,buffer,arraybuffer..
  * @returns object representing the parsed data
  */
-export function parseMPS(arrayBuffer: TextData):ParseMPS {
+export function parseMPS(data: TextData|string[]):MPS {
 
-    const makeString = ensureString(arrayBuffer, { encoding: 'latin1' })
-    let mpsRaw:LineReader = new LineReader(makeString);
-    let result:ParseMPS = { };
+    const lines: string[] = Array.isArray(data) ?  data : ensureString(data, { encoding: 'latin1' }).split(/\r?\n/);
+
+    let result:MPS = { "Technique": { } };
 
     let currentKey = '';
-    while(mpsRaw.index < mpsRaw.length){
+    let i = 0;
+    while(i < lines.length){
 
-      const currentLine = mpsRaw.readLine().trim();/* increases index by 1 */
+      const currentLine = lines[i++].trim();
+      const kV = currentLine.split(/ : | :$/)
 
-      const findKV = / : | :$/
-      if (findKV.exec(currentLine)) { /* key : value */
-        const kV = currentLine.split(findKV);
+      if (kV.length===2) { /* key : value */
         currentKey = kV[0].trim();
         const val = kV[1].trim();
 
         /* if key is Technique add it */
         if(currentKey==="Technique"){
-          Object.assign(result,{[val]:addTechnique(mpsRaw)})
+          const [newTechnique,newIndex]: [StringObject,number] = parseTechnique(lines,i)
+          Object.assign(result[currentKey],{[val]:newTechnique})
+          i = newIndex;
+      } else {/* for keys other than technique*/
+        result[currentKey] = val; 
         }
-        /* for keys other than technique*/
-        else { result[currentKey] = val; }
 
       } else {/* no ':' in line, extends previous line */
-        if (currentKey!=="" && currentLine!=='') {/* if empty we skip it */
+        if (currentKey!=="" && currentLine!=="") {/* if empty we skip it */
           result[currentKey] += `\n${currentLine}`;
         }
       }

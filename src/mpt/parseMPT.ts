@@ -1,7 +1,16 @@
 // This file is the header
 import { MeasurementVariable, TextData } from 'cheminfo-types';
 import { ensureString } from 'ensure-string';
+import { IOBuffer } from 'iobuffer';
 
+import { DNested , MPS, parseMPS } from "../index";
+
+export type MPTBody = Record<string, MeasurementVariable>
+
+export interface MPT { 
+  meta: MPS | { },
+  variables: MPTBody | { }
+}
 export function parseMPT(arrayBuffer: TextData) {
   const lines = ensureString(arrayBuffer, {
     encoding: 'latin1',
@@ -13,38 +22,17 @@ export function parseMPT(arrayBuffer: TextData) {
       break;
     }
   }
-  const header = lines.slice(0, i);
-  const data = lines.slice(i);
 
-  const meta = parseHeader(header);
-  const variables = parseData(data);
+  const meta = i === 0 ? { } : parseMPS(lines.slice(0, i));
+  const variables = i <= lines.length-1 ? parseData(lines.slice(i)): { };
+
   return { meta, variables };
 }
 
-function parseHeader(header: string[]) {
-  header = header.filter((line) => line);
-  const meta: Record<string, string> = {};
-  let currentKey = '';
-  for (let line of header) {
-    if (/ : /.exec(line)) {
-      currentKey = line.replace(/:.*/, '').trim();
-      const value = line.replace(/.*?:/, '').trim();
-      if (value) {
-        meta[currentKey] = value;
-      }
-    } else {
-      if (currentKey) {
-        meta[currentKey] += `\n${line}`;
-      }
-    }
-  }
-  return meta;
-}
-
-function parseData(data: string[]) {
+export function parseData(data: string[]):MPTBody {
   let matrix = data.map((line) => line.split('\t'));
 
-  const variables: Record<string, MeasurementVariable> = {};
+  const variables: MPTBody = { };
 
   const fields = matrix[0];
 
@@ -59,6 +47,5 @@ function parseData(data: string[]) {
       data: matrix.map((row) => Number(row[i])),
     };
   }
-
   return variables;
 }
