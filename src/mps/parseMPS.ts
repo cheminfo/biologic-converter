@@ -1,7 +1,6 @@
 import { TextData } from 'cheminfo-types';
 import { ensureString } from 'ensure-string';
 
-import { LineReader } from '../utils';
 import { StringObject, DNested } from '../index';
 
 export type MPS = DNested;
