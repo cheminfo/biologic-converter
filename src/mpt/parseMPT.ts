@@ -2,14 +2,17 @@ import { MeasurementVariable, TextData } from 'cheminfo-types';
 import { ensureString } from 'ensure-string';
 import { IOBuffer } from 'iobuffer';
 
-import { DNested , MPS, parseMPS } from "../index";
+import { ComplexObject } from "../Types";
+import { parseText } from "../parseText";
 
 export type MPTBody = Record<string, MeasurementVariable>
 
 export interface MPT { 
-  meta: MPS | { },
+  meta: ComplexObject | { },
   variables: MPTBody | { }
 }
+
+export function parseMeta(data:string[]){ return parseText(data, /* */) }
 
 /** 
  * Parses bioLogic MPT files 
@@ -28,14 +31,15 @@ export function parseMPT(arrayBuffer: TextData) {
     }
   }
   const [noHeader, noBody] = [0, lines.length-1]
-  const meta = i === noHeader ? { } : parseMPS(lines.slice(0, i));
+  const meta = i === noHeader ? { } : parseMeta(lines.slice(0, i));
   //const variables = i === noBody ? parseData(lines.slice(i)): noBody;
 
   return { meta, /*variables*/ };
 }
 
 /**
- * Parsee the values */
+ * Parse the values 
+ */
 export function parseData(data: string[]):MPTBody {
   let matrix = data.map((line) => line.split('\t'));
 
