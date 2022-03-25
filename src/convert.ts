@@ -1,24 +1,25 @@
-import { TextData, MeasurementVariable } from 'cheminfo-types';
-import { ensureString } from 'ensure-string';
+//import { TextData, MeasurementVariable } from 'cheminfo-types';
+//import { ensureString } from 'ensure-string';
 
-import { PartialFileList } from "./index";
-import { groupFiles } from "./utils";
+import { MPR, parseMPR } from "./mpr/parseMPR";
 import { MPS, parseMPS } from "./mps/parseMPS";
 import { MPT, parseMPT } from "./mpt/parseMPT";
-import { MPR, parseMPR } from "./mpr/parseMPR"; 
+import { groupFiles } from "./utils";
+
+import { PartialFileList } from "./index";
 
 /** Results of an experiment carried out by BioLogic */
-export interface BioLogic { 
+export interface BioLogic {
   /** parsed settings file */
-  mps: MPS | { }, 
+  mps?: MPS,
   /** parsed whole file */
-  mpt: MPT | { },  
+  mpt?: MPT,
   /** parsed binary file */
-  mpr: MPR | { }
+  mpr?: MPR
   }
 
 /**
- *  Receives an array of File, organizes by dir, and by extension, 
+ *  Receives an array of File, organizes by dir, and by extension,
  *  and gets the properties from each file
  * @param fileList - array of files
  * We will take care of grouping the measurements so we may process an unlimited number of them
@@ -31,12 +32,21 @@ export async function convertBioLogic(fileList: PartialFileList|FileList): Promi
 
   let measurements: BioLogic[ ] = [ ];
 
-  for (const exp of groups) {
-    const mps = exp.mps && parseMPS(await exp.mps.arrayBuffer()) || { }
-    const mpt = exp.mpt && parseMPT(await exp.mpt.arrayBuffer()) || { }
-    const mpr = exp.mpr && parseMPR(await exp.mpr.arrayBuffer()) || { }
+  for ( const exp of groups) {
 
-    measurements.push({ mps, mpt, mpr });
+    let result: BioLogic = { }
+
+    if(exp.mps) {
+      result['mps'] = parseMPS(await exp.mps.arrayBuffer())
+    }
+    if(exp.mpt){
+    result['mpt'] = parseMPT(await exp.mpt.arrayBuffer())
+    }
+    if(exp.mpr){
+    result['mpr'] = parseMPR(await exp.mpr.arrayBuffer())
+    }
+    measurements.push(exp);
+
   }
   return measurements;
 }

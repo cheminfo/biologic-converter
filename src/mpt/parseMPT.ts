@@ -3,42 +3,48 @@ import { ensureString } from 'ensure-string';
 import { IOBuffer } from 'iobuffer';
 
 import { ComplexObject } from "../Types";
-import { parseText } from "../parseText";
+import { parseText, ParseText } from "../parseText";
 
 export type MPTBody = Record<string, MeasurementVariable>
 
-export interface MPT { 
-  meta: ComplexObject | { },
-  variables: MPTBody | { }
+export interface MPT {
+  meta?: ComplexObject,
+  variables?: MPTBody
 }
 
-export function parseMeta(data:string[]){ return parseText(data, /* */) }
+export type ParseMeta = (data:string[ ]) => ReturnType<ParseText>
+export const parseMeta:ParseMeta = (data:string[ ]) =>  parseText(data)
 
-/** 
- * Parses bioLogic MPT files 
+/**
+ * Parses bioLogic MPT files
  * @param arrayBuffer
  * @returns JSON Object with parsed data
  */
-export function parseMPT(arrayBuffer: TextData) {
+export function parseMPT(arrayBuffer: TextData):MPT {
   const lines = ensureString(arrayBuffer, {
     encoding: 'latin1',
   }).split(/\r?\n/);
 
-  let i = 0;//to use it elsewhere
+  let result:MPT = { };
+
+  let i = 0;//to use in variables
   for (; i < lines.length; i++) {
     if (lines[i].startsWith('mode')) {
       break;
     }
   }
-  const [noHeader, noBody] = [0, lines.length-1]
-  const meta = i === noHeader ? { } : parseMeta(lines.slice(0, i));
-  //const variables = i === noBody ? parseData(lines.slice(i)): noBody;
 
-  return { meta, /*variables*/ };
+  const meta =  parseMeta(lines.slice(0, i));
+  const variables = parseData(lines.slice(i));
+
+  if(meta) result.meta = meta
+  if(variables) result.variables = variables
+  
+  return result;
 }
 
 /**
- * Parse the values 
+ * Parse the values
  */
 export function parseData(data: string[]):MPTBody {
   let matrix = data.map((line) => line.split('\t'));
