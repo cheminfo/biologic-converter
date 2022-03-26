@@ -1,7 +1,8 @@
-
 /** string object `{a:'string..',..}` */
-export type StringObject = Record<string,string|boolean>;
-export interface ComplexObject { [key:string]:any }
+export type StringObject = Record<string, string | boolean>;
+export interface ComplexObject {
+  [key: string]: any;
+}
 
 /**
  * temporary type untill filelist-from is more stable

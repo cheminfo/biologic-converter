@@ -8,6 +8,6 @@ describe('parseMPR', () => {
     const arrayBuffer = readFileSync(
       join(__dirname, '../../__tests__/data/test/test.mpr'),
     );
-    console.log(parseMPR(arrayBuffer))
+    console.log(parseMPR(arrayBuffer));
   });
 });
