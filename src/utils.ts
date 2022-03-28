@@ -1,11 +1,7 @@
-//import { TextData } from "cheminfo-types";
-//import { ensureString } from "ensure-string";
-
 import { PartialFileList } from './Types';
 
 /**
  * Interface for [[`groupFiles`]]
- * which returns an array of these.
  */
 export interface GroupedFiles {
   /** group id used to group the files under same path */
@@ -21,19 +17,19 @@ export interface GroupedFiles {
 
 /**
  * Options for [[`groupFiles`]]
- * If none useBasename & useExtension are specified it uses the Filename.
- * example `base.ext`
+ * If neither `useBasename` nor `useExtension` are set it uses the Filename.
  */
 export interface GroupFilesOptions {
   /** A path like `./dir1/dir2/base.ext` will use `./dir1/dir2/base` as id.
-   * Sets `useExtension:true`. Can segregate files. */
+   */
   idWithBasename?: boolean;
-  useFilename?: boolean;
   /** The `./dir1/dir2/base.ext` will be stored under `base` key */
   useBasename?: boolean;
   /** The `./dir1/dir2/base.ext` will be stored under `ext` key.
    * If no extension is found in file, it will use the basename. */
   useExtension?: boolean;
+  /**use basename and extension for the name.*/
+  useFilename?: boolean;
   /** both extension and  basename are lowercased, it doesnt touch the `id` field. */
   lowerCaseFileKey?: boolean;
 }

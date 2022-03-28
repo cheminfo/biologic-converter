@@ -4,17 +4,15 @@ import { ensureString } from 'ensure-string';
 import { StringObject, ComplexObject } from './Types';
 
 /**
- * This interface is a special key name as a string,
- * and the value of the key is the function used to parse
- * that key. So for example the `{"technique":myFn}`
- * But the function needs a special syntax, see [[`SpecialKeyFn`]].
+ * For example the `{"technique":myFn}`.
+ * The function needs a special syntax, see [[`SpecialKeyFn`]].
  */
 export interface ParseSpecialKey {
-  [specialKeyName: string]: SpecialKeyFn;
+  [name: string]: SpecialKeyFn;
 }
 
 /**
- * Syntax for the special key
+ * Special-key parsing-function signature.
  */
 export type SpecialKeyFn = (
   lines: string[],
@@ -28,6 +26,7 @@ export type ParseText = (
   data: TextData | string[],
   specialKey?: ParseSpecialKey,
 ) => ComplexObject;
+
 /**
  * Used in MPS or MPT Header (only) parser,
  * @param data - File or string or string array to be parsed,

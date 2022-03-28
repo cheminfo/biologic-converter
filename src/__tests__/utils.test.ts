@@ -13,7 +13,7 @@ describe('file grouping at a complex directory', () => {
       useExtension: true,
     });
     expect(result).toHaveLength(3);
-    //expect(result).toMatchSnapshot();
+    expect(result).toMatchSnapshot();
   });
 
   it('jdb11-4', () => {
@@ -31,11 +31,8 @@ describe('file grouping at a complex directory', () => {
     const files = fileListFromPath(join(__dirname, 'data/test'));
     const result = groupFiles(files, {
       idWithBasename: false,
-      useExtension: false,
-      useBasename: false,
       useFilename: true,
     });
-    console.log(result);
     expect(Object.keys(result[0])).toHaveLength(4);
   });
 });
