@@ -1,8 +1,8 @@
+import { PartialFileList } from './Types';
 import { MPR, parseMPR } from './mpr/parseMPR';
 import { MPS, parseMPS } from './mps/parseMPS';
 import { MPT, parseMPT } from './mpt/parseMPT';
 import { GroupFilesOptions, groupFiles } from './utils';
-import { PartialFileList } from './Types';
 
 /**
  * Results of an experiment carried up by BioLogic
@@ -20,7 +20,10 @@ export interface BioLogic {
  * convertBiologic function signature
  * takes filelist and options, returns a promise
  */
-export type ConvertBiologic = (fl: PartialFileList | FileList, groupOpts?:GroupFilesOptions) => Promise<BioLogic[]> 
+export type ConvertBioLogic = (
+  fl: PartialFileList | FileList,
+  groupOpts?: GroupFilesOptions,
+) => Promise<BioLogic[]>;
 
 /**
  *  Parses BioLogic mpt, mps formats.
@@ -40,20 +43,22 @@ export type ConvertBiologic = (fl: PartialFileList | FileList, groupOpts?:GroupF
  *│      ├── test.mps
  *│      └── test.mpt
  *  ```
- * 
+ *
  * @param fileList - `path/to/parent` or `path/to/any/child`. (See tree above.)
  * @param groupingOptions - How to group the files on each directory. Optional parameter.
  * Default: `{ idWithBasename: true, useExtension: true };`. See [[`GroupFilesOptions`]].
  * @returns  JSON object passing **child** directory; array of children if you pass a **parent**.
  */
-export const convertBiologic: ConvertBiologic = async ( fileList, groupingOptions ) => {
+export const convertBioLogic: ConvertBioLogic = async (
+  fileList,
+  groupingOptions,
+) => {
+  groupingOptions = groupingOptions || {
+    idWithBasename: true,
+    useExtension: true,
+  };
 
-  groupingOptions = groupingOptions || { idWithBasename: true, useExtension: true };
-
-  const groups = groupFiles(
-    fileList,
-    groupingOptions,
-  );
+  const groups = groupFiles(fileList, groupingOptions);
 
   let measurements: BioLogic[] = [];
 
@@ -73,4 +78,4 @@ export const convertBiologic: ConvertBiologic = async ( fileList, groupingOption
   }
 
   return measurements;
-}
+};

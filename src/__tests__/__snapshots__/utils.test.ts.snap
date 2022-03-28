@@ -1,0 +1,71 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`file grouping at a complex directory all data 1`] = `
+Array [
+  Object {
+    "gid": "/home/sm/clones/biologic-converter/src/__tests__/data/jdb11-1/jdb11-1",
+    "mpr": Object {
+      "arrayBuffer": [Function],
+      "lastModified": 1647170961688,
+      "name": "jdb11-1.mpr",
+      "size": 2465718,
+      "text": [Function],
+      "webkitRelativePath": "/home/sm/clones/biologic-converter/src/__tests__/data/jdb11-1/jdb11-1.mpr",
+    },
+    "mps": Object {
+      "arrayBuffer": [Function],
+      "lastModified": 1647170961688,
+      "name": "jdb11-1.mps",
+      "size": 4330,
+      "text": [Function],
+      "webkitRelativePath": "/home/sm/clones/biologic-converter/src/__tests__/data/jdb11-1/jdb11-1.mps",
+    },
+  },
+  Object {
+    "gid": "/home/sm/clones/biologic-converter/src/__tests__/data/jdb11-4/jdb11-4",
+    "mpr": Object {
+      "arrayBuffer": [Function],
+      "lastModified": 1647170961704,
+      "name": "jdb11-4.mpr",
+      "size": 2041303,
+      "text": [Function],
+      "webkitRelativePath": "/home/sm/clones/biologic-converter/src/__tests__/data/jdb11-4/jdb11-4.mpr",
+    },
+    "mps": Object {
+      "arrayBuffer": [Function],
+      "lastModified": 1647170961704,
+      "name": "jdb11-4.mps",
+      "size": 9648,
+      "text": [Function],
+      "webkitRelativePath": "/home/sm/clones/biologic-converter/src/__tests__/data/jdb11-4/jdb11-4.mps",
+    },
+  },
+  Object {
+    "gid": "/home/sm/clones/biologic-converter/src/__tests__/data/test/test",
+    "mpr": Object {
+      "arrayBuffer": [Function],
+      "lastModified": 1647170961704,
+      "name": "test.mpr",
+      "size": 379643,
+      "text": [Function],
+      "webkitRelativePath": "/home/sm/clones/biologic-converter/src/__tests__/data/test/test.mpr",
+    },
+    "mps": Object {
+      "arrayBuffer": [Function],
+      "lastModified": 1647515352914,
+      "name": "test.mps",
+      "size": 1911,
+      "text": [Function],
+      "webkitRelativePath": "/home/sm/clones/biologic-converter/src/__tests__/data/test/test.mps",
+    },
+    "mpt": Object {
+      "arrayBuffer": [Function],
+      "lastModified": 1647170961712,
+      "name": "test.mpt",
+      "size": 1695957,
+      "text": [Function],
+      "webkitRelativePath": "/home/sm/clones/biologic-converter/src/__tests__/data/test/test.mpt",
+    },
+  },
+]
+`;

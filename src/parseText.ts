@@ -57,10 +57,9 @@ export const parseText: ParseText = (data, specialKey) => {
 
     /* empty line, continue */
     if (nothing.test(lines[i])) {
-      continue
+      continue;
     } else if (keyValue.test(lines[i])) {
-
-    /* key val pairs. Value is single or multiline */
+      /* key val pairs. Value is single or multiline */
       /* variables */
       let kV: string[] = lines[i].split(keyValue);
       let key: string = kV[0].trim();
@@ -80,9 +79,12 @@ export const parseText: ParseText = (data, specialKey) => {
           StringObject,
           number,
         ];
-        key in result
-          ? Object.assign(result[key], { [val]: newObject })
-          : Object.assign(result, { [key]: { [val]: newObject } });
+
+        if (key in result) {
+          result[key][val] = newObject;
+        } else {
+          result[key] = { [val]: newObject };
+        }
         i = newIndex;
         continue; //next line
       }
@@ -95,8 +97,7 @@ export const parseText: ParseText = (data, specialKey) => {
       //either multiline or not, assign now
       result[key] = val;
     } else if (table.test(currentLine)) {
-
-    /* for not k : v */
+      /* for not k : v */
       //table
       const kV: string[] = currentLine.split(/\s{2,}/);
       const key: string = kV[0].trim();
@@ -104,11 +105,12 @@ export const parseText: ParseText = (data, specialKey) => {
       result[key] = val;
     } else {
       //boolean
-      'flags' in result && Array.isArray(result.flags)
-        ? result.flags.push(currentLine)
-        : (result.flags = [currentLine]);
+      if ('flags' in result && Array.isArray(result.flags)) {
+        result.flags.push(currentLine);
+      } else {
+        result.flags = [currentLine];
+      }
     }
   }
-
   return result;
 };
