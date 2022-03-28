@@ -20,13 +20,23 @@ There are 3 possible extensions:
 ## Usage
 
 ```js
-import { myModule } from 'biologic-converter';
+import { join } from 'path';
+import { fileListFromPath } from 'filelist-from';
+import { convertBioLogic as cv } from 'biologic-converter';
 
-const result = myModule(args);
-// result is ...
+const fl = fileListFromPath(join(__dirname, 'data'));
+
+const groups = await cv(fl, {
+  idWithBasename: true,
+  useExtension: true,
+});
+
 ```
 
 ## License
+
+## ToDos
+At the moment the code parses text files. We are developing the binary parser.
 
 [MIT](./LICENSE)
 
