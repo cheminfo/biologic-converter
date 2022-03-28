@@ -26,11 +26,7 @@ import { convertBioLogic as cv } from 'biologic-converter';
 
 const fl = fileListFromPath(join(__dirname, 'data'));
 
-const groups = await cv(fl, {
-  idWithBasename: true,
-  useExtension: true,
-});
-
+const groups = await cv(fl);
 ```
 
 ## License
