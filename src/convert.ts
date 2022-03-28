@@ -1,12 +1,8 @@
-//import { TextData, MeasurementVariable } from 'cheminfo-types';
-//import { ensureString } from 'ensure-string';
-
 import { MPR, parseMPR } from './mpr/parseMPR';
 import { MPS, parseMPS } from './mps/parseMPS';
 import { MPT, parseMPT } from './mpt/parseMPT';
-import { groupFiles } from './utils';
-
-import { PartialFileList } from './index';
+import { GroupFilesOptions, groupFiles } from './utils';
+import { PartialFileList } from './Types';
 
 /**
  * Results of an experiment carried up by BioLogic
@@ -21,7 +17,14 @@ export interface BioLogic {
 }
 
 /**
- *  Parses BioLogic mpt, mps formats. Outputs result as a friendly JSON object.
+ * convertBiologic function signature
+ * takes filelist and options, returns a promise
+ */
+export type ConvertBiologic = (fl: PartialFileList | FileList, groupOpts?:GroupFilesOptions) => Promise<BioLogic[]> 
+
+/**
+ *  Parses BioLogic mpt, mps formats.
+ *
  *  Imagine the following project structure:
  *
  *  ```text
@@ -37,18 +40,20 @@ export interface BioLogic {
  *│      ├── test.mps
  *│      └── test.mpt
  *  ```
- *
- * @param fileList - `path/to/parent` or `path/to/any/child`.
- * @returns  a JSON object if you pass child directory; array of children if you pass a **parent**.
+ * 
+ * @param fileList - `path/to/parent` or `path/to/any/child`. (See tree above.)
+ * @param groupingOptions - How to group the files on each directory. Optional parameter.
+ * Default: `{ idWithBasename: true, useExtension: true };`. See [[`GroupFilesOptions`]].
+ * @returns  JSON object passing **child** directory; array of children if you pass a **parent**.
  */
-export async function convertBioLogic(
-  fileList: PartialFileList | FileList,
-): Promise<BioLogic[]> {
-  const gFLOptions = { idWithBasename: true, useExtension: true };
+export const convertBiologic: ConvertBiologic = async ( fileList, groupingOptions ) => {
+
+  groupingOptions = groupingOptions || { idWithBasename: true, useExtension: true };
+
   const groups = groupFiles(
     fileList,
-    gFLOptions,
-  ); /* items in the same directory in an object */
+    groupingOptions,
+  );
 
   let measurements: BioLogic[] = [];
 
