@@ -8,7 +8,7 @@ export interface BioLogic {
   dir?: string;
   mps?: MPS;
   mpt?: MPT;
-  mpr?: MPR;
+  /*mpr?: MPR;*/
 }
 
 /**

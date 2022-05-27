@@ -21,7 +21,7 @@ There are 3 possible extensions:
 
 ```js
 import { join } from 'path';
-import { fileListFromPath } from 'filelist-from';
+import { fileListFromPath } from 'filelist-utils';
 import { convertBioLogic as cv } from 'biologic-converter';
 
 async function run(){
