@@ -24,15 +24,28 @@ import { join } from 'path';
 import { fileListFromPath } from 'filelist-from';
 import { convertBioLogic as cv } from 'biologic-converter';
 
+async function run(){
+
+/* path to the root dir of experiments or any child */
 const fl = fileListFromPath(join(__dirname, 'data'));
 
-const groups = await cv(fl);
+const experiments = await cv(fl);
+
+/*
+ retrieves them as an array, each item is an object 
+ representing the directory (stores `mps` and `mpt`)
+*/
+return experiments
+
+}
+
+run().then(r=>console.log(r)).catch(e=>console.error(e))
 ```
 
 ## License
 
 ## ToDos
-At the moment the code parses text files. We are developing the binary parser.
+The code parses text files (mps, mpt). Now writing the binary parser.
 
 [MIT](./LICENSE)
 
