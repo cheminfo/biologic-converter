@@ -11,7 +11,6 @@ describe('parseMPT', () => {
     const result = parseMPT(arrayBuffer);
 
     const meta = result.meta;
-    console.log(meta)
     expect(Object.keys(meta)).toHaveLength(50);
 
     const vars = result.variables;

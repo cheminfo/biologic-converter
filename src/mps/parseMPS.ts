@@ -50,7 +50,7 @@ export function parseTechnique(
  */
 export function parseMPS(data: TextData) {
   const lines = ensureString(data, { encoding: 'latin1' }).split(/\r?\n/);
-  const result = parseMeta(lines.slice(1,), { Technique: parseTechnique })
-  result.fileType = lines[0]
-  return result
+  const result = parseMeta(lines.slice(1), { Technique: parseTechnique });
+  result.fileType = lines[0];
+  return result;
 }

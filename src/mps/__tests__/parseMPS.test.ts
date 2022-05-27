@@ -11,7 +11,8 @@ describe('parseMPS', () => {
 
     const result = parseMPS(arrayBuffer);
     expect(Object.keys(result)).toHaveLength(20);
-    expect(result).toMatchObject({'Electrode material': '',
+    expect(result).toMatchObject({
+      'Electrode material': '',
       'Initial state': '',
       Electrolyte: '',
       Comments: '',
@@ -21,16 +22,17 @@ describe('parseMPS', () => {
       'Equivalent Weight': '0.000 g/eq.',
       Density: '0.000 g/cm3',
       'Cycle Definition': 'Charge/Discharge alternance',
-})
+    });
     // needs more tests here
-})
+  });
 
-it('parse a complex string', ()=> {
+  it('parse a complex string', () => {
     //test a simple string
-    const textData = 'THISFILEYAY\n\nkey : val\nw space : val\nmultiline :\n  this.';
+    const textData =
+      'THISFILEYAY\n\nkey : val\nw space : val\nmultiline :\n  this.';
     const result2 = parseMPS(textData);
     expect(result2).toMatchObject({
-      fileType:"THISFILEYAY",
+      fileType: 'THISFILEYAY',
       key: 'val',
       'w space': 'val',
       multiline: `\nthis.`,

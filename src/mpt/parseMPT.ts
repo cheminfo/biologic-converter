@@ -21,8 +21,7 @@ export function parseMPT(arrayBuffer: TextData): MPT {
     encoding: 'latin1',
   }).split(/\r?\n/);
 
-
-  const header = headerMPT(lines.slice(0,4));
+  const header = headerMPT(lines.slice(0, 4));
 
   let i = 4;
   for (; i < lines.length; i++) {
@@ -62,14 +61,14 @@ export function parseData(data: string[]): MPT['variables'] {
 }
 
 export interface HeaderMPT {
-fileType:string,
-Technique:string
-[other:string]:string,
-}                    
+  fileType: string;
+  Technique: string;
+  [other: string]: string;
+}
 
-export function headerMPT(lines:string[]):HeaderMPT{
-const kV = lines[1].split(" : ")
-const k=kV[0] 
-const v = kV[1] || ""
-return { fileType: lines[0], [k]:v, "Technique": lines[3] }
+export function headerMPT(lines: string[]): HeaderMPT {
+  const kV = lines[1].split(' : ');
+  const k = kV[0];
+  const v = kV[1] || '';
+  return { fileType: lines[0], [k]: v, Technique: lines[3] };
 }
