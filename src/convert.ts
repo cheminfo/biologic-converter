@@ -1,81 +1,58 @@
-import { PartialFileList } from './Types';
+import { PartialFileList, groupFiles } from 'filelist-utils';
+
 import { MPR, parseMPR } from './mpr/parseMPR';
 import { MPS, parseMPS } from './mps/parseMPS';
 import { MPT, parseMPT } from './mpt/parseMPT';
-import { GroupFilesOptions, groupFiles } from './utils';
 
-/**
- * Results of an experiment carried up by BioLogic
- */
 export interface BioLogic {
-  /** parsed settings file */
+  dir?: string;
   mps?: MPS;
-  /** parsed whole file */
   mpt?: MPT;
-  /** parsed binary file */
   mpr?: MPR;
 }
 
 /**
- * convertBiologic function signature
- * takes filelist and options, returns a promise
- */
-export type ConvertBioLogic = (
-  fl: PartialFileList | FileList,
-  groupOpts?: GroupFilesOptions,
-) => Promise<BioLogic[]>;
-
-/**
  *  Parses BioLogic mpt, mps formats.
  *
- *  Imagine the following project structure:
+ *  Project structure example:
  *
  *  ```text
  *├── parent
  *│  ├── child1
  *│  │  ├── jdb11-1.mpr
  *│  │  └── jdb11-1.mps
- *│  ├── child2
- *│  │  ├── jdb11-4.mpr
- *│  │  └── jdb11-4.mps
- *│  └── child3
+ *   ...
+ *│  └── childN
  *│      ├── test.mpr
  *│      ├── test.mps
  *│      └── test.mpt
  *  ```
  *
  * @param fileList - `path/to/parent` or `path/to/any/child`. (See tree above.)
- * @param groupingOptions - How to group the files on each directory. Optional parameter.
- * Default: `{ idWithBasename: true, useExtension: true };`. See [[`GroupFilesOptions`]].
  * @returns  JSON object passing **child** directory; array of children if you pass a **parent**.
  */
-export const convertBioLogic: ConvertBioLogic = async (
-  fileList,
-  groupingOptions,
-) => {
-  groupingOptions = groupingOptions || {
-    idWithBasename: true,
-    useExtension: true,
-  };
 
-  const groups = groupFiles(fileList, groupingOptions);
+export async function convertBioLogic(
+  fileList: PartialFileList,
+): Promise<BioLogic[]> {
+  const dirs = groupFiles(fileList);
+  let results: BioLogic[] = [];
 
-  let measurements: BioLogic[] = [];
-
-  for (const exp of groups) {
+  /* can not use `forEach` and pass `async` functions */
+  for (const dir of dirs) {
     let result: BioLogic = {};
-
-    if (exp.mps) {
-      result.mps = parseMPS(await exp.mps.arrayBuffer());
+    result.dir = dir.key;
+    for (const dataFile of dir.fileList) {
+      const fName = dataFile.name;
+      if (fName.endsWith('.mps')) {
+        result.mps = parseMPS(await dataFile.arrayBuffer());
+      } else if (fName.endsWith('.mpt')) {
+        result.mpt = parseMPT(await dataFile.arrayBuffer());
+      } else if (fName.endsWith('.mpr')) {
+        result.mpr = parseMPR(await dataFile.arrayBuffer());
+      }
     }
-    if (exp.mpt) {
-      result.mpt = parseMPT(await exp.mpt.arrayBuffer());
-    }
-    if (exp.mpr) {
-      result.mpr = parseMPR(await exp.mpr.arrayBuffer());
-    }
-    measurements.push(result);
+    results.push(result);
   }
-
-  return measurements;
-};
+  return results;
+}

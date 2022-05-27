@@ -2,20 +2,17 @@ import { MeasurementVariable, TextData } from 'cheminfo-types';
 import { ensureString } from 'ensure-string';
 
 import { ComplexObject } from '../Types';
-import { parseText, ParseText } from '../parseText';
-
-export type MPTBody = Record<string, MeasurementVariable>;
+import { parseMeta } from '../parseMeta';
 
 export interface MPT {
-  meta?: ComplexObject;
-  variables?: MPTBody;
+  /* settings */
+  meta: ComplexObject;
+  /* body, i.e results */
+  variables: Record<string, MeasurementVariable>;
 }
 
-export type ParseMeta = (data: string[]) => ReturnType<ParseText>;
-export const parseMeta: ParseMeta = (data: string[]) => parseText(data);
-
 /**
- * Parses bioLogic MPT files
+ * Parses BioLogic MPT files
  * @param arrayBuffer
  * @returns JSON Object with parsed data
  */
@@ -24,31 +21,29 @@ export function parseMPT(arrayBuffer: TextData): MPT {
     encoding: 'latin1',
   }).split(/\r?\n/);
 
-  let result: MPT = {};
 
-  let i = 0; //to use in variables
+  const header = headerMPT(lines.slice(0,4));
+
+  let i = 4;
   for (; i < lines.length; i++) {
     if (lines[i].startsWith('mode')) {
       break;
     }
   }
 
-  const meta = parseMeta(lines.slice(0, i));
-  const variables = parseData(lines.slice(i));
-
-  if (meta) result.meta = meta;
-  if (variables) result.variables = variables;
-
-  return result;
+  return {
+    meta: Object.assign(header, parseMeta(lines.slice(4, i))),
+    variables: parseData(lines.slice(i)),
+  };
 }
 
 /**
  * Parse the values
  */
-export function parseData(data: string[]): MPTBody {
-  let matrix = data.map((line) => line.split('\t'));
+export function parseData(data: string[]): MPT['variables'] {
+  const variables: Record<string, MeasurementVariable> = {};
 
-  const variables: MPTBody = {};
+  let matrix = data.map((line) => line.split('\t'));
 
   const fields = matrix[0];
 
@@ -64,4 +59,17 @@ export function parseData(data: string[]): MPTBody {
     };
   }
   return variables;
+}
+
+export interface HeaderMPT {
+fileType:string,
+Technique:string
+[other:string]:string,
+}                    
+
+export function headerMPT(lines:string[]):HeaderMPT{
+const kV = lines[1].split(" : ")
+const k=kV[0] 
+const v = kV[1] || ""
+return { fileType: lines[0], [k]:v, "Technique": lines[3] }
 }

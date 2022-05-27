@@ -1,8 +1,7 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
-import { ComplexObject } from '../../Types';
-import { parseMPT, MPTBody } from '../parseMPT';
+import { parseMPT } from '../parseMPT';
 
 describe('parseMPT', () => {
   it('test', () => {
@@ -11,16 +10,17 @@ describe('parseMPT', () => {
     );
     const result = parseMPT(arrayBuffer);
 
-    const meta = result.meta as ComplexObject;
-    expect(Object.keys(meta)).toHaveLength(48);
+    const meta = result.meta;
+    console.log(meta)
+    expect(Object.keys(meta)).toHaveLength(50);
 
-    const vars = result.variables as MPTBody;
+    const vars = result.variables;
     expect(Object.keys(vars)).toHaveLength(18);
 
     //some props in meta
     expect(meta.Comments).toBe('');
     expect(meta.User).toBe('');
-    expect(meta.flags).toHaveLength(5);
+    expect(meta.flags).toHaveLength(3);
 
     //some props in vars
     expect(vars['Efficiency/%']).toMatchObject({

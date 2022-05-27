@@ -3,6 +3,7 @@
 exports[`convert test 1`] = `
 Array [
   Object {
+    "dir": "/home/sm/clones/biologic-converter/src/__tests__/data/jdb11-1",
     "mpr": IOBuffer {
       "_data": DataView [],
       "_mark": 0,
@@ -31,11 +32,13 @@ Array [
       "Ewe ctrl range": "min = 0.00 V, max = 5.00 V",
       "Filename": "C:\\\\EC-Lab\\\\Data\\\\Josh_Bocarsly\\\\jdb11-1_c3_NaCoO2\\\\jdb11-1_c3_gcpl_5cycles_2V-3p8V_C-24_data.mps",
       "Initial state": "",
-      "Mass of active material": " at x = 1.000",
+      "Mass of active material": "
+at x = 1.000",
       "Molecular weight of active material (at x = 0)": "90.930 g/mol",
       "Number of e- transfered per intercalated ion": "1",
       "Number of linked techniques": "1",
-      "Safety Limits": " Do not start on E overload",
+      "Safety Limits": "
+Do not start on E overload",
       "Technique": Object {
         "1": Object {
           "Bandwidth": "5",
@@ -84,6 +87,7 @@ Array [
     },
   },
   Object {
+    "dir": "/home/sm/clones/biologic-converter/src/__tests__/data/jdb11-4",
     "mpr": IOBuffer {
       "_data": DataView [],
       "_mark": 0,
@@ -112,11 +116,13 @@ Array [
       "Ewe ctrl range": "min = 0.00 V, max = 5.00 V",
       "Filename": "C:\\\\EC-Lab\\\\Data\\\\Josh_B\\\\jdb11-4_e1_c4_NaCoO2_GCPL_rateTest_2V-3p8V_retry\\\\jdb11-4_e1_c4_rateTest_GCPL_2V-3p8V_Con24_Con18_Con12_Con6_data.mps",
       "Initial state": "",
-      "Mass of active material": " at x = 0.000",
+      "Mass of active material": "
+at x = 0.000",
       "Molecular weight of active material (at x = 0)": "",
       "Number of e- transfered per intercalated ion": "1",
       "Number of linked techniques": "1",
-      "Safety Limits": " Do not start on E overload",
+      "Safety Limits": "
+Do not start on E overload",
       "Technique": Object {
         "1": Object {
           "Bandwidth": "5",
@@ -165,6 +171,7 @@ Array [
     },
   },
   Object {
+    "dir": "/home/sm/clones/biologic-converter/src/__tests__/data/test",
     "mpr": IOBuffer {
       "_data": DataView [],
       "_mark": 0,
@@ -268,7 +275,10 @@ Array [
         "Initial state": "",
         "Nb header lines": "59",
         "Run on channel": "1 (SN 3441)",
-        "Saved on": " File : CA_AL0006__02_CA_C01.mpr Directory : Z:\\\\Data group member\\\\Anna\\\\EC\\\\2021-10-20_AL0006_SolGel4_EC1_-0.5V_ref1021_1\\\\ Host : 10.46.1.19",
+        "Saved on": "
+File : CA_AL0006__02_CA_C01.mpr
+Directory : Z:\\\\Data group member\\\\Anna\\\\EC\\\\2021-10-20_AL0006_SolGel4_EC1_-0.5V_ref1021_1\\\\
+Host : 10.46.1.19",
         "Technique started on": "10/20/2021 14:01:10",
         "User": "",
         "dI": "5.000",
