@@ -22,10 +22,10 @@ export function parseMPT(data: TextData): MPT {
   }).split(/\r?\n/);
 
   const header = headerMPT(lines.slice(0, 4));
-  const i = parseInt(header["Nb header lines"]) - 2;
+  const i = parseInt(header['Nb header lines'], 10) - 2;
   return {
     meta: Object.assign(header, parseMeta(lines.slice(4, i))),
-    variables: parseData(lines.slice(i+1)),
+    variables: parseData(lines.slice(i + 1)),
   };
 }
 
@@ -61,5 +61,9 @@ export interface HeaderMPT {
 
 export function headerMPT(lines: string[]): HeaderMPT {
   const nOfLinesHeader = lines[1].split(' : ');
-  return { fileType: lines[0], "Nb header lines": nOfLinesHeader[1].trim() || '', Technique: lines[3] };
+  return {
+    fileType: lines[0],
+    'Nb header lines': nOfLinesHeader[1].trim() || '',
+    Technique: lines[3],
+  };
 }

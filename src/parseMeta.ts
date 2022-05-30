@@ -39,7 +39,7 @@ export function parseMeta(
   /* regex for each case */
   const regex = {
     nothing: /^\s*$/,
-    keyValue: /(?: : | :$)/,
+    keyValue: / : | :$/,
     table: /^\w.*\s{2,}-*\w+.*\s{4,}$/,
     multiline: /^[ \t]/,
   };

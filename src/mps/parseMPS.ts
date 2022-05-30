@@ -30,8 +30,8 @@ export function parseTechnique(
 
     // k-v pairs for this technique
     let kV = thisLine.split(/\s{2,}/);
-    const k = kV.shift().trim()
-    const v = kV.join("  ").trim()
+    const k = kV[0].trim();
+    const v = kV.slice(1).join('  ').trim();
     technique[k] = v || '';
   }
   return [technique, i - 1]; // i - 1 is the index of the last line read
