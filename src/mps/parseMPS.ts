@@ -12,8 +12,8 @@ export type MPS = ComplexObject;
 
 /**
  * Parses technique from the _.mps_ file
- * @param i - index to start reading
  * @param lines - lines to read
+ * @param i - index to start reading
  * @return `[Technique, new index]` tuple
  */
 export function parseTechnique(
@@ -23,24 +23,18 @@ export function parseTechnique(
   // get technique name
   let technique: StringObject = { name: lines[i++].trim() };
 
-  while (i < lines.length) {
-    const thisLine = lines[i++].trim();
+  for (i; i < lines.length; i++) {
+    const thisLine = lines[i].trim();
 
-    if (thisLine === '') {
-      break;
-    }
+    if (thisLine === '') break;
 
     // k-v pairs for this technique
-    let [k, v] = thisLine.split(/\s{2,}/);
-
-    if (k && typeof k === 'string') {
-      technique[k] = v || '';
-    } else {
-      throw new Error('Missing key in Technique. File corrupted?');
-    }
+    let kV = thisLine.split(/\s{2,}/);
+    const k = kV.shift().trim()
+    const v = kV.join("  ").trim()
+    technique[k] = v || '';
   }
-  const lastLineReadIndex = i - 1;
-  return [technique, lastLineReadIndex];
+  return [technique, i - 1]; // i - 1 is the index of the last line read
 }
 
 /**
@@ -50,7 +44,6 @@ export function parseTechnique(
  */
 export function parseMPS(data: TextData) {
   const lines = ensureString(data, { encoding: 'latin1' }).split(/\r?\n/);
-  const result = parseMeta(lines.slice(1), { Technique: parseTechnique });
-  result.fileType = lines[0];
-  return result;
+  const fileType = lines.shift(); //remove first element and assign
+  return { fileType, ...parseMeta(lines, { Technique: parseTechnique }) };
 }

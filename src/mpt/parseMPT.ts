@@ -13,26 +13,19 @@ export interface MPT {
 
 /**
  * Parses BioLogic MPT files
- * @param arrayBuffer
+ * @param data - as a string, Buffer, ArrayBuffer.
  * @returns JSON Object with parsed data
  */
-export function parseMPT(arrayBuffer: TextData): MPT {
-  const lines = ensureString(arrayBuffer, {
+export function parseMPT(data: TextData): MPT {
+  const lines = ensureString(data, {
     encoding: 'latin1',
   }).split(/\r?\n/);
 
   const header = headerMPT(lines.slice(0, 4));
-
-  let i = 4;
-  for (; i < lines.length; i++) {
-    if (lines[i].startsWith('mode')) {
-      break;
-    }
-  }
-
+  const i = parseInt(header["Nb header lines"]) - 2;
   return {
     meta: Object.assign(header, parseMeta(lines.slice(4, i))),
-    variables: parseData(lines.slice(i)),
+    variables: parseData(lines.slice(i+1)),
   };
 }
 
@@ -67,8 +60,6 @@ export interface HeaderMPT {
 }
 
 export function headerMPT(lines: string[]): HeaderMPT {
-  const kV = lines[1].split(' : ');
-  const k = kV[0];
-  const v = kV[1] || '';
-  return { fileType: lines[0], [k]: v, Technique: lines[3] };
+  const nOfLinesHeader = lines[1].split(' : ');
+  return { fileType: lines[0], "Nb header lines": nOfLinesHeader[1].trim() || '', Technique: lines[3] };
 }

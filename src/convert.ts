@@ -12,7 +12,8 @@ export interface BioLogic {
 }
 
 /**
- *  Parses BioLogic mpt, mps formats.
+ *  Parses BioLogic mpt, mps formats from multiple or single directories.
+ *  The result contains an array of [[`BioLogic`]] `[{dir:'1', mps, mpt}, {dir:'2', mps, mpt},..]`
  *
  *  Project structure example:
  *

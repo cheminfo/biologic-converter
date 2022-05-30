@@ -6,11 +6,11 @@ import { StringObject, ComplexObject } from './Types';
  */
 
 /**
- * Files have an easy part and exceptions during the parsing.
- * Exceptions are treated with functions passed in an object.
- * For example the `{ "Technique": myFn }`.
+ * Some keys' value are actually an object.
+ * These are parsed with a separate function.
+ * For example the `{ "Technique": parseTechnique }`.
  */
-export interface ParseSpecialKey {
+export interface SpecialKeys {
   [name: string]: SpecialKeyFn;
 }
 
@@ -25,13 +25,13 @@ export type SpecialKeyFn = (
 /**
  * Parses MPS or MPT's header,
  * @param lines - string array to be parsed,
- * @param specialKey - Optional for parsing a specific key differently
- * see [[`ParseSpecialKey`]]
+ * @param specialKeys - Optional object for parsing specific key(s) with a function.
+ * see [[`SpecialKeys`]]
  * @returns parsed data as a JSON Object.
  */
 export function parseMeta(
   lines: string[],
-  specialKey?: ParseSpecialKey,
+  specialKeys?: SpecialKeys,
 ): ComplexObject {
   /* main object */
   let result: ComplexObject = {};
@@ -64,13 +64,9 @@ export function parseMeta(
       /* length is normally 2, it may be larger */
       val = kV.length > 2 ? kV.slice(1).join(' : ').trim() : kV[1].trim();
 
-      /* when it does split it may be regex.multiline */
       /* Special key parsing */
-      if (specialKey && key in specialKey && val) {
-        const [newObject, lastLineRead] = specialKey[key](lines, ++i) as [
-          StringObject,
-          number,
-        ];
+      if (specialKeys && key in specialKeys && val) {
+        const [newObject, lastLineRead] = specialKeys[key](lines, i + 1);
 
         if (key in result) {
           // example `result["Technique"]["2"]`
@@ -92,8 +88,7 @@ export function parseMeta(
       /* for not k : v */
       //regex.table
       const kV: string[] = currentLine.split(/\s{2,}/);
-      const key: string = kV[0].trim();
-      const val: string | boolean = kV[1].trim();
+      const [key, val] = [kV[0].trim(), kV.slice(1).join('  ').trim()];
       result[key] = val;
     } else {
       //boolean
