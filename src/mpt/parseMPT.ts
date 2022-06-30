@@ -1,50 +1,41 @@
-// This file is the header
 import { MeasurementVariable, TextData } from 'cheminfo-types';
 import { ensureString } from 'ensure-string';
 
-export function parseMPT(arrayBuffer: TextData) {
-  const lines = ensureString(arrayBuffer, {
+import { ComplexObject } from '../Types';
+import { parseMeta } from '../parseMeta';
+
+export interface MPT {
+  /* settings */
+  meta: ComplexObject;
+  /* body, i.e results */
+  variables: Record<string, MeasurementVariable>;
+}
+
+/**
+ * Parses BioLogic MPT files
+ * @param data - as a string, Buffer, ArrayBuffer.
+ * @returns JSON Object with parsed data
+ */
+export function parseMPT(data: TextData): MPT {
+  const lines = ensureString(data, {
     encoding: 'latin1',
   }).split(/\r?\n/);
 
-  let i = 0;
-  for (; i < lines.length; i++) {
-    if (lines[i].startsWith('mode')) {
-      break;
-    }
-  }
-  const header = lines.slice(0, i);
-  const data = lines.slice(i);
-
-  const meta = parseHeader(header);
-  const variables = parseData(data);
-  return { meta, variables };
+  const header = headerMPT(lines.slice(0, 4));
+  const i = parseInt(header['Nb header lines'], 10) - 2;
+  return {
+    meta: Object.assign(header, parseMeta(lines.slice(4, i))),
+    variables: parseData(lines.slice(i + 1)),
+  };
 }
 
-function parseHeader(header: string[]) {
-  header = header.filter((line) => line);
-  const meta: Record<string, string> = {};
-  let currentKey = '';
-  for (let line of header) {
-    if (/ : /.exec(line)) {
-      currentKey = line.replace(/:.*/, '').trim();
-      const value = line.replace(/.*?:/, '').trim();
-      if (value) {
-        meta[currentKey] = value;
-      }
-    } else {
-      if (currentKey) {
-        meta[currentKey] += `\n${line}`;
-      }
-    }
-  }
-  return meta;
-}
-
-function parseData(data: string[]) {
-  let matrix = data.map((line) => line.split('\t'));
-
+/**
+ * Parse the values
+ */
+export function parseData(data: string[]): MPT['variables'] {
   const variables: Record<string, MeasurementVariable> = {};
+
+  let matrix = data.map((line) => line.split('\t'));
 
   const fields = matrix[0];
 
@@ -59,6 +50,20 @@ function parseData(data: string[]) {
       data: matrix.map((row) => Number(row[i])),
     };
   }
-
   return variables;
+}
+
+export interface HeaderMPT {
+  fileType: string;
+  Technique: string;
+  [other: string]: string;
+}
+
+export function headerMPT(lines: string[]): HeaderMPT {
+  const nOfLinesHeader = lines[1].split(' : ');
+  return {
+    fileType: lines[0],
+    'Nb header lines': nOfLinesHeader[1].trim() || '',
+    Technique: lines[3],
+  };
 }
