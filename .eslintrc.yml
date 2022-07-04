@@ -1,1 +1,3 @@
 extends: cheminfo-typescript
+rules: 
+  no-control-regex: 0
