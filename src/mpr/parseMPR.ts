@@ -1,9 +1,6 @@
 import { BinaryData } from 'cheminfo-types';
 import { IOBuffer } from 'iobuffer';
 
-<<<<<<< Updated upstream
-export type MPR = IOBuffer;
-=======
 import { ComplexObject } from '../Types';
 
 /**
@@ -31,7 +28,6 @@ export function isModule(buffer: IOBuffer):boolean {
 }
   return false
 }
->>>>>>> Stashed changes
 
 /**
  * Main function parsing the binary data from BioLogic tests
@@ -39,9 +35,6 @@ export function isModule(buffer: IOBuffer):boolean {
  * @returns the data as a JSON-like object.
  */
 export function parseMPR(arrayBuffer: BinaryData): MPR {
-<<<<<<< Updated upstream
-  return new IOBuffer(arrayBuffer);
-=======
   const buffer = new IOBuffer(arrayBuffer);
   let mpr: Partial<MPR> = {};
 
@@ -98,5 +91,4 @@ export class ParseHeader {
     this.version = buffer.readUint32();
     this.date = buffer.readChars(8); //ascii
   }
->>>>>>> Stashed changes
 }
