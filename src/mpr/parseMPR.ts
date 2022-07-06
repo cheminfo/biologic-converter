@@ -165,16 +165,18 @@ export function parseData(
   // Columns data gathering
   for (let i = 0; i < dataPoints; i++) {
     const obj: { [key: string]: number } = {};
+    let flagByte = 256;
     for (const id of colIds) {
       if (id in flagColumns) {
+        if (flagByte === 256) flagByte = buffer.readByte();
         const flag = flagColumns[id];
-        obj[flag[1]] = flag[0] & buffer.readByte(); // mask
+        obj[flag[1]] = flag[0] & flagByte; // mask
       } else if (id in dataColumns) {
         const dat = dataColumns[id];
         obj[dat[1]] = readDtype(buffer, dat[0]);
       }
     }
-    data.push(obj);
+    data[i] = obj;
   }
   return data;
 }
