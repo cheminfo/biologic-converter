@@ -3,7 +3,7 @@ import { IOBuffer } from 'iobuffer';
 
 import { ComplexObject } from '../Types';
 
-import { flagColumns, dataColumns } from './ids';
+import { flagColumns, dataColumns, getParams } from './ids';
 /**
  * imagine the MPR file as a set of blocks or modules,
  * each with a header, and then the data.
@@ -14,8 +14,11 @@ export interface Module {
 }
 
 export interface MPR {
-  name: string;
-  /** a string in the first line */ modules?: Module[];
+  name: string /** a string in the first line */;
+  modules?: Module[];
+  settings?: Module;
+  log?: Module;
+  loop?: Module;
 }
 
 /**
@@ -48,24 +51,17 @@ export function parseMPR(arrayBuffer: BinaryData): MPR {
 
   while (isModule(buffer)) {
     const header = new ParseHeader(buffer);
-    mpr.modules.push({ header });
-    /*
-    switch(blockN){
-    case 1://settings;
-      const settings = ParseSettings(buffer);
-      mpr.modules.push({header,data:settings})
-      break;
-    case 2://data
-      const data = ParseData(buffer, header);
-      mpr.modules.push({header,data})
-      return mpr as MPR
-    default:
-      return mpr as MPR
-
-}
-*/
-    //skip data segment as we didn't yet write the parser
-    buffer.offset = buffer.offset + header.length;
+    const zero = buffer.offset;
+    if (/settings/i.exec(header.shortName)) {
+      mpr.settings = { header: header, data: new ParseSettings(buffer) };
+    } else if (/data/i.exec(header.shortName)) {
+      mpr.modules.push({ header, data: parseData(buffer, header) });
+    } /* else if (/log/i.exec(header.shortName)) {
+      mpr.log = { header: header, data: new ParseLogs(buffer) };
+    } else if (/loop/i.exec(header.shortName)) {
+      mpr.loop = { header: header, data: new ParseLoop(buffer) };
+    }*/
+    buffer.offset = zero + header.length;
   }
   return mpr as MPR;
 }
@@ -113,9 +109,8 @@ export class ParseSettings {
   public characteristicMass: number; /* Characteristic Mass */
   public batteryCapacity: number; /* Battery capacity C = */
   public batteryCapacityUnit: number; /* Unit of the battery capacity */
-  public ns?: number; /* Number of sequences */
-  public nParams?: number; /* Number of technique parameters */
-  //public params?:;
+  public params: object;
+  public header?: object;
 
   public constructor(buffer: IOBuffer) {
     const zero = buffer.offset;
@@ -139,6 +134,7 @@ export class ParseSettings {
     this.characteristicMass = buffer.readFloat32();
     this.batteryCapacity = buffer.readFloat32();
     this.batteryCapacityUnit = buffer.readByte();
+    this.params = readParams(buffer, getParams(this.techniqueId), zero);
   }
 }
 
@@ -173,28 +169,95 @@ export function parseData(
         obj[flag[1]] = flag[0] & flagByte; // mask
       } else if (id in dataColumns) {
         const dat = dataColumns[id];
-        obj[dat[1]] = readDtype(buffer, dat[0]);
+        obj[dat[1]] = readType(buffer, dat[0]);
       }
     }
     data[i] = obj;
   }
   return data;
 }
+/*
+ * Each file has modules with head and body, this parses the header
+ * buffer - IOBuffer
+ * @returns the header as a JSON-like object
+ */
+/*
+export class ParseLogs {
+  public channelNumber: number; /*Zero-based channel number*\/
+  public channeSerial: string; /*Channel serial number*\/
+  public EweControlMin: number; /*Ewe control range min*\/
+  public EweControlMax: number; /*Ewe control range max*\/
+  public oleTimestamp: string; /*Timestamp in OLE format *\/
+  public filename: string; /* Filename string *\/
+  public host: string; /* Host ip address *\/
+  public ecLabVersion: string; /* EC-Lab software version * /
+  public serverVersion: string; /* Web server firmware version * /
+  public interpreterVersion: string; /* Command interpreter firmware version * /
+  public deviceSerial: string; /* Device serial number * /
+  public averagingPoints: string; /* Smooth data on these points * /
 
+  public constructor(buffer: IOBuffer) {
+    // TODO
+  
+  }
+}
+*/
+/*
+ * Each file has modules with head and body, this parses the header
+ * buffer - IOBuffer
+ * @returns the header as a JSON-like object
+ */
+/*
+export class ParseLoop {
+  public numIndexes: string;// shortName:Short name, e.g. VMP Set.
+  public indexes: string; // longName:Longer name, e.g. VMP settings.
+  // TODO
+  public constructor(buffer: IOBuffer) {
+    this.shortName = buffer.readUtf8(10).trim();
+    this.longName = buffer.readUtf8(25).trim();
+    this.length = buffer.readUint32();
+    this.version = buffer.readUint32();
+    this.date = buffer.readChars(8); //ascii
+  }
+}
+*/
+
+export function readParams(
+  buffer: IOBuffer,
+  params: (string | string[][])[],
+  zero: number,
+) {
+  let read = 0;
+  // Parameters can start at either 0x572, 0x1845 or 0x1846
+  for (const off of [0x572, 0x1845, 0x1846]) {
+    buffer.offset = zero + off;
+    read = buffer.readUint16();
+    if (read !== 0) break;
+  }
+  const nParams = buffer.readUint16();
+  const paramOut: { [key: string]: number | string } = {};
+  paramOut['technique'] = String(params[0]);
+  for (let i = 0; i < Math.min(nParams, params[1].length); i++) {
+    const param = params[1][i];
+    if (param[1] === 'Pascal') paramOut[param[0]] = pascalString(buffer);
+    else paramOut[param[0]] = readType(buffer, param[1]);
+  }
+  return paramOut;
+}
 /**
- * Read a certain number of bytes in a buffer using a numpy dtype string
+ * Read a certain number of bytes in a buffer using a type string
  * */
-function readDtype(buffer: IOBuffer, dtype: string): number {
-  switch (dtype) {
-    case 'u1':
+function readType(buffer: IOBuffer, type: string): number {
+  switch (type) {
+    case 'Uint8':
       return buffer.readByte();
-    case 'u2':
+    case 'Uint16':
       return buffer.readUint16();
-    case 'u4':
+    case 'Uint32':
       return buffer.readUint32();
-    case 'f4':
+    case 'Float32':
       return buffer.readFloat32();
-    case 'f8':
+    case 'Float64':
       return buffer.readFloat64();
     default:
       return 0;
