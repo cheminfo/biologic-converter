@@ -10,12 +10,12 @@ import { flagColumns, dataColumns, getParams } from './ids';
  */
 export interface Module {
   header?: ParseHeader;
-  data?: ComplexObject;
+  values?: ComplexObject;
 }
 
 export interface MPR {
   name: string /** a string in the first line */;
-  modules?: Module[];
+  data?: Module;
   settings?: Module;
   log?: Module;
   loop?: Module;
@@ -47,20 +47,19 @@ export function parseMPR(arrayBuffer: BinaryData): MPR {
     .readUtf8(0x34)
     .replace(/\x1A|\x00/g, '')
     .trim();
-  mpr.modules = [];
 
   while (isModule(buffer)) {
     const header = new ParseHeader(buffer);
     const zero = buffer.offset;
-    if (/settings/i.exec(header.shortName)) {
-      mpr.settings = { header: header, data: new ParseSettings(buffer) };
-    } else if (/data/i.exec(header.shortName)) {
-      mpr.modules.push({ header, data: parseData(buffer, header) });
-    } /* else if (/log/i.exec(header.shortName)) {
-      mpr.log = { header: header, data: new ParseLogs(buffer) };
-    } else if (/loop/i.exec(header.shortName)) {
-      mpr.loop = { header: header, data: new ParseLoop(buffer) };
-    }*/
+    if (/settings/i.exec(header.longName)) {
+      mpr.settings = { header: header, values: new ParseSettings(buffer) };
+    } else if (/data/i.exec(header.longName)) {
+      mpr.data = { header, values: parseData(buffer, header) };
+    } else if (/log/i.exec(header.longName)) {
+      mpr.log = { header: header, values: new ParseLogs(buffer) };
+    } else if (/loop/i.exec(header.longName)) {
+      mpr.loop = { header: header, values: new ParseLoop(buffer) };
+    }
     buffer.offset = zero + header.length;
   }
   return mpr as MPR;
@@ -181,46 +180,66 @@ export function parseData(
  * buffer - IOBuffer
  * @returns the header as a JSON-like object
  */
-/*
+
 export class ParseLogs {
-  public channelNumber: number; /*Zero-based channel number*\/
-  public channeSerial: string; /*Channel serial number*\/
-  public EweControlMin: number; /*Ewe control range min*\/
-  public EweControlMax: number; /*Ewe control range max*\/
-  public oleTimestamp: string; /*Timestamp in OLE format *\/
-  public filename: string; /* Filename string *\/
-  public host: string; /* Host ip address *\/
-  public ecLabVersion: string; /* EC-Lab software version * /
-  public serverVersion: string; /* Web server firmware version * /
-  public interpreterVersion: string; /* Command interpreter firmware version * /
-  public deviceSerial: string; /* Device serial number * /
-  public averagingPoints: string; /* Smooth data on these points * /
+  public channelNumber: number; /*Zero-based channel number*/
+  public channeSerial: number; /*Channel serial number*/
+  public eweControlMin: number; /*Ewe control range min*/
+  public eweControlMax: number; /*Ewe control range max*/
+  public oleTimestamp: number; /*Timestamp in OLE format */
+  public filename: string; /* Filename string */
+  public host: string; /* Host ip address */
+  public address: string; /* IP address / COM port of potentiostat */
+  public ecLabVersion: string; /* EC-Lab software version */
+  public serverVersion: string; /* Web server firmware version */
+  public interpreterVersion: string; /* Command interpreter firmware version */
+  public deviceSerial: string; /* Device serial number */
+  public averagingPoints: number; /* Smooth data on these points */
 
   public constructor(buffer: IOBuffer) {
-    // TODO
-  
+    const zero = buffer.offset;
+    buffer.offset = zero + 0x9;
+    this.channelNumber = buffer.readUint8();
+    buffer.offset = zero + 0xab;
+    this.channeSerial = buffer.readUint16();
+    buffer.offset = zero + 0x1f8;
+    this.eweControlMin = buffer.readFloat32();
+    this.eweControlMax = buffer.readFloat32();
+    buffer.offset = zero + 0x249;
+    this.oleTimestamp = buffer.readFloat64();
+    this.filename = pascalString(buffer);
+    buffer.offset = zero + 0x351;
+    this.host = pascalString(buffer);
+    buffer.offset = zero + 0x384;
+    this.address = pascalString(buffer);
+    buffer.offset = zero + 0x3b7;
+    this.ecLabVersion = pascalString(buffer);
+    buffer.offset = zero + 0x3be;
+    this.serverVersion = pascalString(buffer);
+    buffer.offset = zero + 0x3c5;
+    this.interpreterVersion = pascalString(buffer);
+    buffer.offset = zero + 0x3cf;
+    this.deviceSerial = pascalString(buffer);
+    buffer.offset = zero + 0x922;
+    this.averagingPoints = buffer.readUint8();
   }
 }
-*/
+
 /*
  * Each file has modules with head and body, this parses the header
  * buffer - IOBuffer
  * @returns the header as a JSON-like object
  */
-/*
+
 export class ParseLoop {
-  public numIndexes: string;// shortName:Short name, e.g. VMP Set.
-  public indexes: string; // longName:Longer name, e.g. VMP settings.
-  // TODO
+  public numIndexes: number; // Number of loop indexes
+  public indexes: number; // Indexes at which loops start in data
+
   public constructor(buffer: IOBuffer) {
-    this.shortName = buffer.readUtf8(10).trim();
-    this.longName = buffer.readUtf8(25).trim();
-    this.length = buffer.readUint32();
-    this.version = buffer.readUint32();
-    this.date = buffer.readChars(8); //ascii
+    this.numIndexes = buffer.readUint32();
+    this.indexes = buffer.readUint32();
   }
 }
-*/
 
 export function readParams(
   buffer: IOBuffer,
@@ -236,7 +255,7 @@ export function readParams(
   }
   const nParams = buffer.readUint16();
   const paramOut: { [key: string]: number | string } = {};
-  paramOut['technique'] = String(params[0]);
+  paramOut.technique = String(params[0]);
   for (let i = 0; i < Math.min(nParams, params[1].length); i++) {
     const param = params[1][i];
     if (param[1] === 'Pascal') paramOut[param[0]] = pascalString(buffer);

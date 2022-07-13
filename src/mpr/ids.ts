@@ -134,9 +134,10 @@ export function getParams(id: number) {
     case 0x7f:
       throw new Error(`Not implemented technique: MB`);
     default:
-      throw new Error(`Not implemented technique: unknown`);
+      throw new Error(
+        `Not implemented technique: unknown (0x${id.toString(16)})`,
+      );
   }
-  return ['', []];
 }
 
 export const caParams = [

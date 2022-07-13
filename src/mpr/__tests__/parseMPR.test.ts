@@ -1,11 +1,11 @@
 /* eslint-disable no-console */
-import { readFileSync } from 'fs';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { readFileSync, writeFileSync } from 'fs';
+import { join } from 'path';
 
 import { IOBuffer } from 'iobuffer';
 
-import { join } from 'path';
-
-import { parseData, ParseHeader, parseMPR } from '../parseMPR';
+import { parseData, ParseHeader, parseMPR, ParseSettings } from '../parseMPR';
 
 describe('parseMPR', () => {
   const arrayBuffer = readFileSync(
@@ -22,5 +22,22 @@ describe('parseMPR', () => {
     const header = new ParseHeader(buffer);
     const data = parseData(buffer, header);
     console.log(data);
+  });
+  it('settings', () => {
+    buffer.offset = 0x6d;
+    const settings = new ParseSettings(buffer);
+    console.log(settings);
+  });
+
+  // THIS TEST OUTPUTS A FILE
+  // eslint-disable-next-line jest/no-commented-out-tests
+
+  it('wholeJson', () => {
+    buffer.offset = 0x0;
+    /*const parsed =*/ parseMPR(arrayBuffer);
+    /*writeFileSync('whole.json', JSON.stringify(Object(parsed)), {
+      encoding: 'utf8',
+      flag: 'w',
+    });*/
   });
 });

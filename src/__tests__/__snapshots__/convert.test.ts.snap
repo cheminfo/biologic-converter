@@ -3,7 +3,7 @@
 exports[`convert test 1`] = `
 Array [
   Object {
-    "dir": "/home/sm/clones/biologic-converter/src/__tests__/data/jdb11-1",
+    "dir": "/mnt/c/Users/Ben/git/cheminfo/biologic-converter/src/__tests__/data/jdb11-1",
     "mps": Object {
       "Acquisition started at": "xo = 0.900",
       "Atomic weight of intercalated ion": "0",
@@ -75,7 +75,7 @@ Do not start on E overload",
     },
   },
   Object {
-    "dir": "/home/sm/clones/biologic-converter/src/__tests__/data/jdb11-4",
+    "dir": "/mnt/c/Users/Ben/git/cheminfo/biologic-converter/src/__tests__/data/jdb11-4",
     "mps": Object {
       "Acquisition started at": "xo = 0.000",
       "Atomic weight of intercalated ion": "",
@@ -147,7 +147,7 @@ Do not start on E overload",
     },
   },
   Object {
-    "dir": "/home/sm/clones/biologic-converter/src/__tests__/data/test",
+    "dir": "/mnt/c/Users/Ben/git/cheminfo/biologic-converter/src/__tests__/data/test",
     "mps": Object {
       "Cable": "standard",
       "Channel": "Floating",
