@@ -9,14 +9,14 @@ import { flagColumns, dataColumns, getParams } from './ids';
  * each with a header, and then the data.
  */
 export interface Module {
-  header?: ParseHeader;
-  values?: ComplexObject;
+  header: ParseHeader;
+  values: ComplexObject;
 }
 
 export interface MPR {
   name: string /** a string in the first line */;
-  data?: Module;
-  settings?: Module;
+  data: Module;
+  settings: Module;
   log?: Module;
   loop?: Module;
 }
@@ -137,18 +137,41 @@ export class ParseSettings {
   }
 }
 
+export function addData(
+  data: Record<string, Array<number | string>>,
+  key: string,
+  value: string | number,
+) {
+  if (Object.prototype.hasOwnProperty.call(data, key)) {
+    data[key].push(value);
+  } else {
+    data[key] = [];
+  }
+}
+
 export function parseData(
   buffer: IOBuffer,
   header: ParseHeader,
-): Array<Record<string, unknown>> {
-  const zero = buffer.offset;
-  const dataPoints = buffer.readUint32();
-  const columns = buffer.readByte();
-  const colIds = new Uint16Array(columns);
+): Record<
+  string,
+  Record<string, Array<number | string>> | Array<number | string>
+> {
+  const zero = buffer.offset; // relative 0x0
+  const dataPoints = buffer.readUint32(); // Number of datapoints
+  const columns = buffer.readByte(); // Number of columns
+  const colIds = new Uint16Array(columns); // Id of the columns
+  const units = new Array<string>(columns); // Units for each column
   for (let i = 0; i < columns; i++) {
-    colIds[i] = buffer.readUint16();
+    const id = buffer.readUint16();
+    colIds[i] = id;
+    if (id in flagColumns) {
+      units[i] = 'flag';
+    } else if (id in dataColumns) {
+      units[i] = dataColumns[id][2];
+    }
   }
-  const data = new Array(dataPoints);
+  const data = {};
+  //const data = new Array(dataPoints);
 
   // Starts of datapoints vary between module versions
   if (header.version <= 2) {
@@ -159,21 +182,19 @@ export function parseData(
 
   // Columns data gathering
   for (let i = 0; i < dataPoints; i++) {
-    const obj: { [key: string]: number } = {};
     let flagByte = 256;
     for (const id of colIds) {
       if (id in flagColumns) {
         if (flagByte === 256) flagByte = buffer.readByte();
         const flag = flagColumns[id];
-        obj[flag[1]] = flag[0] & flagByte; // mask
+        addData(data, flag[1], flag[0] & flagByte ? 1 : 0); // mask
       } else if (id in dataColumns) {
         const dat = dataColumns[id];
-        obj[dat[1]] = readType(buffer, dat[0]);
+        addData(data, dat[1], readType(buffer, dat[0]));
       }
     }
-    data[i] = obj;
   }
-  return data;
+  return { data: data, units: units };
 }
 /*
  * Each file has modules with head and body, this parses the header
