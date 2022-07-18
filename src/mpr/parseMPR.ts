@@ -138,24 +138,19 @@ export class ParseSettings {
 }
 
 export function addData(
-  data: Record<string, Array<number | string>>,
-  key: string,
+  variable: Record<string, Array<number | string>>,
   value: string | number,
 ) {
-  if (Object.prototype.hasOwnProperty.call(data, key)) {
-    data[key].push(value);
-  } else {
-    data[key] = [];
+  if (!Object.prototype.hasOwnProperty.call(variable, 'data')) {
+    variable.data = [];
   }
+  variable.data.push(value);
 }
 
 export function parseData(
   buffer: IOBuffer,
   header: ParseHeader,
-): Record<
-  string,
-  Record<string, Array<number | string>> | Array<number | string>
-> {
+): Record<string, Record<string, Array<number | string> | string>> {
   const zero = buffer.offset; // relative 0x0
   const dataPoints = buffer.readUint32(); // Number of datapoints
   const columns = buffer.readByte(); // Number of columns
@@ -170,9 +165,12 @@ export function parseData(
       units[i] = dataColumns[id][2];
     }
   }
-  const data = {};
   //const data = new Array(dataPoints);
 
+  const variables: Record<
+    string,
+    Record<string, Array<number | string> | string>
+  > = {};
   // Starts of datapoints vary between module versions
   if (header.version <= 2) {
     buffer.offset = zero + 0x195;
@@ -187,14 +185,40 @@ export function parseData(
       if (id in flagColumns) {
         if (flagByte === 256) flagByte = buffer.readByte();
         const flag = flagColumns[id];
-        addData(data, flag[1], flag[0] & flagByte ? 1 : 0); // mask
+        let twosComp = flag[0] & -flag[0];
+        let shift = -1;
+        while (twosComp > 0) {
+          twosComp >>= 1;
+          shift++;
+        }
+        if (!Object.keys(variables).includes(flag[1])) {
+          variables[flag[1]] = {};
+        }
+        const variab = variables[flag[1]];
+        addData(Object(variab), (flag[0] & flagByte) >> shift);
+        if (!Object.prototype.hasOwnProperty.call(variab, 'label')) {
+          variab.label = flag[1];
+        }
+        if (!Object.prototype.hasOwnProperty.call(variab, 'units')) {
+          variab.units = '';
+        }
       } else if (id in dataColumns) {
         const dat = dataColumns[id];
-        addData(data, dat[1], readType(buffer, dat[0]));
+        if (!Object.keys(variables).includes(dat[1])) {
+          variables[dat[1]] = {};
+        }
+        const variab = variables[dat[1]];
+        addData(Object(variab), readType(buffer, dat[0]));
+        if (!Object.prototype.hasOwnProperty.call(variab, 'label')) {
+          variab.label = dat[1];
+        }
+        if (!Object.prototype.hasOwnProperty.call(variab, 'units')) {
+          variab.units = dat[2];
+        }
       }
     }
   }
-  return { data: data, units: units };
+  return variables;
 }
 /*
  * Each file has modules with head and body, this parses the header
