@@ -303,20 +303,23 @@ export const zirParams = [
   ['comp_mode', 'Uint8'],
 ];
 
-export const unitsScale = {
-  iRange: [
-    ['1 A', 9, 1],
-    ['100 mA', 10, 1e-1],
-    ['10 mA', 11, 1e-2],
-    ['1 mA', 12, 1e-3],
-    ['100 µA', 13, 1e-4],
-    ['10 µA', 14, 1e-5],
-    ['1 µA', 15, 1e-6],
-    ['Auto', 21, 0],
-    ['Auto', 23, 0],
-    ['Auto', 24, 0],
-    ['1 A', 37, 1],
-  ],
+export const unitsScale: Record<
+  string,
+  Record<number, string> | Record<string, number>
+> = {
+  iRange: {
+    9: '1 A',
+    10: '100 mA',
+    11: '10 mA',
+    12: '1 mA',
+    13: '100 µA',
+    14: '10 µA',
+    15: '1 µA',
+    21: 'Auto',
+    23: 'Auto',
+    24: 'Auto',
+    37: '1 A',
+  },
   isUnit: {
     A: 0,
     mA: 1,

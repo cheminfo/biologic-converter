@@ -3,14 +3,14 @@ import { IOBuffer } from 'iobuffer';
 
 import { ComplexObject } from '../Types';
 
-import { flagColumns, dataColumns, getParams } from './ids';
+import { flagColumns, dataColumns, getParams, unitsScale } from './ids';
 /**
  * imagine the MPR file as a set of blocks or modules,
  * each with a header, and then the data.
  */
 export interface Module {
   header: ParseHeader;
-  values: ComplexObject;
+  variables: ComplexObject;
 }
 
 export interface MPR {
@@ -52,13 +52,13 @@ export function parseMPR(arrayBuffer: BinaryData): MPR {
     const header = new ParseHeader(buffer);
     const zero = buffer.offset;
     if (/settings/i.exec(header.longName)) {
-      mpr.settings = { header: header, values: new ParseSettings(buffer) };
+      mpr.settings = { header: header, variables: new ParseSettings(buffer) };
     } else if (/data/i.exec(header.longName)) {
-      mpr.data = { header, values: parseData(buffer, header) };
+      mpr.data = { header, variables: parseData(buffer, header) };
     } else if (/log/i.exec(header.longName)) {
-      mpr.log = { header: header, values: new ParseLogs(buffer) };
+      mpr.log = { header: header, variables: new ParseLogs(buffer) };
     } else if (/loop/i.exec(header.longName)) {
-      mpr.loop = { header: header, values: new ParseLoop(buffer) };
+      mpr.loop = { header: header, variables: new ParseLoop(buffer) };
     }
     buffer.offset = zero + header.length;
   }
@@ -208,7 +208,13 @@ export function parseData(
           variables[dat[1]] = {};
         }
         const variab = variables[dat[1]];
-        addData(Object(variab), readType(buffer, dat[0]));
+        const read = readType(buffer, dat[0]);
+        if (id === 0x27) {
+          // If ID is I Range
+          addData(Object(variab), Object(unitsScale.iRange)[read]);
+        } else {
+          addData(Object(variab), read);
+        }
         if (!Object.prototype.hasOwnProperty.call(variab, 'label')) {
           variab.label = dat[1];
         }

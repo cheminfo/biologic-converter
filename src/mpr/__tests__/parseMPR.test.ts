@@ -34,7 +34,7 @@ describe('parseMPR', () => {
       JSON.parse(
         JSON.stringify(
           parseMPR(readFileSync(join(__dirname, `${testFiles}/ca.mpr`)))
-            .settings.values.params,
+            .settings.variables.params,
         ),
       ),
     );
@@ -48,7 +48,7 @@ describe('parseMPR', () => {
       JSON.parse(
         JSON.stringify(
           parseMPR(readFileSync(join(__dirname, `${testFiles}/cp.mpr`)))
-            .settings.values.params,
+            .settings.variables.params,
         ),
       ),
     );
@@ -60,7 +60,7 @@ describe('parseMPR', () => {
     );
     expect(meta.params[0]).toEqual(
       parseMPR(readFileSync(join(__dirname, `${testFiles}/cv.mpr`))).settings
-        .values.params,
+        .variables.params,
     );
   });
   it('lsvParams', () => {
@@ -70,7 +70,7 @@ describe('parseMPR', () => {
     );
     expect(meta.params[0]).toEqual(
       parseMPR(readFileSync(join(__dirname, `${testFiles}/lsv.mpr`))).settings
-        .values.params,
+        .variables.params,
     );
   });
   it('waitParams', () => {
@@ -80,7 +80,7 @@ describe('parseMPR', () => {
     );
     expect(meta.params[0]).toEqual(
       parseMPR(readFileSync(join(__dirname, `${testFiles}/wait.mpr`))).settings
-        .values.params,
+        .variables.params,
     );
   });
   it('zirParams', () => {
@@ -90,7 +90,7 @@ describe('parseMPR', () => {
     );
     expect(meta.params[0]).toEqual(
       parseMPR(readFileSync(join(__dirname, `${testFiles}/zir.mpr`))).settings
-        .values.params,
+        .variables.params,
     );
   });
   it('data', () => {
@@ -112,20 +112,21 @@ describe('parseMPR', () => {
     }
     for (const dat of dataFile.steps[0].data) {
       for (const key of Object.keys(dat.raw)) {
-        if (!Object.keys(data).includes(key)) {
-          data[key] = {};
-        }
-        if (flags.includes(key)) {
-          addData(Object(data[key]), dat.raw[key]);
-          if (first) data[key].units = '';
-        } else if (vars.includes(key)) {
-          addData(Object(data[key]), dat.raw[key].n);
-          if (first) {
-            data[key].units = dat.raw[key].u;
-            console.log(`${key} : ${dat.raw[key].n}`);
+        if (flags.includes(key) || vars.includes(key)) {
+          if (!Object.keys(data).includes(key)) {
+            data[key] = {};
           }
-        } else if (first) {
-          data[key].units = '';
+          if (typeof dat.raw[key] === 'object') {
+            addData(Object(data[key]), dat.raw[key].n);
+            if (first) {
+              data[key].units = dat.raw[key].u;
+            }
+          } else {
+            addData(Object(data[key]), dat.raw[key]);
+            if (first) data[key].units = '';
+          }
+        } else {
+          continue;
         }
         if (first) data[key].label = key;
       }
@@ -133,6 +134,6 @@ describe('parseMPR', () => {
     }
 
     // Check if same data
-    expect(data).toBeDeepCloseTo(parsed.data.values, 3);
+    expect(data).toBeDeepCloseTo(parsed.data.variables, 1);
   });
 });
