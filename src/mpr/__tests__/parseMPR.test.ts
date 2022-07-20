@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { readFileSync, writeFileSync } from 'fs';
-import fs from 'fs';
 import { join } from 'path';
 
 import { toBeDeepCloseTo, toMatchCloseTo } from 'jest-matcher-deep-close-to';
@@ -18,7 +17,7 @@ describe('parseMPR', () => {
   const arrayBuffer = readFileSync(join(__dirname, `${testFiles}/ca.mpr`));
   const parsed = parseMPR(arrayBuffer);
   /****/
-  /* Write output to workspace root */
+  /* Write output to workspace root */ /*
   fs.writeFileSync(join('.', 'whole.json'), JSON.stringify(parsed), {
     encoding: 'utf8',
     flag: 'w',
