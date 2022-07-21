@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
 
@@ -16,19 +14,11 @@ describe('parseMPR', () => {
   /* TEST FILES READING */
   const arrayBuffer = readFileSync(join(__dirname, `${testFiles}/ca.mpr`));
   const parsed = parseMPR(arrayBuffer);
-  /****/
-  /* Write output to workspace root */ /*
-  fs.writeFileSync(join('.', 'whole.json'), JSON.stringify(parsed), {
-    encoding: 'utf8',
-    flag: 'w',
-  });
-  /****/
 
   it('caParams', () => {
-    //const;
     const caMeta = JSON.parse(
       readFileSync(join(__dirname, `${testFiles}/CAmeta.json`)).toString(),
-    ); // Essayer de stringify puis reparser pour transformer NaN en null
+    );
     expect(caMeta.params[0]).toEqual(
       JSON.parse(
         JSON.stringify(
@@ -53,7 +43,6 @@ describe('parseMPR', () => {
     );
   });
   it('cvParams', () => {
-    //const;
     const meta = JSON.parse(
       readFileSync(join(__dirname, `${testFiles}/CVmeta.json`)).toString(),
     );
@@ -63,7 +52,6 @@ describe('parseMPR', () => {
     );
   });
   it('lsvParams', () => {
-    //const;
     const meta = JSON.parse(
       readFileSync(join(__dirname, `${testFiles}/LSVmeta.json`)).toString(),
     );
@@ -73,7 +61,6 @@ describe('parseMPR', () => {
     );
   });
   it('waitParams', () => {
-    //const;
     const meta = JSON.parse(
       readFileSync(join(__dirname, `${testFiles}/WAITmeta.json`)).toString(),
     );
@@ -83,7 +70,6 @@ describe('parseMPR', () => {
     );
   });
   it('zirParams', () => {
-    //const;
     const meta = JSON.parse(
       readFileSync(join(__dirname, `${testFiles}/ZIRmeta.json`)).toString(),
     );
