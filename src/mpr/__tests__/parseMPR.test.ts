@@ -79,7 +79,7 @@ describe('parseMPR', () => {
     );
   });
   // Convert yadg data file to our format of files
-  function convertData(dataFile:Record<string, any>){
+  function convertData(dataFile: Record<string, any>) {
     const data: Record<
       string,
       Record<string, Array<number | string> | string>
@@ -87,11 +87,11 @@ describe('parseMPR', () => {
     let first = true;
     const flags = new Array<string>();
     const vars = new Array<string>();
-    for (const truc of Object.keys(flagColumns)) {
-      flags.push(flagColumns[Number(truc)][1]);
+    for (const flagKey of Object.keys(flagColumns)) {
+      flags.push(flagColumns[Number(flagKey)][1]);
     }
-    for (const truc of Object.keys(dataColumns)) {
-      vars.push(dataColumns[Number(truc)][1]);
+    for (const colKey of Object.keys(dataColumns)) {
+      vars.push(dataColumns[Number(colKey)][1]);
     }
     for (const dat of dataFile.steps[0].data) {
       for (const key of Object.keys(dat.raw)) {

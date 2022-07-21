@@ -194,32 +194,32 @@ export function parseData(
         if (!Object.keys(variables).includes(flag[1])) {
           variables[flag[1]] = {};
         }
-        const variab = variables[flag[1]];
-        addData(Object(variab), (flag[0] & flagByte) >> shift);
-        if (!Object.prototype.hasOwnProperty.call(variab, 'label')) {
-          variab.label = flag[1];
+        const variableName = variables[flag[1]];
+        addData(Object(variableName), (flag[0] & flagByte) >> shift);
+        if (!Object.prototype.hasOwnProperty.call(variableName, 'label')) {
+          variableName.label = flag[1];
         }
-        if (!Object.prototype.hasOwnProperty.call(variab, 'units')) {
-          variab.units = '';
+        if (!Object.prototype.hasOwnProperty.call(variableName, 'units')) {
+          variableName.units = '';
         }
       } else if (id in dataColumns) {
         const dat = dataColumns[id];
         if (!Object.keys(variables).includes(dat[1])) {
           variables[dat[1]] = {};
         }
-        const variab = variables[dat[1]];
+        const variableName = variables[dat[1]];
         const read = readType(buffer, dat[0]);
         if (id === 0x27) {
           // If ID is I Range
-          addData(Object(variab), Object(unitsScale.iRange)[read]);
+          addData(Object(variableName), Object(unitsScale.iRange)[read]);
         } else {
-          addData(Object(variab), read);
+          addData(Object(variableName), read);
         }
-        if (!Object.prototype.hasOwnProperty.call(variab, 'label')) {
-          variab.label = dat[1];
+        if (!Object.prototype.hasOwnProperty.call(variableName, 'label')) {
+          variableName.label = dat[1];
         }
-        if (!Object.prototype.hasOwnProperty.call(variab, 'units')) {
-          variab.units = dat[2];
+        if (!Object.prototype.hasOwnProperty.call(variableName, 'units')) {
+          variableName.units = dat[2];
         }
       }
     }
