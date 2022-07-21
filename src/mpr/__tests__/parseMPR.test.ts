@@ -1,12 +1,12 @@
-import { readFileSync, writeFileSync } from 'fs';
+import { readFileSync } from 'fs';
 import { join } from 'path';
 
-import { toBeDeepCloseTo, toMatchCloseTo } from 'jest-matcher-deep-close-to';
+import { toBeDeepCloseTo } from 'jest-matcher-deep-close-to';
 
 import { flagColumns, dataColumns } from '../ids';
 import { parseMPR, addData } from '../parseMPR';
 
-expect.extend({ toBeDeepCloseTo, toMatchCloseTo });
+expect.extend({ toBeDeepCloseTo });
 
 const testFiles = '../../__tests__/data/test';
 
