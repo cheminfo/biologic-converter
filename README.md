@@ -42,7 +42,9 @@ return experiments
 run().then(r=>console.log(r)).catch(e=>console.error(e))
 ```
 
-## License
+## Licens
+
+Test files from https://github.com/dgbowl/yadg
 
 ## ToDos
 The code parses text files (mps, mpt). Now writing the binary parser.
