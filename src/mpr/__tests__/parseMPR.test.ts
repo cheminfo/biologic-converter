@@ -78,10 +78,8 @@ describe('parseMPR', () => {
         .variables.params,
     );
   });
-  it('data', () => {
-    const dataFile = JSON.parse(
-      readFileSync(join(__dirname, `${testFiles}/ca_data.json`)).toString(),
-    );
+  // Convert yadg data file to our format of files
+  function convertData(dataFile:Record<string, any>){
     const data: Record<
       string,
       Record<string, Array<number | string> | string>
@@ -117,8 +115,15 @@ describe('parseMPR', () => {
       }
       first = false;
     }
+    return data;
+  }
 
-    // Check if same data
+  it('data', () => {
+    const dataFile = JSON.parse(
+      readFileSync(join(__dirname, `${testFiles}/ca_data.json`)).toString(),
+    );
+    const data = convertData(dataFile);
+
     expect(data).toBeDeepCloseTo(parsed.data.variables, 1);
   });
 });
