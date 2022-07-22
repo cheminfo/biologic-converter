@@ -9,7 +9,7 @@ import { flagColumns, dataColumns, getParams, unitsScale } from './ids';
  * each with a header, and then the data.
  */
 export interface Module {
-  header: ParseHeader;
+  header: Record<string, string | number>;
   variables: ComplexObject;
 }
 
@@ -49,18 +49,18 @@ export function parseMPR(arrayBuffer: BinaryData): MPR {
     .trim();
 
   while (isModule(buffer)) {
-    const header = new ParseHeader(buffer);
+    const header = parseHeader(buffer);
     const zero = buffer.offset;
-    if (/settings/i.exec(header.longName)) {
-      mpr.settings = { header: header, variables: new ParseSettings(buffer) };
-    } else if (/data/i.exec(header.longName)) {
+    if (/settings/i.exec(String(header.longName))) {
+      mpr.settings = { header: header, variables: parseSettings(buffer) };
+    } else if (/data/i.exec(String(header.longName))) {
       mpr.data = { header, variables: parseData(buffer, header) };
-    } else if (/log/i.exec(header.longName)) {
-      mpr.log = { header: header, variables: new ParseLogs(buffer) };
-    } else if (/loop/i.exec(header.longName)) {
-      mpr.loop = { header: header, variables: new ParseLoop(buffer) };
+    } else if (/log/i.exec(String(header.longName))) {
+      mpr.log = { header: header, variables: parseLogs(buffer) };
+    } else if (/loop/i.exec(String(header.longName))) {
+      mpr.loop = { header: header, variables: parseLoop(buffer) };
     }
-    buffer.offset = zero + header.length;
+    buffer.offset = zero + Number(header.length);
   }
   return mpr as MPR;
 }
@@ -70,20 +70,15 @@ export function parseMPR(arrayBuffer: BinaryData): MPR {
  * buffer - IOBuffer
  * @returns the header as a JSON-like object
  */
-export class ParseHeader {
-  public shortName: string; /*shortName:Short name, e.g. VMP Set.*/
-  public longName: string; /*longName:Longer name, e.g. VMP settings.*/
-  public length: number; /*length:Number of bytes in module data.*/
-  public version: number; /*version:Module version.*/
-  public date: string; /*date:Acquisition date in ASCII, e.g. 08/10/21. */
 
-  public constructor(buffer: IOBuffer) {
-    this.shortName = buffer.readUtf8(10).trim();
-    this.longName = buffer.readUtf8(25).trim();
-    this.length = buffer.readUint32();
-    this.version = buffer.readUint32();
-    this.date = buffer.readChars(8); //ascii
-  }
+function parseHeader(buffer: IOBuffer) {
+  const object: Record<string, string | number> = {};
+  object.shortName = buffer.readUtf8(10).trim();
+  object.longName = buffer.readUtf8(25).trim();
+  object.length = buffer.readUint32();
+  object.version = buffer.readUint32();
+  object.date = buffer.readChars(8); //ascii
+  return object;
 }
 
 //function parseTechParams(buffer, tech) {}
@@ -92,49 +87,34 @@ function pascalString(buffer: IOBuffer): string {
   return buffer.readChars(length);
 }
 
-export class ParseSettings {
-  public techniqueId: number; /* Unique technique Id */
-  public comments: string; /* Pascal string */
-  public activeMaterialMass: number; /* Mass of active material */
-  public atX: number; /* at x = */
-  public molecularWeight: number; /* Molecular weight of active material */
-  public atomicWeight: number; /* Atomic weight of intercalated ion */
-  public acquisitionStart: number; /* Acquisition started a: xo = */
-  public eTransferred: number; /* Number of e- transferred */
-  public electrodeMaterial: string; /* Electrode Material */
-  public electrolyte: string; /* electrolyte */
-  public electrodeArea: number; /* Electrode surface area */
-  public referenceElectrode: string; /* Reference Electrode */
-  public characteristicMass: number; /* Characteristic Mass */
-  public batteryCapacity: number; /* Battery capacity C = */
-  public batteryCapacityUnit: number; /* Unit of the battery capacity */
-  public params: object;
-  public header?: object;
-
-  public constructor(buffer: IOBuffer) {
-    const zero = buffer.offset;
-    this.techniqueId = buffer.readByte();
-    this.comments = pascalString(buffer);
-    buffer.offset = zero + 0x107;
-    this.activeMaterialMass = buffer.readFloat32();
-    this.atX = buffer.readFloat32();
-    this.molecularWeight = buffer.readFloat32();
-    this.atomicWeight = buffer.readFloat32();
-    this.acquisitionStart = buffer.readFloat32();
-    this.eTransferred = buffer.readUint16(); // 3 bytes but only 2 are used
-    buffer.offset = zero + 0x11e;
-    this.electrodeMaterial = pascalString(buffer);
-    buffer.offset = zero + 0x1c0;
-    this.electrolyte = pascalString(buffer);
-    buffer.offset = zero + 0x211;
-    this.electrodeArea = buffer.readFloat32();
-    this.referenceElectrode = pascalString(buffer);
-    buffer.offset = zero + 0x24c;
-    this.characteristicMass = buffer.readFloat32();
-    this.batteryCapacity = buffer.readFloat32();
-    this.batteryCapacityUnit = buffer.readByte();
-    this.params = readParams(buffer, getParams(this.techniqueId), zero);
-  }
+function parseSettings(buffer: IOBuffer) {
+  const object: Record<
+    string,
+    string | number | { [key: string]: string | number }
+  > = {};
+  const zero = buffer.offset;
+  object.techniqueId = buffer.readByte();
+  object.comments = pascalString(buffer);
+  buffer.offset = zero + 0x107;
+  object.activeMaterialMass = buffer.readFloat32();
+  object.atX = buffer.readFloat32();
+  object.molecularWeight = buffer.readFloat32();
+  object.atomicWeight = buffer.readFloat32();
+  object.acquisitionStart = buffer.readFloat32();
+  object.eTransferred = buffer.readUint16(); // 3 bytes but only 2 are used
+  buffer.offset = zero + 0x11e;
+  object.electrodeMaterial = pascalString(buffer);
+  buffer.offset = zero + 0x1c0;
+  object.electrolyte = pascalString(buffer);
+  buffer.offset = zero + 0x211;
+  object.electrodeArea = buffer.readFloat32();
+  object.referenceElectrode = pascalString(buffer);
+  buffer.offset = zero + 0x24c;
+  object.characteristicMass = buffer.readFloat32();
+  object.batteryCapacity = buffer.readFloat32();
+  object.batteryCapacityUnit = buffer.readByte();
+  object.params = readParams(buffer, getParams(object.techniqueId), zero);
+  return object;
 }
 
 export function addData(
@@ -149,7 +129,7 @@ export function addData(
 
 export function parseData(
   buffer: IOBuffer,
-  header: ParseHeader,
+  header: Record<string, string | number>,
 ): Record<string, Record<string, Array<number | string> | string>> {
   const zero = buffer.offset; // relative 0x0
   const dataPoints = buffer.readUint32(); // Number of datapoints
@@ -227,69 +207,52 @@ export function parseData(
   return variables;
 }
 /*
- * Each file has modules with head and body, this parses the header
+ * Most files have logs, this parses logs
  * buffer - IOBuffer
  * @returns the header as a JSON-like object
  */
 
-export class ParseLogs {
-  public channelNumber: number; /*Zero-based channel number*/
-  public channeSerial: number; /*Channel serial number*/
-  public eweControlMin: number; /*Ewe control range min*/
-  public eweControlMax: number; /*Ewe control range max*/
-  public oleTimestamp: number; /*Timestamp in OLE format */
-  public filename: string; /* Filename string */
-  public host: string; /* Host ip address */
-  public address: string; /* IP address / COM port of potentiostat */
-  public ecLabVersion: string; /* EC-Lab software version */
-  public serverVersion: string; /* Web server firmware version */
-  public interpreterVersion: string; /* Command interpreter firmware version */
-  public deviceSerial: string; /* Device serial number */
-  public averagingPoints: number; /* Smooth data on these points */
-
-  public constructor(buffer: IOBuffer) {
-    const zero = buffer.offset;
-    buffer.offset = zero + 0x9;
-    this.channelNumber = buffer.readUint8();
-    buffer.offset = zero + 0xab;
-    this.channeSerial = buffer.readUint16();
-    buffer.offset = zero + 0x1f8;
-    this.eweControlMin = buffer.readFloat32();
-    this.eweControlMax = buffer.readFloat32();
-    buffer.offset = zero + 0x249;
-    this.oleTimestamp = buffer.readFloat64();
-    this.filename = pascalString(buffer);
-    buffer.offset = zero + 0x351;
-    this.host = pascalString(buffer);
-    buffer.offset = zero + 0x384;
-    this.address = pascalString(buffer);
-    buffer.offset = zero + 0x3b7;
-    this.ecLabVersion = pascalString(buffer);
-    buffer.offset = zero + 0x3be;
-    this.serverVersion = pascalString(buffer);
-    buffer.offset = zero + 0x3c5;
-    this.interpreterVersion = pascalString(buffer);
-    buffer.offset = zero + 0x3cf;
-    this.deviceSerial = pascalString(buffer);
-    buffer.offset = zero + 0x922;
-    this.averagingPoints = buffer.readUint8();
-  }
+function parseLogs(buffer: IOBuffer) {
+  const object: Record<string, string | number> = {};
+  const zero = buffer.offset;
+  buffer.offset = zero + 0x9;
+  object.channelNumber = buffer.readUint8();
+  buffer.offset = zero + 0xab;
+  object.channeSerial = buffer.readUint16();
+  buffer.offset = zero + 0x1f8;
+  object.eweControlMin = buffer.readFloat32();
+  object.eweControlMax = buffer.readFloat32();
+  buffer.offset = zero + 0x249;
+  object.oleTimestamp = buffer.readFloat64();
+  object.filename = pascalString(buffer);
+  buffer.offset = zero + 0x351;
+  object.host = pascalString(buffer);
+  buffer.offset = zero + 0x384;
+  object.address = pascalString(buffer);
+  buffer.offset = zero + 0x3b7;
+  object.ecLabVersion = pascalString(buffer);
+  buffer.offset = zero + 0x3be;
+  object.serverVersion = pascalString(buffer);
+  buffer.offset = zero + 0x3c5;
+  object.interpreterVersion = pascalString(buffer);
+  buffer.offset = zero + 0x3cf;
+  object.deviceSerial = pascalString(buffer);
+  buffer.offset = zero + 0x922;
+  object.averagingPoints = buffer.readUint8();
+  return object;
 }
 
 /*
- * Each file has modules with head and body, this parses the header
+ * Some files have a loop, this parses the loop
  * buffer - IOBuffer
  * @returns the header as a JSON-like object
  */
 
-export class ParseLoop {
-  public numIndexes: number; // Number of loop indexes
-  public indexes: number; // Indexes at which loops start in data
-
-  public constructor(buffer: IOBuffer) {
-    this.numIndexes = buffer.readUint32();
-    this.indexes = buffer.readUint32();
-  }
+function parseLoop(buffer: IOBuffer) {
+  const object: Record<string, string | number> = {};
+  object.numIndexes = buffer.readUint32();
+  object.indexes = buffer.readUint32();
+  return object;
 }
 
 export function readParams(
