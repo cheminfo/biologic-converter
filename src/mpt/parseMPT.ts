@@ -46,7 +46,7 @@ export function parseData(data: string[]): MPT['variables'] {
     variables[fieldName] = {
       label: fieldName.split('/')[0],
       units: fieldName.split('/')[1],
-      isDependent: fieldName === 'time/s' ? false : true,
+      isDependent: fieldName !== 'time/s',
       data: matrix.map((row) => Number(row[i])),
     };
   }

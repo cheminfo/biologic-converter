@@ -92,7 +92,8 @@ export function parseMeta(
       result[key] = val;
     } else {
       //boolean
-      if ('flags' in result && Array.isArray(result.flags)) {
+      // eslint-disable-next-line no-lonely-if
+      if (Array.isArray(result.flags)) {
         result.flags.push(currentLine);
       } else {
         result.flags = [currentLine];

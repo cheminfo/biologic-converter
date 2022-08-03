@@ -28,7 +28,7 @@ export interface MPR {
  */
 export function isModule(buffer: IOBuffer): boolean {
   if (buffer.length > buffer.offset + 6) {
-    return buffer.readUtf8(6) === 'MODULE' ? true : false;
+    return buffer.readUtf8(6) === 'MODULE';
   }
   return false;
 }
@@ -52,13 +52,13 @@ export function parseMPR(arrayBuffer: BinaryData): MPR {
     const header = parseHeader(buffer);
     const zero = buffer.offset;
     if (/settings/i.exec(String(header.longName))) {
-      mpr.settings = { header: header, variables: parseSettings(buffer) };
+      mpr.settings = { header, variables: parseSettings(buffer) };
     } else if (/data/i.exec(String(header.longName))) {
       mpr.data = { header, variables: parseData(buffer, header) };
     } else if (/log/i.exec(String(header.longName))) {
-      mpr.log = { header: header, variables: parseLogs(buffer) };
+      mpr.log = { header, variables: parseLogs(buffer) };
     } else if (/loop/i.exec(String(header.longName))) {
-      mpr.loop = { header: header, variables: parseLoop(buffer) };
+      mpr.loop = { header, variables: parseLoop(buffer) };
     }
     buffer.offset = zero + Number(header.length);
   }
