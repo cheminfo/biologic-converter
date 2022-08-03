@@ -19,7 +19,7 @@ describe('parseMPR', () => {
     const caMeta = JSON.parse(
       readFileSync(join(__dirname, `${testFiles}/CAmeta.json`)).toString(),
     );
-    expect(caMeta.params[0]).toEqual(
+    expect(caMeta.params[0]).toStrictEqual(
       JSON.parse(
         JSON.stringify(
           parseMPR(readFileSync(join(__dirname, `${testFiles}/ca.mpr`)))
@@ -33,7 +33,7 @@ describe('parseMPR', () => {
     const meta = JSON.parse(
       readFileSync(join(__dirname, `${testFiles}/CPmeta.json`)).toString(),
     );
-    expect(meta.params[0]).toEqual(
+    expect(meta.params[0]).toStrictEqual(
       JSON.parse(
         JSON.stringify(
           parseMPR(readFileSync(join(__dirname, `${testFiles}/cp.mpr`)))
@@ -46,7 +46,7 @@ describe('parseMPR', () => {
     const meta = JSON.parse(
       readFileSync(join(__dirname, `${testFiles}/CVmeta.json`)).toString(),
     );
-    expect(meta.params[0]).toEqual(
+    expect(meta.params[0]).toStrictEqual(
       parseMPR(readFileSync(join(__dirname, `${testFiles}/cv.mpr`))).settings
         .variables.params,
     );
@@ -55,7 +55,7 @@ describe('parseMPR', () => {
     const meta = JSON.parse(
       readFileSync(join(__dirname, `${testFiles}/LSVmeta.json`)).toString(),
     );
-    expect(meta.params[0]).toEqual(
+    expect(meta.params[0]).toStrictEqual(
       parseMPR(readFileSync(join(__dirname, `${testFiles}/lsv.mpr`))).settings
         .variables.params,
     );
@@ -64,7 +64,7 @@ describe('parseMPR', () => {
     const meta = JSON.parse(
       readFileSync(join(__dirname, `${testFiles}/WAITmeta.json`)).toString(),
     );
-    expect(meta.params[0]).toEqual(
+    expect(meta.params[0]).toStrictEqual(
       parseMPR(readFileSync(join(__dirname, `${testFiles}/wait.mpr`))).settings
         .variables.params,
     );
@@ -73,7 +73,7 @@ describe('parseMPR', () => {
     const meta = JSON.parse(
       readFileSync(join(__dirname, `${testFiles}/ZIRmeta.json`)).toString(),
     );
-    expect(meta.params[0]).toEqual(
+    expect(meta.params[0]).toStrictEqual(
       parseMPR(readFileSync(join(__dirname, `${testFiles}/zir.mpr`))).settings
         .variables.params,
     );
