@@ -2,11 +2,11 @@ import { join } from 'path';
 
 import { fileListFromPath } from 'filelist-utils';
 
-import { convertBioLogic as convert } from '../convert';
+import { convert } from '../convert';
 
 describe('convert', () => {
   it('test mps', async () => {
-    const fl = fileListFromPath(join(__dirname, 'data'));
+    const fl = await fileListFromPath(join(__dirname, 'data'));
     const directories = await convert(fl);
     // test number of directories
     expect(directories).toHaveLength(3);

@@ -22,24 +22,24 @@ There are 3 possible extensions:
 ```js
 import { join } from 'path';
 import { fileListFromPath } from 'filelist-utils';
-import { convertBioLogic as cv } from 'biologic-converter';
+import { convert as cv } from 'biologic-converter';
 
-async function run(){
+async function run() {
+  /* path to the root dir of experiments or any child */
+  const fl = fileListFromPath(join(__dirname, 'data'));
 
-/* path to the root dir of experiments or any child */
-const fl = fileListFromPath(join(__dirname, 'data'));
+  const experiments = await cv(fl);
 
-const experiments = await cv(fl);
-
-/*
+  /*
  retrieves them as an array, each item is an object 
  representing the directory (stores `mps` and `mpt`)
 */
-return experiments
-
+  return experiments;
 }
 
-run().then(r=>console.log(r)).catch(e=>console.error(e))
+run()
+  .then((r) => console.log(r))
+  .catch((e) => console.error(e));
 ```
 
 ## Licens
@@ -47,6 +47,7 @@ run().then(r=>console.log(r)).catch(e=>console.error(e))
 Test files from https://github.com/dgbowl/yadg
 
 ## ToDos
+
 The code parses text files (mps, mpt). Now writing the binary parser.
 
 [MIT](./LICENSE)

@@ -33,9 +33,7 @@ export interface BioLogic {
  * @returns  JSON object passing **child** directory; array of children if you pass a **parent**.
  */
 
-export async function convertBioLogic(
-  fileList: PartialFileList,
-): Promise<BioLogic[]> {
+export async function convert(fileList: PartialFileList): Promise<BioLogic[]> {
   const dirs = groupFiles(fileList);
   let results: BioLogic[] = [];
 
