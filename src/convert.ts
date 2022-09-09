@@ -1,11 +1,13 @@
 import { PartialFileList, groupFiles } from 'filelist-utils';
 
 /*import { MPR, parseMPR } from './mpr/parseMPR';*/
+import { MPR, parseMPR } from './mpr/parseMPR';
 import { MPS, parseMPS } from './mps/parseMPS';
 import { MPT, parseMPT } from './mpt/parseMPT';
 
 export interface BioLogic {
   dir?: string;
+  mpr?: MPR;
   mps?: MPS;
   mpt?: MPT;
   /*mpr?: MPR;*/
@@ -47,6 +49,8 @@ export async function convert(fileList: PartialFileList): Promise<BioLogic[]> {
         result.mps = parseMPS(await dataFile.arrayBuffer());
       } else if (fName.endsWith('.mpt')) {
         result.mpt = parseMPT(await dataFile.arrayBuffer());
+      } else if (fName.endsWith('.mpr')) {
+        result.mpr = parseMPR(await dataFile.arrayBuffer());
       }
       /*
     else if (fName.endsWith('.mpr')) {
