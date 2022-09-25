@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.1.0](https://github.com/cheminfo/biologic-converter/compare/v0.0.1...v0.1.0) (2022-09-25)
+
+
+### Features
+
+* convert parse mpr ([17ec926](https://github.com/cheminfo/biologic-converter/commit/17ec926afec210cc2f944d70d6d3d85cfc52e5e1))
+
+
+### Bug Fixes
+
+* updated convert.ts and test ([#9](https://github.com/cheminfo/biologic-converter/issues/9)) ([71506d1](https://github.com/cheminfo/biologic-converter/commit/71506d1ecfdd9bfff5a474356c6ed6c2c8b59a6f))
+
 ## 0.0.1 (2022-09-08)
 
 
