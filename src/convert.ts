@@ -53,7 +53,9 @@ export async function convert(fileList: PartialFileList): Promise<BioLogic[]> {
         result.mpr = parseMPR(await dataFile.arrayBuffer());
       }
     }
-    if(Object.keys(result).length > 1) { results.push(result);}
+    if (Object.keys(result).length > 1) {
+      results.push(result);
+    }
   }
   return results;
 }

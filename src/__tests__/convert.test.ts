@@ -18,6 +18,6 @@ describe('convert', () => {
   it('passing a not-biologic dir should give []', async () => {
     const fl = await fileListFromPath(join(__dirname, 'data/not-biologic'));
     const directories = await convert(fl);
-    expect(directories).toStrictEqual([])
+    expect(directories).toStrictEqual([]);
   });
 });
