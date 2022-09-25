@@ -52,13 +52,10 @@ export async function convert(fileList: PartialFileList): Promise<BioLogic[]> {
       } else if (fName.endsWith('.mpr')) {
         result.mpr = parseMPR(await dataFile.arrayBuffer());
       }
-      /*
-    else if (fName.endsWith('.mpr')) {
-            result.mpr = parseMPR(await dataFile.arrayBuffer());
-          }
-    */
     }
-    results.push(result);
+    if (Object.keys(result).length > 1) {
+      results.push(result);
+    }
   }
   return results;
 }
