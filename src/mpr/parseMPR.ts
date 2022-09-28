@@ -48,50 +48,74 @@ export function parseMPR(arrayBuffer: BinaryData): MPR {
     .replace(/\x1A|\x00/g, '')
     .trim();
 
+  //bc files can be modules i.e this is a "multifile"
+  //files w modules contain the word "MODULE" before the module starts
   while (isModule(buffer)) {
     const header = parseHeader(buffer);
     const zero = buffer.offset;
-    if (/settings/i.exec(String(header.longName))) {
+    //header.longname flags which "submodules" are present in the module
+    if (/settings/i.exec(header.longName)) {
       mpr.settings = { header, variables: parseSettings(buffer) };
-    } else if (/data/i.exec(String(header.longName))) {
+    } else if (/data/i.exec(header.longName)) {
       mpr.data = { header, variables: parseData(buffer, header) };
-    } else if (/log/i.exec(String(header.longName))) {
+    } else if (/log/i.exec(header.longName)) {
       mpr.log = { header, variables: parseLogs(buffer) };
-    } else if (/loop/i.exec(String(header.longName))) {
+    } else if (/loop/i.exec(header.longName)) {
       mpr.loop = { header, variables: parseLoop(buffer) };
     }
-    buffer.offset = zero + Number(header.length);
+    buffer.offset = zero + header.length;
   }
   return mpr as MPR;
 }
 
+interface ParseHeader {
+  shortName: string,
+  longName: string,
+  length: number,
+  version: number,
+  date: string,//ascii
+}
 /*
  * Each file has modules with head and body, this parses the header
  * buffer - IOBuffer
  * @returns the header as a JSON-like object
  */
-
-function parseHeader(buffer: IOBuffer) {
+function parseHeader(buffer: IOBuffer):ParseHeader {
   const object: Record<string, string | number> = {};
   object.shortName = buffer.readUtf8(10).trim();
   object.longName = buffer.readUtf8(25).trim();
   object.length = buffer.readUint32();
   object.version = buffer.readUint32();
   object.date = buffer.readChars(8); //ascii
-  return object;
+  return object as ParseHeader,
 }
 
-//function parseTechParams(buffer, tech) {}
+
 function pascalString(buffer: IOBuffer): string {
-  let length = buffer.readUint8();
+  const length = buffer.readUint8();
   return buffer.readChars(length);
 }
 
+interface ParseSettings{ 
+  techniqueId: number,
+  comments: string,
+  activeMaterialMass: number,
+  atX: buffer.readFloat32();
+  molecularWeight: number,
+  atomicWeight: number,
+  acquisitionStart: number,
+  eTransferred: number,
+  electrodeMaterial:string,
+  electrolyte:string,
+  electrodeArea: number,
+  referenceElectrode: number,
+  characteristicMass: number,
+  batteryCapacity: number,
+  batteryCapacityUnit: number,
+  params:ParamOut
+}
 function parseSettings(buffer: IOBuffer) {
-  const object: Record<
-    string,
-    string | number | { [key: string]: string | number }
-  > = {};
+  let object: Partial<ParseSettings> = { }
   const zero = buffer.offset;
   object.techniqueId = buffer.readByte();
   object.comments = pascalString(buffer);
@@ -114,14 +138,17 @@ function parseSettings(buffer: IOBuffer) {
   object.batteryCapacity = buffer.readFloat32();
   object.batteryCapacityUnit = buffer.readByte();
   object.params = readParams(buffer, getParams(object.techniqueId), zero);
-  return object;
+  return object as ParseSettings;
 }
 
+// function is mutating an object
 export function addData(
   variable: Record<string, Array<number | string>>,
   value: string | number,
-) {
-  if (!Object.prototype.hasOwnProperty.call(variable, 'data')) {
+):(string|number)[] {
+  //would it be `variable.hasOwnProperty('data')` ?
+ // if (!Object.prototype.hasOwnProperty.call(variable, 'data')) {
+  if (!variable.hasOwnProperty(variable, 'data')) {
     variable.data = [];
   }
   variable.data.push(value);
@@ -233,8 +260,8 @@ function parseLogs(buffer: IOBuffer) {
   object.ecLabVersion = pascalString(buffer);
   buffer.offset = zero + 0x3be;
   object.serverVersion = pascalString(buffer);
-  buffer.offset = zero + 0x3c5;
   object.interpreterVersion = pascalString(buffer);
+  buffer.offset = zero + 0x3c5;
   buffer.offset = zero + 0x3cf;
   object.deviceSerial = pascalString(buffer);
   buffer.offset = zero + 0x922;
@@ -255,11 +282,12 @@ function parseLoop(buffer: IOBuffer) {
   return object;
 }
 
+type ParamOut = Record<string, string|number>
 export function readParams(
   buffer: IOBuffer,
   params: (string | string[][])[],
   zero: number,
-) {
+): ParamOut{
   let read = 0;
   // Parameters can start at either 0x572, 0x1845 or 0x1846
   for (const off of [0x572, 0x1845, 0x1846]) {
@@ -268,7 +296,7 @@ export function readParams(
     if (read !== 0) break;
   }
   const nParams = buffer.readUint16();
-  const paramOut: { [key: string]: number | string } = {};
+  const paramOut:ParamOut  = {};
   paramOut.technique = String(params[0]);
   for (let i = 0; i < Math.min(nParams, params[1].length); i++) {
     const param = params[1][i];

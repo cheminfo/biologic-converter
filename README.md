@@ -42,7 +42,7 @@ run()
   .catch((e) => console.error(e));
 ```
 
-## Licens
+## License
 
 Test files from https://github.com/dgbowl/yadg
 
