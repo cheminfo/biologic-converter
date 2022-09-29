@@ -11,7 +11,7 @@ export interface VarsChild {
   label: string;
   units: string;
 }
-type Variables = Record<string, VarsChild>;
+export type Variables = Record<string, VarsChild>;
 
 export function parseData(buffer: IOBuffer, header: ModuleHeader): Variables {
   const zero = buffer.offset; // relative 0x0

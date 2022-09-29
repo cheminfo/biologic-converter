@@ -1,18 +1,18 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
-import { toBeDeepCloseTo } from 'jest-matcher-deep-close-to';
+//import { toBeDeepCloseTo } from 'jest-matcher-deep-close-to';
 
 import { flagColumns, dataColumns } from '../ids';
-import { parseMPR } from '../parseMPR';
+import { VarsChild } from '../modules/parseData';
+import { DataVariables, parseMPR } from '../parseMPR';
 import { addData } from '../utility/addData';
 
-expect.extend({ toBeDeepCloseTo });
+//expect.extend({ toBeDeepCloseTo });
 
 const testFiles = '../../__tests__/data/test';
 
 describe('parseMPR', () => {
-
   it('caParams', () => {
     const caMeta = JSON.parse(
       readFileSync(join(__dirname, `${testFiles}/CAmeta.json`)).toString(),
@@ -78,10 +78,7 @@ describe('parseMPR', () => {
   });
   // Convert yadg data file to our format of files
   function convertData(dataFile: Record<string, any>) {
-    const data: Record<
-      string,
-      Record<string, Array<number | string> | string>
-    > = { };
+    const data: Record<string, Partial<VarsChild>> = {};
     let first = true;
     const flags = new Array<string>();
     const vars = new Array<string>();
@@ -94,7 +91,7 @@ describe('parseMPR', () => {
     for (const dat of dataFile.steps[0].data) {
       for (const key of Object.keys(dat.raw)) {
         if (flags.includes(key) || vars.includes(key)) {
-          if (data[key]===undefined) {
+          if (data[key] === undefined) {
             data[key] = {};
           }
           if (typeof dat.raw[key] === 'object') {
@@ -113,11 +110,10 @@ describe('parseMPR', () => {
       }
       first = false;
     }
-    return data;
+    return data as DataVariables;
   }
 
   it('data', () => {
-
     const arrayBuffer = readFileSync(join(__dirname, `${testFiles}/ca.mpr`));
     const parsed = parseMPR(arrayBuffer);
 
@@ -126,8 +122,8 @@ describe('parseMPR', () => {
     );
 
     const data = convertData(dataFile);
-
-    expect(data).toBeDeepCloseTo(parsed.data.variables, 1);
+    // console.log('\n\n\n\n\n', data);
+    // console.log('\n\n\n\n\n', parsed.data.variables);
+    expect(data).toMatchObject(parsed.data.variables);
   });
 });
-
