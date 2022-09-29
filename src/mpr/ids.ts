@@ -105,7 +105,10 @@ export const dataColumns: { [key: number]: string[] } = {
   0x1f1: ['Float32', '|I h7|', 'A'],
 };
 
-export const unitsScale: { iRange: { [key:string]:string }, isUnit: { [key:string]: number} } = {
+export const unitsScale: {
+  iRange: { [key: string]: string };
+  isUnit: { [key: string]: number };
+} = {
   iRange: {
     9: '1 A',
     10: '100 mA',

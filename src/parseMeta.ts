@@ -46,7 +46,6 @@ export function parseMeta(
   let i = 0; //loop over lines
 
   for (; i < lines.length; i++) {
-
     const currentLine = lines[i];
 
     /* empty line, continue */
@@ -88,10 +87,10 @@ export function parseMeta(
       const kV: string[] = currentLine.split(/\s{2,}/);
       const [key, val] = [kV[0].trim(), kV.slice(1).join('  ').trim()];
       result[key] = val;
+    } else if (Array.isArray(result.flags)) {
+      result.flags.push(currentLine);
     } else {
-      Array.isArray(result.flags) ? 
-        result.flags.push(currentLine) :
-        result.flags = [currentLine];
+      result.flags = [currentLine];
     }
   }
   return result;

@@ -1,4 +1,4 @@
-import {IOBuffer} from "iobuffer";
+import { IOBuffer } from 'iobuffer';
 
 /**
  * Read a certain number of bytes in a buffer using a type string
