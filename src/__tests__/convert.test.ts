@@ -9,6 +9,7 @@ describe('test convert', () => {
   it('directory', async () => {
     const fl = await fileListFromPath(join(__dirname, 'data'));
     const directories = await convert(fl);
+    console.log(directories)
     // test number of directories
     expect(directories).toHaveLength(3);
     //each dir is an object with 'dir', 'mpr', 'mps', 'mpt' all optional.

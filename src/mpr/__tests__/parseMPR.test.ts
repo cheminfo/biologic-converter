@@ -4,16 +4,14 @@ import { join } from 'path';
 import { toBeDeepCloseTo } from 'jest-matcher-deep-close-to';
 
 import { flagColumns, dataColumns } from '../ids';
-import { parseMPR, addData } from '../parseMPR';
+import { parseMPR } from '../parseMPR';
+import { addData } from '../utility/addData';
 
 expect.extend({ toBeDeepCloseTo });
 
 const testFiles = '../../__tests__/data/test';
 
 describe('parseMPR', () => {
-  /* TEST FILES READING */
-  const arrayBuffer = readFileSync(join(__dirname, `${testFiles}/ca.mpr`));
-  const parsed = parseMPR(arrayBuffer);
 
   it('caParams', () => {
     const caMeta = JSON.parse(
@@ -83,7 +81,7 @@ describe('parseMPR', () => {
     const data: Record<
       string,
       Record<string, Array<number | string> | string>
-    > = {};
+    > = { };
     let first = true;
     const flags = new Array<string>();
     const vars = new Array<string>();
@@ -96,16 +94,16 @@ describe('parseMPR', () => {
     for (const dat of dataFile.steps[0].data) {
       for (const key of Object.keys(dat.raw)) {
         if (flags.includes(key) || vars.includes(key)) {
-          if (!Object.keys(data).includes(key)) {
+          if (data[key]===undefined) {
             data[key] = {};
           }
           if (typeof dat.raw[key] === 'object') {
-            addData(Object(data[key]), dat.raw[key].n);
+            addData(data[key], dat.raw[key].n);
             if (first) {
               data[key].units = dat.raw[key].u;
             }
           } else {
-            addData(Object(data[key]), dat.raw[key]);
+            addData(data[key], dat.raw[key]);
             if (first) data[key].units = '';
           }
         } else {
@@ -119,11 +117,17 @@ describe('parseMPR', () => {
   }
 
   it('data', () => {
+
+    const arrayBuffer = readFileSync(join(__dirname, `${testFiles}/ca.mpr`));
+    const parsed = parseMPR(arrayBuffer);
+
     const dataFile = JSON.parse(
       readFileSync(join(__dirname, `${testFiles}/ca_data.json`)).toString(),
     );
+
     const data = convertData(dataFile);
 
     expect(data).toBeDeepCloseTo(parsed.data.variables, 1);
   });
 });
+

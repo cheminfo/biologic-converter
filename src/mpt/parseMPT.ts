@@ -32,7 +32,7 @@ export function parseMPT(data: TextData): MPT {
 /**
  * Parse the values
  */
-export function parseData(data: string[]): MPT['variables'] {
+function parseData(data: string[]): MPT['variables'] {
   const variables: Record<string, MeasurementVariable> = {};
 
   let matrix = data.map((line) => line.split('\t'));
@@ -53,13 +53,13 @@ export function parseData(data: string[]): MPT['variables'] {
   return variables;
 }
 
-export interface HeaderMPT {
+interface HeaderMPT {
   fileType: string;
   Technique: string;
   [other: string]: string;
 }
 
-export function headerMPT(lines: string[]): HeaderMPT {
+function headerMPT(lines: string[]): HeaderMPT {
   const nOfLinesHeader = lines[1].split(' : ');
   return {
     fileType: lines[0],

@@ -1,6 +1,5 @@
 import { PartialFileList, groupFiles } from 'filelist-utils';
 
-/*import { MPR, parseMPR } from './mpr/parseMPR';*/
 import { MPR, parseMPR } from './mpr/parseMPR';
 import { MPS, parseMPS } from './mps/parseMPS';
 import { MPT, parseMPT } from './mpt/parseMPT';
@@ -10,7 +9,6 @@ export interface BioLogic {
   mpr?: MPR;
   mps?: MPS;
   mpt?: MPT;
-  mpr?: MPR;
 }
 
 /**
