@@ -2,7 +2,6 @@ import { StringObject, ComplexObject } from './Types';
 
 /**
  * Parse MPS file and MPT header
- * @module parseMeta
  */
 
 /**
@@ -47,7 +46,6 @@ export function parseMeta(
   let i = 0; //loop over lines
 
   for (; i < lines.length; i++) {
-    // read line by line...
 
     const currentLine = lines[i];
 
@@ -91,13 +89,9 @@ export function parseMeta(
       const [key, val] = [kV[0].trim(), kV.slice(1).join('  ').trim()];
       result[key] = val;
     } else {
-      //boolean
-      // eslint-disable-next-line no-lonely-if
-      if (Array.isArray(result.flags)) {
-        result.flags.push(currentLine);
-      } else {
+      Array.isArray(result.flags) ? 
+        result.flags.push(currentLine) :
         result.flags = [currentLine];
-      }
     }
   }
   return result;
