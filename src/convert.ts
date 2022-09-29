@@ -10,7 +10,7 @@ export interface BioLogic {
   mpr?: MPR;
   mps?: MPS;
   mpt?: MPT;
-  /*mpr?: MPR;*/
+  mpr?: MPR;
 }
 
 /**
