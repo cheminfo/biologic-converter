@@ -1,4 +1,4 @@
-import { VarsChild } from '../modules/parseData';
+import { VarsChild } from '../parseData';
 
 export function addData(
   varsChild: Partial<VarsChild>,
