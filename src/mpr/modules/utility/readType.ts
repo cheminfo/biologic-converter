@@ -4,7 +4,7 @@ import { IOBuffer } from 'iobuffer';
  * Read dType bites
  * @param buffer
  * @param dType
- * 
+ *
  * */
 export function readType(buffer: IOBuffer, dType: string): number {
   switch (dType) {

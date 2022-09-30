@@ -1,19 +1,19 @@
 import { IOBuffer } from 'iobuffer';
 
 import { flagColumns, dataColumns, unitsScale } from '../ids';
-import { addData } from '../utility/addData';
-import { readType } from '../utility/readType';
 
 import { ModuleHeader } from './parseModuleHeader';
+import { addData } from './utility/addData';
+import { readType } from './utility/readType';
 
 export interface VarsChild {
   data: (number | string)[];
   label: string;
   units: string;
 }
-export type Variables = Record<string, VarsChild>;
+export type ParseData = Record<string, VarsChild>;
 
-export function parseData(buffer: IOBuffer, header: ModuleHeader): Variables {
+export function parseData(buffer: IOBuffer, header: ModuleHeader): ParseData {
   const zero = buffer.offset; // relative 0x0
   const dataPoints = buffer.readUint32(); // Number of datapoints
   const columns = buffer.readByte(); // Number of columns
@@ -43,7 +43,6 @@ export function parseData(buffer: IOBuffer, header: ModuleHeader): Variables {
   for (let i = 0; i < dataPoints; i++) {
     let flagByte = 256;
     for (const id of colIds) {
-
       if (flagColumns[id] !== undefined) {
         if (flagByte === 256) flagByte = buffer.readByte();
         const flag = flagColumns[id];
@@ -55,7 +54,7 @@ export function parseData(buffer: IOBuffer, header: ModuleHeader): Variables {
         }
 
         const varsKeyName = flag[1];
-        let varsChildObject: Partial<VarsChild> = variables[varsKeyName] || { };
+        let varsChildObject: Partial<VarsChild> = variables[varsKeyName] || {};
 
         varsChildObject = addData(
           varsChildObject,
@@ -93,5 +92,5 @@ export function parseData(buffer: IOBuffer, header: ModuleHeader): Variables {
       }
     }
   }
-  return variables as Variables;
+  return variables as ParseData;
 }

@@ -4,9 +4,9 @@ import { join } from 'path';
 //import { toBeDeepCloseTo } from 'jest-matcher-deep-close-to';
 
 import { flagColumns, dataColumns } from '../ids';
-import { VarsChild } from '../modules/parseData';
-import { DataVariables, parseMPR } from '../parseMPR';
-import { addData } from '../utility/addData';
+import { ParseData, VarsChild } from '../modules/parseData';
+import { addData } from '../modules/utility/addData';
+import { parseMPR } from '../parseMPR';
 
 //expect.extend({ toBeDeepCloseTo });
 
@@ -21,7 +21,7 @@ describe('parseMPR', () => {
       JSON.parse(
         JSON.stringify(
           parseMPR(readFileSync(join(__dirname, `${testFiles}/ca.mpr`)))
-            .settings.variables.params,
+            .settings.variables.technique,
         ),
       ),
     );
@@ -35,7 +35,7 @@ describe('parseMPR', () => {
       JSON.parse(
         JSON.stringify(
           parseMPR(readFileSync(join(__dirname, `${testFiles}/cp.mpr`)))
-            .settings.variables.params,
+            .settings.variables.technique,
         ),
       ),
     );
@@ -46,7 +46,7 @@ describe('parseMPR', () => {
     );
     expect(meta.params[0]).toStrictEqual(
       parseMPR(readFileSync(join(__dirname, `${testFiles}/cv.mpr`))).settings
-        .variables.params,
+        .variables.technique,
     );
   });
   it('lsvParams', () => {
@@ -55,7 +55,7 @@ describe('parseMPR', () => {
     );
     expect(meta.params[0]).toStrictEqual(
       parseMPR(readFileSync(join(__dirname, `${testFiles}/lsv.mpr`))).settings
-        .variables.params,
+        .variables.technique,
     );
   });
   it('waitParams', () => {
@@ -64,7 +64,7 @@ describe('parseMPR', () => {
     );
     expect(meta.params[0]).toStrictEqual(
       parseMPR(readFileSync(join(__dirname, `${testFiles}/wait.mpr`))).settings
-        .variables.params,
+        .variables.technique,
     );
   });
   it('zirParams', () => {
@@ -73,7 +73,7 @@ describe('parseMPR', () => {
     );
     expect(meta.params[0]).toStrictEqual(
       parseMPR(readFileSync(join(__dirname, `${testFiles}/zir.mpr`))).settings
-        .variables.params,
+        .variables.technique,
     );
   });
   // Convert yadg data file to our format of files
@@ -110,7 +110,7 @@ describe('parseMPR', () => {
       }
       first = false;
     }
-    return data as DataVariables;
+    return data as ParseData;
   }
 
   it('data', () => {

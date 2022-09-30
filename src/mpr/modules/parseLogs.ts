@@ -1,6 +1,6 @@
 import { IOBuffer } from 'iobuffer';
 
-import { pascalString } from '../utility/pascalString';
+import { pascalString } from './utility/pascalString';
 
 export interface ParseLogs {
   channelNumber: number;
