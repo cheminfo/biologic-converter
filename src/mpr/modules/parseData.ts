@@ -43,6 +43,7 @@ export function parseData(buffer: IOBuffer, header: ModuleHeader): Variables {
   for (let i = 0; i < dataPoints; i++) {
     let flagByte = 256;
     for (const id of colIds) {
+
       if (flagColumns[id] !== undefined) {
         if (flagByte === 256) flagByte = buffer.readByte();
         const flag = flagColumns[id];
@@ -54,7 +55,7 @@ export function parseData(buffer: IOBuffer, header: ModuleHeader): Variables {
         }
 
         const varsKeyName = flag[1];
-        let varsChildObject: Partial<VarsChild> = variables[varsKeyName] || {};
+        let varsChildObject: Partial<VarsChild> = variables[varsKeyName] || { };
 
         varsChildObject = addData(
           varsChildObject,

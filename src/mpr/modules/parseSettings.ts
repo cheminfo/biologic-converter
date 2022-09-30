@@ -1,9 +1,11 @@
 import { IOBuffer } from 'iobuffer';
 
-import { getParams } from '../utility/getParams';
-import { pascalString } from '../utility/pascalString';
-import { readType } from '../utility/readType';
+import { parseTechnique } from './utility/parseTechnique';
+import { techniqueLookUp } from './utility/techniqueHelpers/techniqueLookUp';
+import {readParameterValue } from './utility/techniqueHelpers/readParametersValue';
+import { pascalString } from './utility/pascalString';
 
+// settings has a general set of keys, and then some specific for the technique
 export interface ParseSettings {
   techniqueId: number;
   comments: string;
@@ -20,11 +22,22 @@ export interface ParseSettings {
   characteristicMass: number;
   batteryCapacity: number;
   batteryCapacityUnit: number;
-  params: ParamOut;
+  /*
+  * these will be useful parameters depending on the technique, 
+  * but not the main data (seeparseData)
+  */
+  technique: ParseTechnique;
 }
+ /**
+ * Parses the experiments settings
+ * @param buffer - the data at a precise offset
+ * @returns Settings as an object
+ * this should likely converge to MPS (working on it).
+ * bc these are experiment settings should this converge to MPS? (working on it.)
+ */
 export function parseSettings(buffer: IOBuffer) {
   let object: Partial<ParseSettings> = {};
-  const zero = buffer.offset;
+  buffer.mark();//flags module offset, used in readParams
   object.techniqueId = buffer.readByte();
   object.comments = pascalString(buffer);
   buffer.offset = zero + 0x107;
@@ -45,30 +58,7 @@ export function parseSettings(buffer: IOBuffer) {
   object.characteristicMass = buffer.readFloat32();
   object.batteryCapacity = buffer.readFloat32();
   object.batteryCapacityUnit = buffer.readByte();
-  object.params = readParams(buffer, getParams(object.techniqueId), zero);
-  return object as ParseSettings;
-}
+  object.technique = parseTechnique(buffer, techniqueLookUp(object.techniqueId));
 
-type ParamOut = Record<string, string | number>;
-function readParams(
-  buffer: IOBuffer,
-  params: ReturnType<typeof getParams>,
-  zero: number,
-): ParamOut {
-  let read = 0;
-  // Parameters can start at either 0x572, 0x1845 or 0x1846
-  for (const off of [0x572, 0x1845, 0x1846]) {
-    buffer.offset = zero + off;
-    read = buffer.readUint16();
-    if (read !== 0) break;
-  }
-  const nParams = buffer.readUint16();
-  const paramOut: ParamOut = {};
-  paramOut.technique = params[0];
-  for (let i = 0; i < Math.min(nParams, params[1].length); i++) {
-    const param = params[1][i];
-    if (param[1] === 'Pascal') paramOut[param[0]] = pascalString(buffer);
-    else paramOut[param[0]] = readType(buffer, param[1]);
-  }
-  return paramOut;
+  return object as ParseSettings;
 }

@@ -1,21 +1,22 @@
 import { BinaryData } from 'cheminfo-types';
 import { IOBuffer } from 'iobuffer';
 
-import { parseData, Variables } from './modules/parseData';
-import { ParseLogs, parseLogs } from './modules/parseLogs';
-import { ParseLoop, parseLoop } from './modules/parseLoop';
-import { ModuleHeader, parseModuleHeader } from './modules/parseModuleHeader';
+import { parseData, ParseData } from './modules/parseData';
+import { parseLogs, ParseLogs } from './modules/parseLogs';
+import { parseLoop, ParseLoop } from './modules/parseLoop';
+import { parseModuleHeader, ModuleHeader } from './modules/parseModuleHeader';
 import { parseSettings, ParseSettings } from './modules/parseSettings';
 import { isModule } from './utility/isModule';
 
-export type DataVariables = Variables;
+
 /**
  * imagine the MPR file as a set of blocks or modules,
  * each with a header, and then the data.
+ * the modules are: `data`, `settings`, `log` and `loop`.
  */
 export interface MPR {
   name: string /** a string in the first line */;
-  data: { header: ModuleHeader; variables: DataVariables };
+  data: { header: ModuleHeader; variables: ParseData };
   settings: { header: ModuleHeader; variables: ParseSettings };
   log?: { header: ModuleHeader; variables: ParseLogs };
   loop?: { header: ModuleHeader; variables: ParseLoop };

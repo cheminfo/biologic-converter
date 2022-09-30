@@ -1,40 +1,12 @@
 /**
- * EC-LAB TECHNIQUE PARAMS
+ * parameters for each currently parsed technique (several not implemented.)
  */
-type Technique = string;
-type ArraySS = [string, string][];
-export function getParams(id: number): [Technique, ArraySS] {
-  switch (id) {
-    case 0x4:
-      return ['GCPL', gcplParams];
-    case 0x6:
-      return ['CV', cvParams];
-    case 0xb:
-      throw new Error(`Not implemented technique: OCV`);
-    case 0x18:
-      return ['CA', caParams];
-    case 0x19:
-      return ['CP', cpParams];
-    case 0x1c:
-      return ['WAIT', waitParams];
-    case 0x1d:
-      throw new Error(`Not implemented technique: PEIS`);
-    case 0x1e:
-      throw new Error(`Not implemented technique: GEIS`);
-    case 0x32:
-      return ['ZIR', zirParams];
-    case 0x6c:
-      return ['LSV', lsvParams];
-    case 0x7f:
-      throw new Error(`Not implemented technique: MB`);
-    default:
-      throw new Error(
-        `Not implemented technique: unknown (0x${id.toString(16)})`,
-      );
-  }
-}
 
-export const caParams: ArraySS = [
+type ArraySS = [string, string][];
+type TechniquesAndParams = Record<string, ArraySS>
+
+export const techniquesAndParams: TechniqueAndParams = {
+ caParams: [
   ['Ei', 'Float32'],
   ['Ei_vs', 'Uint8'],
   ['ti', 'Float32'],
@@ -60,9 +32,8 @@ export const caParams: ArraySS = [
   ['bandwidth', 'Uint8'],
   ['goto_Ns', 'Uint32'],
   ['nc_cycles', 'Uint32'],
-];
-
-export const cpParams: ArraySS = [
+],
+cpParams:[
   ['Is', 'Float32'],
   ['Is_unit', 'Uint8'],
   ['Is_vs', 'Uint8'],
@@ -79,9 +50,8 @@ export const cpParams: ArraySS = [
   ['bandwidth', 'Uint8'],
   ['goto_Ns', 'Uint32'],
   ['nc_cycles', 'Uint32'],
-];
-
-export const cvParams: ArraySS = [
+],
+cvParams: [
   ['Ei', 'Float32'],
   ['Ei_vs', 'Uint8'],
   ['dE/dt', 'Float32'],
@@ -103,9 +73,8 @@ export const cvParams: ArraySS = [
   ['reverse_scan', 'Uint8'],
   ['Ef', 'Float32'],
   ['Ef_vs', 'Uint8'],
-];
-
-export const gcplParams: ArraySS = [
+],
+gcplParams: [
   ['set_I/C', 'Uint8'],
   ['Is', 'Float32'],
   ['Is_unit', 'Uint8'],
@@ -138,9 +107,8 @@ export const gcplParams: ArraySS = [
   ['EL', 'Float32'],
   ['goto_Ns', 'Uint32'],
   ['nc_cycles', 'Uint32'],
-];
-
-export const lsvParams: ArraySS = [
+],
+lsvParams: [
   ['tR', 'Float32'],
   ['dER/dt', 'Float32'],
   ['dER', 'Float32'],
@@ -164,9 +132,8 @@ export const lsvParams: ArraySS = [
   ['I_range_max', 'Uint8'],
   ['I_range_init', 'Uint8'],
   ['bandwidth', 'Uint8'],
-];
-
-export const waitParams: ArraySS = [
+],
+waitParams: [
   ['select', 'Uint8'],
   ['td', 'Uint32'],
   ['from', 'Uint8'],
@@ -179,8 +146,7 @@ export const waitParams: ArraySS = [
   ['dI_unit', 'Uint8'],
   ['dt', 'Float32'],
 ];
-
-export const zirParams: ArraySS = [
+zirParams: [
   ['E', 'Float32'],
   ['E_vs', 'Uint8'],
   ['f', 'Float32'],
@@ -195,4 +161,5 @@ export const zirParams: ArraySS = [
   ['comp_level', 'Uint8'],
   ['use_results', 'Uint8'],
   ['comp_mode', 'Uint8'],
-];
+]
+};

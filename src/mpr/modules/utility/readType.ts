@@ -1,10 +1,13 @@
 import { IOBuffer } from 'iobuffer';
 
 /**
- * Read a certain number of bytes in a buffer using a type string
+ * Read dType bites
+ * @param buffer
+ * @param dType
+ * 
  * */
-export function readType(buffer: IOBuffer, type: string): number {
-  switch (type) {
+export function readType(buffer: IOBuffer, dType: string): number {
+  switch (dType) {
     case 'Uint8':
       return buffer.readByte();
     case 'Uint16':
