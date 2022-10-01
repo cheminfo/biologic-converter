@@ -1,0 +1,1 @@
+[{"Ei": 0.0, "Ei_vs": 0, "dE/dt": 0.10000000149011612, "dE/dt_unit": 1, "E1": 1.5, "E1_vs": 4, "step_percent": 50, "N": 10, "E_range_min": 0.0, "E_range_max": 10.0, "I_range": "1 \u00b5A", "I_range_min": 123, "I_range_max": 123, "I_range_init": 123, "bandwidth": 5, "E2": 5.5, "E2_vs": 4, "nc_cycles": 4, "reverse_scan": 1, "Ef": 0.0, "Ef_vs": 0}]

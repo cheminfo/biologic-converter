@@ -106,10 +106,14 @@ export const dataColumns: { [key: number]: string[] } = {
 };
 
 export const unitsScale: {
-  iRange: { [key: string]: string };
-  isUnit: { [key: string]: number };
+  //this is quite entangled to fix now
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  I_range: { [key: string]: string };
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  Is_unit: { [key: string]: number };
 } = {
-  iRange: {
+  // eslint-disable-next-line camelcase
+  I_range: {
     9: '1 A',
     10: '100 mA',
     11: '10 mA',
@@ -122,7 +126,8 @@ export const unitsScale: {
     24: 'Auto',
     37: '1 A',
   },
-  isUnit: {
+  // eslint-disable-next-line camelcase
+  Is_unit: {
     A: 0,
     mA: 1,
     µA: 2,
