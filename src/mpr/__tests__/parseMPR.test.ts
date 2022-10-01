@@ -1,117 +1,52 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
-//import { toBeDeepCloseTo } from 'jest-matcher-deep-close-to';
-
 import { flagColumns, dataColumns } from '../ids';
 import { ParseData, VarsChild } from '../modules/parseData';
 import { addData } from '../modules/utility/addData';
 import { parseMPR } from '../parseMPR';
 
-//expect.extend({ toBeDeepCloseTo });
-
 const testFiles = '../../__tests__/data/test';
 
-describe('parseMPR', () => {
-  it('caParams', () => {
-    const caMeta = JSON.parse(
-      readFileSync(join(__dirname, `${testFiles}/CAmeta.json`)).toString(),
-    );
-    expect(caMeta.params[0]).toStrictEqual(
-      JSON.parse(
-        JSON.stringify(
-          parseMPR(readFileSync(join(__dirname, `${testFiles}/ca.mpr`)))
-            .settings.variables.technique,
-        ),
-      ),
-    );
-  });
-  it('cpParams', () => {
-    //const;
-    const meta = JSON.parse(
-      readFileSync(join(__dirname, `${testFiles}/CPmeta.json`)).toString(),
-    );
-    expect(meta.params[0]).toStrictEqual(
-      JSON.parse(
-        JSON.stringify(
-          parseMPR(readFileSync(join(__dirname, `${testFiles}/cp.mpr`)))
-            .settings.variables.technique,
-        ),
-      ),
-    );
-  });
-  it('cvParams', () => {
-    const meta = JSON.parse(
-      readFileSync(join(__dirname, `${testFiles}/CVmeta.json`)).toString(),
-    );
-    expect(meta.params[0]).toStrictEqual(
-      parseMPR(readFileSync(join(__dirname, `${testFiles}/cv.mpr`))).settings
-        .variables.technique,
-    );
-  });
-  it('lsvParams', () => {
-    const meta = JSON.parse(
-      readFileSync(join(__dirname, `${testFiles}/LSVmeta.json`)).toString(),
-    );
-    expect(meta.params[0]).toStrictEqual(
-      parseMPR(readFileSync(join(__dirname, `${testFiles}/lsv.mpr`))).settings
-        .variables.technique,
-    );
-  });
-  it('waitParams', () => {
-    const meta = JSON.parse(
-      readFileSync(join(__dirname, `${testFiles}/WAITmeta.json`)).toString(),
-    );
-    expect(meta.params[0]).toStrictEqual(
-      parseMPR(readFileSync(join(__dirname, `${testFiles}/wait.mpr`))).settings
-        .variables.technique,
-    );
-  });
-  it('zirParams', () => {
-    const meta = JSON.parse(
-      readFileSync(join(__dirname, `${testFiles}/ZIRmeta.json`)).toString(),
-    );
-    expect(meta.params[0]).toStrictEqual(
-      parseMPR(readFileSync(join(__dirname, `${testFiles}/zir.mpr`))).settings
-        .variables.technique,
-    );
-  });
-  // Convert yadg data file to our format of files
-  function convertData(dataFile: Record<string, any>) {
-    const data: Record<string, Partial<VarsChild>> = {};
-    let first = true;
-    const flags = new Array<string>();
-    const vars = new Array<string>();
-    for (const flagKey of Object.keys(flagColumns)) {
-      flags.push(flagColumns[Number(flagKey)][1]);
-    }
-    for (const colKey of Object.keys(dataColumns)) {
-      vars.push(dataColumns[Number(colKey)][1]);
-    }
-    for (const dat of dataFile.steps[0].data) {
-      for (const key of Object.keys(dat.raw)) {
-        if (flags.includes(key) || vars.includes(key)) {
-          if (data[key] === undefined) {
-            data[key] = {};
-          }
-          if (typeof dat.raw[key] === 'object') {
-            addData(data[key], dat.raw[key].n);
-            if (first) {
-              data[key].units = dat.raw[key].u;
-            }
-          } else {
-            addData(data[key], dat.raw[key]);
-            if (first) data[key].units = '';
+
+// Convert yadg data file to our format of files
+function convertData(dataFile: Record<string, any>) {
+  const data: Record<string, Partial<VarsChild>> = {};
+  let first = true;
+  const flags = new Array<string>();
+  const vars = new Array<string>();
+  for (const flagKey of Object.keys(flagColumns)) {
+    flags.push(flagColumns[Number(flagKey)][1]);
+  }
+  for (const colKey of Object.keys(dataColumns)) {
+    vars.push(dataColumns[Number(colKey)][1]);
+  }
+  for (const dat of dataFile.steps[0].data) {
+    for (const key of Object.keys(dat.raw)) {
+      if (flags.includes(key) || vars.includes(key)) {
+        if (data[key] === undefined) {
+          data[key] = {};
+        }
+        if (typeof dat.raw[key] === 'object') {
+          addData(data[key], dat.raw[key].n);
+          if (first) {
+            data[key].units = dat.raw[key].u;
           }
         } else {
-          continue;
+          addData(data[key], dat.raw[key]);
+          if (first) data[key].units = '';
         }
-        if (first) data[key].label = key;
+      } else {
+        continue;
       }
-      first = false;
+      if (first) data[key].label = key;
     }
-    return data as ParseData;
+    first = false;
   }
+  return data as ParseData;
+}
+
+describe('parseMPR', () => {
 
   it('data', () => {
     const arrayBuffer = readFileSync(join(__dirname, `${testFiles}/ca.mpr`));
@@ -122,8 +57,6 @@ describe('parseMPR', () => {
     );
 
     const data = convertData(dataFile);
-    // console.log('\n\n\n\n\n', data);
-    // console.log('\n\n\n\n\n', parsed.data.variables);
     expect(data).toMatchObject(parsed.data.variables);
   });
 });

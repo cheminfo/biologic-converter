@@ -8,11 +8,12 @@ import { parseModuleHeader, ModuleHeader } from './modules/parseModuleHeader';
 import { parseSettings, ParseSettings } from './modules/parseSettings';
 import { isModule } from './utility/isModule';
 
-
 /**
  * imagine the MPR file as a set of blocks or modules,
  * each with a header, and then the data.
  * the modules are: `data`, `settings`, `log` and `loop`.
+ * there is only one of each module.
+ * Normally in the order: settings, data, log, loop
  */
 export interface MPR {
   name: string /** a string in the first line */;

@@ -3,9 +3,9 @@
  */
 
 export type ArraySS = [string, string][];
-type TechniquesAndParams = Record<string, ArraySS>;
+type ParamsLookUp = Record<string, ArraySS>;
 
-export const techniquesAndParams: TechniquesAndParams = {
+export const preParamsLookUp: ParamsLookUp = {
   caParams: [
     ['Ei', 'Float32'],
     ['Ei_vs', 'Uint8'],

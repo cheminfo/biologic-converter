@@ -77,7 +77,7 @@ export function parseData(buffer: IOBuffer, header: ModuleHeader): ParseData {
         const read = readType(buffer, dat[0]).toString();
         if (id === 0x27) {
           // If ID is I Range
-          varsChildObject = addData(varsChildObject, unitsScale.iRange[read]);
+          varsChildObject = addData(varsChildObject, unitsScale["I_range"][read]);
         } else {
           varsChildObject = addData(varsChildObject, read);
         }
