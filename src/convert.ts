@@ -1,4 +1,4 @@
-import { PartialFileList, groupFiles } from 'filelist-utils';
+import { FileCollection, groupFiles } from 'filelist-utils';
 
 import { MPR, parseMPR } from './mpr/parseMPR';
 import { MPS, parseMPS } from './mps/parseMPS';
@@ -29,19 +29,19 @@ export interface BioLogic {
  *│      └── test.mpt
  *  ```
  *
- * @param fileList - `path/to/parent` or `path/to/any/child`. (See tree above.)
+ * @param fileCol - `path/to/parent` or `path/to/any/child`. (See tree above.)
  * @returns  JSON object passing **child** directory; array of children if you pass a **parent**.
  */
 
-export async function convert(fileList: PartialFileList): Promise<BioLogic[]> {
-  const dirs = groupFiles(fileList);
+export async function convert(fileCol: FileCollection): Promise<BioLogic[]> {
+  const dirs = groupFiles(fileCol);
   let results: BioLogic[] = [];
 
   /* can not use `forEach` and pass `async` functions */
   for (const dir of dirs) {
     let result: BioLogic = {};
     result.dir = dir.key;
-    for (const dataFile of dir.fileList) {
+    for (const dataFile of dir.fileCollection) {
       const fName = dataFile.name;
       if (fName.endsWith('.mps')) {
         result.mps = parseMPS(await dataFile.arrayBuffer());
