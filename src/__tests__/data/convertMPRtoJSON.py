@@ -19,10 +19,10 @@ for filename in files:
     if filename.endswith("wait.mpr"):
         a = "pass"
     else:
-        newfilename = filename.split(".mpr")[0]+"-params.json"
+        newfilename = filename.split(".mpr")[0]+"-meta.json"
         print(newfilename)
         data, meta, date  = p.process("./"+filename)
-        totest = meta["params"]
+        totest = meta
         fo = open(newfilename, "w")
         fo.write(json.dumps(totest))
         fo.close()
