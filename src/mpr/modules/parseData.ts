@@ -26,7 +26,7 @@ export function parseData(buffer: IOBuffer, header: ModuleHeader): ParseData {
     if (flagColumns[id] !== undefined) {
       units[i] = 'flag';
     } else if (dataColumns[id] !== undefined) {
-      units[i] = dataColumns[id][2];
+      units[i] = dataColumns[id].unit;
     }
   }
 
@@ -45,20 +45,20 @@ export function parseData(buffer: IOBuffer, header: ModuleHeader): ParseData {
     for (const id of colIds) {
       if (flagColumns[id] !== undefined) {
         if (flagByte === 256) flagByte = buffer.readByte();
-        const flag = flagColumns[id];
-        let twosComp = flag[0] & -flag[0];
+        const { bitMask, name: flagName } = flagColumns[id];
+        let twosComp = bitMask & -bitMask;
         let shift = -1;
         while (twosComp > 0) {
           twosComp >>= 1;
           shift++;
         }
 
-        const varsKeyName = flag[1];
+        const varsKeyName = flagName;
         let varsChildObject: Partial<VarsChild> = variables[varsKeyName] || {};
 
         varsChildObject = addData(
           varsChildObject,
-          (flag[0] & flagByte) >> shift,
+          (bitMask & flagByte) >> shift,
         ); //adds data key or pushes to data key
         if (!varsChildObject.label) {
           //addLabel prop
@@ -70,26 +70,26 @@ export function parseData(buffer: IOBuffer, header: ModuleHeader): ParseData {
         }
         variables[varsKeyName] = varsChildObject; //reassign
       } else if (dataColumns[id] !== undefined) {
-        const dat = dataColumns[id];
-        const varsKeyName = dat[1];
+        const dat = dataColumns[id]; //[dataType, name, unit]
+        const varsKeyName = dat.name;
         let varsChildObject: Partial<VarsChild> = variables[varsKeyName] || {};
 
-        const read = readType(buffer, dat[0]);
+        const read = readType(buffer, dat.dType);
         if (id === 0x27) {
           // If ID is I Range
           varsChildObject = addData(
             varsChildObject,
-            unitsScale('I_range', read) as string,
+            unitsScale('I_range', read),
           );
         } else {
-          varsChildObject = addData(varsChildObject, read.toString());
+          varsChildObject = addData(varsChildObject, read);
         }
         if (!varsChildObject.label) {
           //addLabel
           varsChildObject.label = varsKeyName;
         }
         if (!varsChildObject.units) {
-          varsChildObject.units = dat[2];
+          varsChildObject.units = dat.unit;
         }
         variables[varsKeyName] = varsChildObject; //now reassign
       }

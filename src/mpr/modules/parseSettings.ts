@@ -25,7 +25,7 @@ export interface ParseSettings {
    * these will be useful parameters depending on the technique,
    */
   params: Parameters;
-  // I think it is actually Parameters[], but atm the code is simplified.
+  // I think it is actually Parameters[], but atm the parser is simplified.
 }
 /**
  * Parses the experiments settings
