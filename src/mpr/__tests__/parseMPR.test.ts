@@ -9,18 +9,19 @@ import { parseMPR } from '../parseMPR';
 const testFiles = '../../__tests__/data/test';
 
 // Convert yadg data file to our format of files
-function convertData(dataFile: Record<string, any>) {
+function convertData(dataFile: Record<string, any>[]) {
   const data: Record<string, Partial<VarsChild>> = {};
   let first = true;
-  const flags = new Array<string>();
-  const vars = new Array<string>();
-  for (const flagKey of Object.keys(flagColumns)) {
-    flags.push(flagColumns[parseInt(flagKey, 16)].name);
+  const flags:string[] = [];
+  const vars:string[] = [];
+
+  for (const [flagKey,val] of Object.entries(flagColumns)) {
+    flags.push(val.name);
   }
-  for (const colKey of Object.keys(dataColumns)) {
-    vars.push(dataColumns[parseInt(colKey, 16)].name);
+  for (const [colKey,val] of Object.entries(dataColumns)) {
+    vars.push(val.name);
   }
-  for (const dat of dataFile.steps[0].data) {
+  for (const dat of dataFile) {
     for (const key of Object.keys(dat.raw)) {
       if (flags.includes(key) || vars.includes(key)) {
         if (data[key] === undefined) {
@@ -47,15 +48,13 @@ function convertData(dataFile: Record<string, any>) {
 
 describe('parseMPR', () => {
   it('data', () => {
-    //const arrayBuffer = readFileSync(join(__dirname, `${testFiles}/ca.mpr`));
-    //const parsed = parseMPR(arrayBuffer);
+    const arrayBuffer = readFileSync(join(__dirname, `${testFiles}/ca.mpr`));
+    const parsed = parseMPR(arrayBuffer);
 
     const dataFile = JSON.parse(
       readFileSync(join(__dirname, `${testFiles}/ca-full.json`), 'utf-8'),
     )
-    //const p = dataFile.filter((d: any) => d.label === 'time');
-    console.log(dataFile);
-    //const data = convertData(dataFile);
-    //expect(data).toMatchObject(parsed.data.variables);
+    const data = convertData(dataFile);
+    expect(data).toMatchObject(parsed.data.variables);
   });
 });

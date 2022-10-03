@@ -20,6 +20,8 @@ export function parseData(buffer: IOBuffer, header: ModuleHeader): ParseData {
   const colIds = new Uint16Array(columns); // array of Ids of the columns
   const units = new Array<string>(columns); // Units for each column
 
+  const variables: Record<string, Partial<VarsChild>> = {};
+
   for (let i = 0; i < columns; i++) {
     const id = buffer.readUint16();
     colIds[i] = id;
@@ -29,8 +31,6 @@ export function parseData(buffer: IOBuffer, header: ModuleHeader): ParseData {
       units[i] = dataColumns[id].unit;
     }
   }
-
-  const variables: Record<string, Partial<VarsChild>> = {};
 
   // Starts of datapoints vary between module versions
   if (header.version <= 2) {
@@ -95,5 +95,5 @@ export function parseData(buffer: IOBuffer, header: ModuleHeader): ParseData {
       }
     }
   }
-  return variables as ParseData;
+  return variables as ParseData
 }
