@@ -16,13 +16,11 @@ import yadg.parsers.electrochem.eclabmpr as p
 files = glob.glob("./*/*.mpr")
 print(files)
 for filename in files:
-    if filename.endswith("wait.mpr"):
-        a = "pass"
-    else:
-        newfilename = filename.split(".mpr")[0]+"-meta.json"
+    if filename.endswith("ca.mpr"):
+        newfilename = filename.split(".mpr")[0]+"-full.json"
         print(newfilename)
         data, meta, date  = p.process("./"+filename)
-        totest = meta
+        totest = data
         fo = open(newfilename, "w")
         fo.write(json.dumps(totest))
         fo.close()
