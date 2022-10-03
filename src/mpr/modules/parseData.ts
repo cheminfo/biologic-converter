@@ -74,12 +74,15 @@ export function parseData(buffer: IOBuffer, header: ModuleHeader): ParseData {
         const varsKeyName = dat[1];
         let varsChildObject: Partial<VarsChild> = variables[varsKeyName] || {};
 
-        const read = readType(buffer, dat[0]).toString();
+        const read = readType(buffer, dat[0]);
         if (id === 0x27) {
           // If ID is I Range
-          varsChildObject = addData(varsChildObject, unitsScale["I_range"][read]);
+          varsChildObject = addData(
+            varsChildObject,
+            unitsScale('I_range', read) as string,
+          );
         } else {
-          varsChildObject = addData(varsChildObject, read);
+          varsChildObject = addData(varsChildObject, read.toString());
         }
         if (!varsChildObject.label) {
           //addLabel

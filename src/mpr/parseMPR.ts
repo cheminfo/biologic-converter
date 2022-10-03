@@ -9,8 +9,7 @@ import { parseSettings, ParseSettings } from './modules/parseSettings';
 import { isModule } from './utility/isModule';
 
 /**
- * imagine the MPR file as a set of blocks or modules,
- * each with a header, and then the data.
+ * imagine the MPR file as a set of modules(blocks), each with a header, and then the data.
  * the modules are: `data`, `settings`, `log` and `loop`.
  * there is only one of each module.
  * Normally in the order: settings, data, log, loop
@@ -41,7 +40,8 @@ export function parseMPR(arrayBuffer: BinaryData): MPR {
   //file is header + modules flagged as "MODULE" before starts
   while (isModule(buffer)) {
     const header = parseModuleHeader(buffer); //this is added to the objects below
-    const zero = buffer.offset;
+    const dataStart = buffer.offset;
+    const dataLength = header.length;
     //header.longname flags the props in the module
     if (/settings/i.exec(header.longName)) {
       mpr.settings = { header, variables: parseSettings(buffer) };
@@ -52,7 +52,7 @@ export function parseMPR(arrayBuffer: BinaryData): MPR {
     } else if (/loop/i.exec(header.longName)) {
       mpr.loop = { header, variables: parseLoop(buffer) };
     }
-    buffer.offset = zero + header.length;
+    buffer.offset = dataStart + dataLength;//end of module
   }
   return mpr as MPR;
 }
