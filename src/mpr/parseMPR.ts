@@ -52,7 +52,7 @@ export function parseMPR(arrayBuffer: BinaryData): MPR {
     } else if (/loop/i.exec(header.longName)) {
       mpr.loop = { header, variables: parseLoop(buffer) };
     }
-    buffer.offset = dataStart + dataLength;//end of module
+    buffer.offset = dataStart + dataLength; //end of module
   }
   return mpr as MPR;
 }

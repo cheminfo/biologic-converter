@@ -5,9 +5,7 @@ import { parseMPT } from '../parseMPT';
 
 describe('parseMPT', () => {
   it('test', () => {
-    const arrayBuffer = readFileSync(
-      join(__dirname, '../../__tests__/data/test/test.mpt'),
-    );
+    const arrayBuffer = readFileSync(join(__dirname, './data/test.mpt'));
     const result = parseMPT(arrayBuffer);
 
     const meta = result.meta;

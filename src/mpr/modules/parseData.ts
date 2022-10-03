@@ -95,5 +95,5 @@ export function parseData(buffer: IOBuffer, header: ModuleHeader): ParseData {
       }
     }
   }
-  return variables as ParseData
+  return variables as ParseData;
 }

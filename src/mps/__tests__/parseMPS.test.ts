@@ -5,9 +5,7 @@ import { parseTechnique, parseMPS } from '../parseMPS';
 
 describe('parseMPS', () => {
   it('parse an mps file', () => {
-    const arrayBuffer = readFileSync(
-      join(__dirname, '../../__tests__/data/test/test.mps'),
-    );
+    const arrayBuffer = readFileSync(join(__dirname, './data/test.mps'));
 
     const result = parseMPS(arrayBuffer);
     expect(Object.keys(result)).toHaveLength(20);

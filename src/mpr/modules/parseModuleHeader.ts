@@ -18,6 +18,6 @@ export function parseModuleHeader(buffer: IOBuffer): ModuleHeader {
   object.longName = buffer.readUtf8(25).trim();
   object.length = buffer.readUint32();
   object.version = buffer.readUint32();
-  object.date = buffer.readChars(8);//ascii
+  object.date = buffer.readChars(8); //ascii
   return object as ModuleHeader;
 }
