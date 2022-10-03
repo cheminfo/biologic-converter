@@ -1,5 +1,7 @@
 import { IOBuffer } from 'iobuffer';
 
+import { unitsScale } from '../../ids';
+
 import { readType as pValue } from './readType';
 import { TechniqueLookUp } from './techniqueHelpers/techniquesLookUp';
 
@@ -9,7 +11,8 @@ export interface Parameters {
 /**
  * Parses current technique (type of experiment carried out.)
  * @param buffer - our data at an expected offset
- * @param parameters for technique
+ * @param preParameters - it is a tuple `[name, dataType]` that helps
+ * to read the value of type `dataType` later on.
  */
 export function getTechniqueParameters(
   buffer: IOBuffer,
@@ -22,18 +25,24 @@ export function getTechniqueParameters(
     //byte flags params' start
     buffer.offset = zero + off;
     if (buffer.readUint16() !== 0) {
+      const nParams = buffer.readUint16();
       /*
        * not sure whether next line is correct
        * see https://github.com/dgbowl/yadg/blob/075f1708d03bdd4c4324871cc7bd4b1ffb7e1ccf/src/yadg/parsers/electrochem/eclabmpr.py#L501
        * update: for now we are parsing a subset this would fail
        * https://github.com/dgbowl/yadg/blob/075f1708d03bdd4c4324871cc7bd4b1ffb7e1ccf/src/yadg/parsers/electrochem/eclabtechniques.py#L701
        */
-      const nParams = buffer.readUint16();
       for (let i = 0; i < Math.min(preParameters.length, nParams); i++) {
         const [pName, pReadType] = preParameters[i];
-        // the line below is for some techiques not yet implemented ?
-        //if (param[1] === 'Pascal') parameters[param[0]] = pascalString(buffer);
-        parameters[pName] = pValue(buffer, pReadType);
+        //if (param[1] === 'Pascal') parameters[param[0]] = pascalString(buffer); //we not using it
+        //apparently
+        const val = pValue(buffer, pReadType);
+        parameters[pName] =
+          pName === 'I_range'
+            ? unitsScale('I_range', val + 1)
+            : pName === 'Is_unit'
+            ? unitsScale('Is_unit', val)
+            : val;
       }
       return parameters;
     }

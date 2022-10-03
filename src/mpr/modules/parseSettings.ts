@@ -6,7 +6,7 @@ import { techniqueLookUp } from './utility/techniqueHelpers/techniquesLookUp';
 
 // Represents the data part of the module
 export interface ParseSettings {
-  technique: string;// Unique technique ID.
+  technique: string; // Unique technique ID.
   comments: string; // Pascal string.
   activeMaterialMass: number; // Mass of active material
   atX: number; // at x =
@@ -21,12 +21,11 @@ export interface ParseSettings {
   characteristicMass: number; //characteristic mass
   batteryCapacity: number; //batery capacity C=
   batteryCapacityUnit: number; //unit of the battery capacity
-  nParams?: number; //nSequences sets of nTechniqueParams
   /*
    * these will be useful parameters depending on the technique,
    */
-  params: Parameters;//it could be an error and is actually 
-  // Parameters[].
+  params: Parameters;
+  // I think it is actually Parameters[], but atm the code is simplified.
 }
 /**
  * Parses the experiments settings

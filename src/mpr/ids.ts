@@ -1,7 +1,9 @@
 /**
  * DATA COLUMNS
  */
-
+/**
+ * flag column ID bytes to the corresponding bitmask and name
+ */
 export const flagColumns: { [key: number]: [number, string] } = {
   0x1: [0b00000011, 'mode'],
   0x2: [0b00000100, 'ox/red'],
@@ -103,35 +105,69 @@ export const dataColumns: { [key: number]: string[] } = {
   0x1ef: ['Float32', '|I h5|', 'A'],
   0x1f0: ['Float32', '|I h6|', 'A'],
   0x1f1: ['Float32', '|I h7|', 'A'],
+  0x1f2: ['Float32', '|Ece h2|', 'V'], //-->Added f2 to f7 (not sure why they were missing.)
+  0x1f3: ['Float32', '|Ece h7|', 'V'],
+  0x1f4: ['Float32', '|Ece h7|', 'V'],
+  0x1f5: ['Float32', '|Ece h7|', 'V'],
+  0x1f6: ['Float32', '|Ece h7|', 'V'],
+  0x1f7: ['Float32', '|Ece h7|', 'V'],
 };
 
-export const unitsScale: {
-  //this is quite entangled to fix now
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  I_range: { [key: string]: string };
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  Is_unit: { [key: string]: number };
-} = {
-  // eslint-disable-next-line camelcase
-  I_range: {
-    9: '1 A',
-    10: '100 mA',
-    11: '10 mA',
-    12: '1 mA',
-    13: '100 µA',
-    14: '10 µA',
-    15: '1 µA',
-    21: 'Auto',
-    23: 'Auto',
-    24: 'Auto',
-    37: '1 A',
-  },
-  // eslint-disable-next-line camelcase
-  Is_unit: {
-    A: 0,
-    mA: 1,
-    µA: 2,
-    nA: 3,
-    pA: 4,
-  },
-};
+/** This function maps numeric values in I range to a string */
+export function unitsScale(key: 'I_range' | 'Is_unit', val: number): string {
+  if (key === 'I_range') {
+    switch (val) {
+      case 9:
+        return '1 A';
+      case 10:
+        return '100 mA';
+      case 11:
+        return '10 mA';
+      case 12:
+        return '1 mA';
+      case 13:
+        return '100 µA';
+      case 14:
+        return '10 µA';
+      case 15:
+        return '1 µA';
+      case 21:
+        return '10 µA';
+      case 22:
+        return '1 µA';
+      case 23:
+        return '100 nA';
+      case 24:
+        return '10 nA';
+      case 37:
+        return '1 A';
+      case 38:
+        return '100 mA';
+      case 39:
+        return '10 mA';
+      case 40:
+        return '1 mA';
+      case undefined: //not sure whether this will be equivalent, just trying now
+        return 'Auto';
+      default:
+        break;
+    }
+  }
+  if (key === 'Is_unit') {
+    switch (val) {
+      case 0:
+        return 'A';
+      case 1:
+        return 'mA';
+      case 2:
+        return 'µA';
+      case 3:
+        return 'nA';
+      case 4:
+        return 'pA';
+      default:
+        break;
+    }
+  }
+  throw new Error('Error mapping Is_unit or I_range to value');
+}
