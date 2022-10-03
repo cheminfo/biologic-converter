@@ -6,19 +6,19 @@ import { ParseData, VarsChild } from '../modules/parseData';
 import { addData } from '../modules/utility/addData';
 import { parseMPR } from '../parseMPR';
 
-const testFiles = '../../__tests__/data/test';
+const testFiles = './data';
 
 // Convert yadg data file to our format of files
 function convertData(dataFile: Record<string, any>[]) {
   const data: Record<string, Partial<VarsChild>> = {};
   let first = true;
-  const flags:string[] = [];
-  const vars:string[] = [];
+  const flags: string[] = [];
+  const vars: string[] = [];
 
-  for (const [flagKey,val] of Object.entries(flagColumns)) {
+  for (const [, val] of Object.entries(flagColumns)) {
     flags.push(val.name);
   }
-  for (const [colKey,val] of Object.entries(dataColumns)) {
+  for (const [, val] of Object.entries(dataColumns)) {
     vars.push(val.name);
   }
   for (const dat of dataFile) {
@@ -53,7 +53,7 @@ describe('parseMPR', () => {
 
     const dataFile = JSON.parse(
       readFileSync(join(__dirname, `${testFiles}/ca-full.json`), 'utf-8'),
-    )
+    );
     const data = convertData(dataFile);
     expect(data).toMatchObject(parsed.data.variables);
   });

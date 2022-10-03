@@ -1,0 +1,61 @@
+{
+  "settings": {
+    "technique": "LSV",
+    "comments": "",
+    "active_material_mass": 0.0010000000474974513,
+    "at_x": 0.0,
+    "molecular_weight": 0.0010000000474974513,
+    "atomic_weight": 0.0010000000474974513,
+    "acquisition_start": 0.0,
+    "e_transferred": 1,
+    "electrode_material": "",
+    "electrolyte": "",
+    "electrode_area": 0.0010000000474974513,
+    "reference_electrode": "SCE Saturated Calomel Electrode",
+    "characteristic_mass": 0.0010000000474974513,
+    "battery_capacity": 0.0,
+    "battery_capacity_unit": 0
+  },
+  "params": [
+    {
+      "tR": 0.0,
+      "dER/dt": 0.0,
+      "dER": 0.0,
+      "dtR": 0.0,
+      "dE/dt": 20.000001907348633,
+      "dE/dt_unit": 1,
+      "Ei": -0.05700000002980232,
+      "Ei_vs": 4,
+      "EL": -4.0,
+      "EL_vs": 4,
+      "record": 1,
+      "dI": 0.0,
+      "dI_unit": 2,
+      "tI": 0.0,
+      "step_percent": 50,
+      "N": 10,
+      "E_range_min": -10.0,
+      "E_range_max": 10.0,
+      "I_range": "1 A",
+      "I_range_min": 123,
+      "I_range_max": 123,
+      "I_range_init": 123,
+      "bandwidth": 8
+    }
+  ],
+  "log": {
+    "channel_number": 0,
+    "channel_sn": 5304,
+    "Ewe_ctrl_min": -10.0,
+    "Ewe_ctrl_max": 10.0,
+    "ole_timestamp": 44257.65697916667,
+    "filename": "C:\\EmpaDaten\\Alessandro\\2021_03_02_spAg_Porex_01\\20210302_spAg_Porex_01_LSV_Test_C01.mpr",
+    "host": "10.1.1.100",
+    "address": "USB",
+    "ec_lab_version": "11.33",
+    "server_version": "11.32",
+    "interpreter_version": "11.33",
+    "device_sn": "0200",
+    "averaging_points": 0
+  }
+}
