@@ -52,9 +52,10 @@ describe('parseMPR', () => {
     const parsed = parseMPR(arrayBuffer);
 
     const dataFile = JSON.parse(
-      readFileSync(join(__dirname, `${testFiles}/ca-full.json`), 'utf-8'),
+      readFileSync(join(__dirname, `${testFiles}/ca-data.json`), 'utf-8'),
     );
     const data = convertData(dataFile);
     expect(data).toMatchObject(parsed.data.variables);
+    expect(data).toMatchSnapshot();
   });
 });

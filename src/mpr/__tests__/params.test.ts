@@ -51,6 +51,7 @@ describe('Compare the technique (settings parser)', () => {
     expect(Object.keys(variables)).toHaveLength(
       Object.keys(trueMeta.settings).length + 1,
     ); // we store params inside variables
+    expect(variables).toMatchSnapshot();
   });
 
   it('cv params', () => {
@@ -101,7 +102,7 @@ describe('Compare the technique (settings parser)', () => {
   });
 
   it('wait params', () => {
-    //the python script fails w this file.
+    //the python script fails w this file, here we only testing part of the parsing
     const trueMeta = JSON.parse(
       readFileSync(join(__dirname, `${testFiles}/WAITmeta.json`), 'utf8'),
     );
