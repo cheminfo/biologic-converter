@@ -1,7 +1,6 @@
 import { IOBuffer } from 'iobuffer';
 
 import { Parameters, getTechniqueParameters } from './utility/getParameters';
-import { pascalString } from './utility/pascalString';
 import { techniqueLookUp } from './utility/techniqueHelpers/techniquesLookUp';
 
 // Represents the data part of the module
@@ -39,7 +38,7 @@ export function parseSettings(buffer: IOBuffer) {
   const zero = buffer.offset;
   const { technique, preParameters } = techniqueLookUp(buffer.readByte());
   object.technique = technique;
-  object.comments = pascalString(buffer);
+  object.comments = buffer.decodeText(buffer.readUint8(), 'windows-1252');
   buffer.offset = zero + 0x107;
   object.activeMaterialMass = buffer.readFloat32();
   object.atX = buffer.readFloat32();
@@ -48,12 +47,18 @@ export function parseSettings(buffer: IOBuffer) {
   object.acquisitionStart = buffer.readFloat32();
   object.eTransferred = buffer.readUint16(); // 3 bytes but only 2 are used
   buffer.offset = zero + 0x11e;
-  object.electrodeMaterial = pascalString(buffer);
+  object.electrodeMaterial = buffer.decodeText(
+    buffer.readUint8(),
+    'windows-1252',
+  );
   buffer.offset = zero + 0x1c0;
-  object.electrolyte = pascalString(buffer);
+  object.electrolyte = buffer.decodeText(buffer.readUint8(), 'windows-1252');
   buffer.offset = zero + 0x211;
   object.electrodeArea = buffer.readFloat32();
-  object.referenceElectrode = pascalString(buffer);
+  object.referenceElectrode = buffer.decodeText(
+    buffer.readUint8(),
+    'windows-1252',
+  );
   buffer.offset = zero + 0x24c;
   object.characteristicMass = buffer.readFloat32();
   object.batteryCapacity = buffer.readFloat32();

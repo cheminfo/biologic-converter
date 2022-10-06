@@ -1,7 +1,5 @@
 import { IOBuffer } from 'iobuffer';
 
-import { pascalString } from './utility/pascalString';
-
 export interface ParseLogs {
   channelNumber: number;
   channeSerial: number;
@@ -35,19 +33,22 @@ export function parseLogs(buffer: IOBuffer): ParseLogs {
   object.eweControlMax = buffer.readFloat32();
   buffer.offset = zero + 0x249;
   object.oleTimestamp = buffer.readFloat64();
-  object.filename = pascalString(buffer);
+  object.filename = buffer.decodeText(buffer.readUint8(), 'windows-1252');
   buffer.offset = zero + 0x351;
-  object.host = pascalString(buffer);
+  object.host = buffer.decodeText(buffer.readUint8(), 'windows-1252');
   buffer.offset = zero + 0x384;
-  object.address = pascalString(buffer);
+  object.address = buffer.decodeText(buffer.readUint8(), 'windows-1252');
   buffer.offset = zero + 0x3b7;
-  object.ecLabVersion = pascalString(buffer);
+  object.ecLabVersion = buffer.decodeText(buffer.readUint8(), 'windows-1252');
   buffer.offset = zero + 0x3be;
-  object.serverVersion = pascalString(buffer);
-  object.interpreterVersion = pascalString(buffer);
+  object.serverVersion = buffer.decodeText(buffer.readUint8(), 'windows-1252');
+  object.interpreterVersion = buffer.decodeText(
+    buffer.readUint8(),
+    'windows-1252',
+  );
   buffer.offset = zero + 0x3c5;
   buffer.offset = zero + 0x3cf;
-  object.deviceSerial = pascalString(buffer);
+  object.deviceSerial = buffer.decodeText(buffer.readUint8(), 'windows-1252');
   buffer.offset = zero + 0x922;
   object.averagingPoints = buffer.readUint8();
   return object as ParseLogs;
