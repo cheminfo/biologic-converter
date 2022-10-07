@@ -1,10 +1,9 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
-import { getParams, parseMPS } from '../parseMPS';
+import { parseMPS } from '../parseMPS';
 
 describe('parseMPS', () => {
-
   it('basic test: parse string', () => {
     //test a simple string
     const textData =
@@ -13,7 +12,7 @@ describe('parseMPS', () => {
     expect(result2).toMatchObject({
       name: 'THISFILEYAY',
       key: 'val',
-      'w space': 'val',
+      wSpace: 'val',
       multiline: `\nthis.`,
     });
   });
@@ -36,6 +35,4 @@ describe('parseMPS', () => {
       cycleDefinition: 'Charge/Discharge alternance',
     });
   });
-
-
 });
