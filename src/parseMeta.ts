@@ -1,39 +1,84 @@
-import { StringObject, ComplexObject } from './Types';
+import { ComplexObject } from './Types';
+import { getParams } from './mps/parseMPS';
+import { knownTechniques } from './mps/techniques';
 
 /**
  * Parse MPS file and MPT header
  */
 
-/**
- * Some keys' value are actually an object.
- * These are parsed with a separate function.
- * For example the `{ "Technique": parseTechnique }`.
+/** At the moment it seems this is the
+ * easiest way to get some compatibility between
+ * the two parsers (binary and text)
+ * basically, this is a conversion of the keys
+ * already included in the MPR parser
+ * The ones not included, are returned as they are
+ * in the text file
  */
-export interface SpecialKeys {
-  [name: string]: SpecialKeyFn;
+function mapToMPRSettingsNames(name: string) {
+  switch (name.toLowerCase()) {
+    case 'technique':
+      return 'technique';
+    case 'acquisition started on':
+      return 'acquisitionStart';
+    case 'technique started on':
+      return 'techniqueStart';
+    case 'cycle definition':
+      return 'cycleDefinition';
+    case 'e transferred':
+      return 'eTransferred';
+    case 'electrode material':
+      return 'electrodeMaterial';
+    case 'electrolyte':
+      return 'electrolyte';
+    case 'electrode surface area':
+      return 'electrodeSurfaceArea';
+    case 'referece electrode':
+      return 'referenceElectrode';
+    case 'electrode connection':
+      return 'electrodeConnection';
+    case 'characteristic mass':
+      return 'characteristicMass';
+    case 'active material mass':
+      return 'activeMaterialMass';
+    case 'equivalent weight':
+      return 'equivalentWeight';
+    case 'battery capacity':
+      return 'batteryCapacity';
+    case 'battery capacity unit':
+      return 'batteryCapacityUnit';
+    case 'molecular weight':
+      return 'molecularWeight';
+    case 'atomic weight':
+      return 'atomicWeight';
+    case 'initial state':
+      return 'initialState';
+    case 'filename':
+      return 'fileName';
+    case 'device':
+      return 'device';
+    case 'cable':
+      return 'cable';
+    case 'channel':
+      return 'channel';
+    case 'comments':
+      return 'comments';
+    case 'density':
+      return 'density';
+    case 'user':
+      return 'user';
+    default:
+      return name;
+  }
 }
-
-/**
- * Special-key parsing-function signature.
- */
-export type SpecialKeyFn = (
-  lines: string[],
-  index: number,
-) => [exception: StringObject, nextLineIndex: number];
 
 /**
  * Parses MPS or MPT's header,
  * @param lines - string array to be parsed,
- * @param specialKeys - Optional object for parsing specific key(s) with a function.
- * see [[`SpecialKeys`]]
  * @returns parsed data as a JSON Object.
  */
-export function parseMeta(
-  lines: string[],
-  specialKeys?: SpecialKeys,
-): ComplexObject {
+export function parseMeta(lines: string[]): ComplexObject {
   /* main object */
-  let result: ComplexObject = {};
+  let result: ComplexObject = { misc: [] };
 
   /* regex for each case */
   const regex = {
@@ -55,21 +100,29 @@ export function parseMeta(
       /* key val pairs. Value is single or regex.multiline */
 
       const kV: string[] = currentLine.split(regex.keyValue); //if many " : " we fix below
-      const key: string = kV[0].trim();
+      const key: string = mapToMPRSettingsNames(kV[0].trim());
       let val = '';
 
       /* length is normally 2, it may be larger */
       val = kV.length > 2 ? kV.slice(1).join(' : ').trim() : kV[1].trim();
 
       /* Special key parsing */
-      if (specialKeys && key in specialKeys && val) {
-        const [newObject, lastLineRead] = specialKeys[key](lines, i + 1);
-
-        if (key in result) {
-          // example `result["Technique"]["2"]`
-          result[key][val] = newObject;
+      if (key === 'technique') {
+        const techniqueName = lines[i++].trim();
+        const [params, knownTechnique, lastLineRead] = getParams(
+          techniqueName,
+          lines,
+          i,
+          knownTechniques,
+        );
+        if (params && knownTechnique) {
+          result.params = params;
+          result.technique = techniqueName;
         } else {
-          result[key] = { [val]: newObject };
+          result.misc = [
+            { params: params || '', technique: techniqueName },
+            ...result.misc,
+          ];
         }
         i = lastLineRead;
         continue; //next line

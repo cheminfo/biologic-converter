@@ -1,7 +1,7 @@
 import { IOBuffer } from 'iobuffer';
 
 import { Parameters, getTechniqueParameters } from './utility/getParameters';
-import { techniqueLookUp } from './utility/techniqueHelpers/techniquesLookUp';
+import { techniqueLookUp } from './utility/techniquesAndParams';
 
 // Represents the data part of the module
 export interface ParseSettings {

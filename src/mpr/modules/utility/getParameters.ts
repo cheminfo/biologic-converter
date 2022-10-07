@@ -3,7 +3,7 @@ import { IOBuffer } from 'iobuffer';
 import { unitsScale } from '../../ids';
 
 import { readType as pValue } from './readType';
-import { TechniqueLookUp } from './techniqueHelpers/techniquesLookUp';
+import { TechniqueLookUp } from './techniquesAndParams';
 
 export interface Parameters {
   [key: string]: string | number;
