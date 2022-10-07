@@ -15,7 +15,7 @@ export interface ParseSettings {
   eTransferred: number; // Number of e- transferred
   electrodeMaterial: string; //Pascal string
   electrolyte: string; //Pascal string
-  electrodeArea: number; //Electrode surface area
+  electrodeSurfaceArea: number; //Electrode surface area
   referenceElectrode: string; //Pascal string
   characteristicMass: number; //characteristic mass
   batteryCapacity: number; //batery capacity C=
@@ -54,7 +54,7 @@ export function parseSettings(buffer: IOBuffer) {
   buffer.offset = zero + 0x1c0;
   object.electrolyte = buffer.decodeText(buffer.readUint8(), 'windows-1252');
   buffer.offset = zero + 0x211;
-  object.electrodeArea = buffer.readFloat32();
+  object.electrodeSurfaceArea = buffer.readFloat32();
   object.referenceElectrode = buffer.decodeText(
     buffer.readUint8(),
     'windows-1252',

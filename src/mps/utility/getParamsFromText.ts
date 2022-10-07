@@ -1,4 +1,35 @@
-import { StringObject } from '../Types';
+import { StringObject } from '../../Types';
+
+/**
+ * name:string,
+ * params: Parameters;
+ */
+export type GetParams = (lines: string[], i: number) => [StringObject, number];
+/**
+ * Parses technique from the _.mps_ file
+ * @param techniques - the full name of the technique.
+ * @param lines - lines to read
+ * @param i - index to start reading
+ * @return `[params, boolean, newIndex]`, `boolean` indicates whether is a known technique
+ */
+export const getParams: GetParams = function getParams(lines, i) {
+  let params: StringObject = {};
+  for (i; i < lines.length; i++) {
+    const thisLine = lines[i].trim();
+
+    if (thisLine === '') break;
+
+    // k-v pairs for this technique
+    let kV = thisLine.split(/\s{2,}/);
+    const k = kV[0].trim();
+    const v = kV.slice(1).join('  ').trim();
+    params[k] = v || '';
+  }
+  return [params, i - 1];
+};
+
+
+
 /** future
 column_units = {
     '"Ri"/Ohm': ("'Ri'", "Ω"),
@@ -88,31 +119,3 @@ column_units = {
     "z cycle": ("z cycle", None),
 }
 */
-
-/**
- * name:string,
- * params: Parameters;
- */
-export type GetParams = (lines: string[], i: number) => [StringObject, number];
-/**
- * Parses technique from the _.mps_ file
- * @param techniques - the full name of the technique.
- * @param lines - lines to read
- * @param i - index to start reading
- * @return `[params, boolean, newIndex]`, `boolean` indicates whether is a known technique
- */
-export const getParams: GetParams = function getParams(lines, i) {
-  let params: StringObject = {};
-  for (i; i < lines.length; i++) {
-    const thisLine = lines[i].trim();
-
-    if (thisLine === '') break;
-
-    // k-v pairs for this technique
-    let kV = thisLine.split(/\s{2,}/);
-    const k = kV[0].trim();
-    const v = kV.slice(1).join('  ').trim();
-    params[k] = v || '';
-  }
-  return [params, i - 1];
-};
