@@ -1,3 +1,4 @@
+
 /**
  * parameters for each currently parsed technique (several not implemented.)
  */
@@ -163,3 +164,89 @@ export const preParamsLookUp: ParamsLookUp = {
     ['comp_mode', 'Uint8'],
   ],
 };
+
+
+/**
+    - CA - Chronoamperometry / Chronocoulometry
+    - CP - Chronopotentiometry
+    - CV - Cyclic Voltammetry
+    - GCPL - Galvanostatic Cycling with Potential Limitation
+    - GEIS - Galvano Electrochemical Impedance Spectroscopy
+    - LOOP - Loop
+    - LSV - Linear Sweep Voltammetry
+    - MB - Modulo Bat
+    - OCV - Open Circuit Voltage
+    - PEIS - Potentio Electrochemical Impedance Spectroscopy
+    - WAIT - Wait
+    - ZIR - IR compensation (PEIS)
+*/
+export interface TechniqueLookUp {
+  technique: string;
+  preParameters: ArraySS;
+}
+
+export function techniqueLookUp(id: number): TechniqueLookUp {
+  switch (id) {
+    case 0x4:
+      return { technique: 'GCPL', preParameters: p.gcplParams };
+    case 0x6:
+      return { technique: 'CV', preParameters: p.cvParams };
+    case 0xb:
+      throw new Error(`Not implemented technique: OCV`);
+    case 0x18:
+      return { technique: 'CA', preParameters: p.caParams };
+    case 0x19:
+      return { technique: 'CP', preParameters: p.cpParams };
+    case 0x1c:
+      return { technique: 'WAIT', preParameters: p.waitParams };
+    case 0x1d:
+      throw new Error(`Not implemented technique: PEIS`);
+    case 0x1e:
+      throw new Error(`Not implemented technique: GEIS`);
+    case 0x32:
+      return { technique: 'ZIR', preParameters: p.zirParams };
+    case 0x6c:
+      return { technique: 'LSV', preParameters: p.lsvParams };
+    case 0x7f:
+      throw new Error(`Not implemented technique: MB`);
+    default:
+      throw new Error(
+        `Not implemented technique: unknown (0x${id.toString(16)})`,
+      );
+  }
+}
+
+
+/**
+    - LOOP - Loop ? what is it?
+*/
+export function techniqueParamsFromName(id: string): TechniqueLookUp {
+  switch (id) {
+    case "Galvanostatic Cycling with Potential Limitation":
+      return { technique: 'GCPL', preParameters: p.gcplParams };
+    case "Cyclic Voltammetry":
+      return { technique: 'CV', preParameters: p.cvParams };
+    case "Open Circuit Voltage":
+      throw new Error(`Not implemented technique: OCV`);
+    case "Chronoamperometry / Chronocoulometry":
+      return { technique: 'CA', preParameters: p.caParams };
+    case "Chronopotentiometry":
+      return { technique: 'CP', preParameters: p.cpParams };
+    case "Wait":
+      return { technique: 'WAIT', preParameters: p.waitParams };
+    case "Potentio Electrochemical Impedance Spectroscopy":
+      throw new Error("Not implemented technique: PEIS");
+    case "Galvano Electrochemical Impedance Spectroscopy":
+      throw new Error("Not implemented technique: GEIS");
+    case "IR compensation (PEIS)":
+      return { technique: 'ZIR', preParameters: p.zirParams };
+    case "Linear Sweep Voltammetry":
+      return { technique: 'LSV', preParameters: p.lsvParams };
+    case "Modulo Bat":
+      throw new Error("Not implemented technique: MB");
+    default:
+      throw new Error(
+        `Not implemented technique: unknown (0x${id.toString(16)})`,
+      );
+  }
+}
