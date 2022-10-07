@@ -32,7 +32,7 @@ export function parseData(buffer: IOBuffer, header: ModuleHeader): ParseData {
     }
   }
 
-  // Starts of datapoints vary between module versions
+  // Start of datapoints vary between module versions
   if (header.version <= 2) {
     buffer.offset = zero + 0x195;
   } else {
@@ -43,9 +43,10 @@ export function parseData(buffer: IOBuffer, header: ModuleHeader): ParseData {
   for (let i = 0; i < dataPoints; i++) {
     let flagByte = 256;
     for (const id of colIds) {
-      if (flagColumns[id] !== undefined) {
+
+      if (flagColumns[id] !== undefined) {//undefined if not a column (flag + data columns have unique ids)
         if (flagByte === 256) flagByte = buffer.readByte();
-        const { bitMask, name: flagName } = flagColumns[id];
+        const { bitMask, name: varName } = flagColumns[id];
         let twosComp = bitMask & -bitMask;
         let shift = -1;
         while (twosComp > 0) {
@@ -53,8 +54,7 @@ export function parseData(buffer: IOBuffer, header: ModuleHeader): ParseData {
           shift++;
         }
 
-        const varsKeyName = flagName;
-        let varsChildObject: Partial<VarsChild> = variables[varsKeyName] || {};
+        let varsChildObject: Partial<VarsChild> = variables[varName] || {};
 
         varsChildObject = addData(
           varsChildObject,
@@ -62,21 +62,20 @@ export function parseData(buffer: IOBuffer, header: ModuleHeader): ParseData {
         ); //adds data key or pushes to data key
         if (!varsChildObject.label) {
           //addLabel prop
-          varsChildObject.label = varsKeyName;
+          varsChildObject.label = varName;
         }
         if (!varsChildObject.units) {
           //add units prop
           varsChildObject.units = '';
         }
-        variables[varsKeyName] = varsChildObject; //reassign
+        variables[varName] = varsChildObject; //reassign
       } else if (dataColumns[id] !== undefined) {
-        const dat = dataColumns[id]; //[dataType, name, unit]
-        const varsKeyName = dat.name;
-        let varsChildObject: Partial<VarsChild> = variables[varsKeyName] || {};
 
-        const read = readType(buffer, dat.dType);
-        if (id === 0x27) {
-          // If ID is I Range
+        const {name:varName, dType, unit} = dataColumns[id];
+        let varsChildObject: Partial<VarsChild> = variables[varName] || {};
+
+        const read = readType(buffer, dType);
+        if (id === 0x27) { // If ID is I Range
           varsChildObject = addData(
             varsChildObject,
             unitsScale('I_range', read),
@@ -86,12 +85,12 @@ export function parseData(buffer: IOBuffer, header: ModuleHeader): ParseData {
         }
         if (!varsChildObject.label) {
           //addLabel
-          varsChildObject.label = varsKeyName;
+          varsChildObject.label = varName;
         }
         if (!varsChildObject.units) {
-          varsChildObject.units = dat.unit;
+          varsChildObject.units = unit;
         }
-        variables[varsKeyName] = varsChildObject; //now reassign
+        variables[varName] = varsChildObject; //now reassign
       }
     }
   }

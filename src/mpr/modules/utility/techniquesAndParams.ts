@@ -188,25 +188,25 @@ export interface TechniqueLookUp {
 export function techniqueLookUp(id: number): TechniqueLookUp {
   switch (id) {
     case 0x4:
-      return { technique: 'GCPL', preParameters: p.gcplParams };
+      return { technique: 'GCPL', preParameters: preParamsLookUp.gcplParams };
     case 0x6:
-      return { technique: 'CV', preParameters: p.cvParams };
+      return { technique: 'CV', preParameters: preParamsLookUp.cvParams };
     case 0xb:
       throw new Error(`Not implemented technique: OCV`);
     case 0x18:
-      return { technique: 'CA', preParameters: p.caParams };
+      return { technique: 'CA', preParameters: preParamsLookUp.caParams };
     case 0x19:
-      return { technique: 'CP', preParameters: p.cpParams };
+      return { technique: 'CP', preParameters: preParamsLookUp.cpParams };
     case 0x1c:
-      return { technique: 'WAIT', preParameters: p.waitParams };
+      return { technique: 'WAIT', preParameters: preParamsLookUp.waitParams };
     case 0x1d:
       throw new Error(`Not implemented technique: PEIS`);
     case 0x1e:
       throw new Error(`Not implemented technique: GEIS`);
     case 0x32:
-      return { technique: 'ZIR', preParameters: p.zirParams };
+      return { technique: 'ZIR', preParameters: preParamsLookUp.zirParams };
     case 0x6c:
-      return { technique: 'LSV', preParameters: p.lsvParams };
+      return { technique: 'LSV', preParameters: preParamsLookUp.lsvParams };
     case 0x7f:
       throw new Error(`Not implemented technique: MB`);
     default:
@@ -219,29 +219,28 @@ export function techniqueLookUp(id: number): TechniqueLookUp {
 
 /**
     - LOOP - Loop ? what is it?
-*/
 export function techniqueParamsFromName(id: string): TechniqueLookUp {
   switch (id) {
     case "Galvanostatic Cycling with Potential Limitation":
-      return { technique: 'GCPL', preParameters: p.gcplParams };
+      return { technique: 'GCPL', preParameters: gcplParams };
     case "Cyclic Voltammetry":
-      return { technique: 'CV', preParameters: p.cvParams };
+      return { technique: 'CV', preParameters: cvParams };
     case "Open Circuit Voltage":
       throw new Error(`Not implemented technique: OCV`);
     case "Chronoamperometry / Chronocoulometry":
-      return { technique: 'CA', preParameters: p.caParams };
+      return { technique: 'CA', preParameters: caParams };
     case "Chronopotentiometry":
-      return { technique: 'CP', preParameters: p.cpParams };
+      return { technique: 'CP', preParameters: cpParams };
     case "Wait":
-      return { technique: 'WAIT', preParameters: p.waitParams };
+      return { technique: 'WAIT', preParameters: waitParams };
     case "Potentio Electrochemical Impedance Spectroscopy":
       throw new Error("Not implemented technique: PEIS");
     case "Galvano Electrochemical Impedance Spectroscopy":
       throw new Error("Not implemented technique: GEIS");
     case "IR compensation (PEIS)":
-      return { technique: 'ZIR', preParameters: p.zirParams };
+      return { technique: 'ZIR', preParameters: zirParams };
     case "Linear Sweep Voltammetry":
-      return { technique: 'LSV', preParameters: p.lsvParams };
+      return { technique: 'LSV', preParameters: lsvParams };
     case "Modulo Bat":
       throw new Error("Not implemented technique: MB");
     default:
@@ -250,3 +249,4 @@ export function techniqueParamsFromName(id: string): TechniqueLookUp {
       );
   }
 }
+*/

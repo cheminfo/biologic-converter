@@ -3,7 +3,6 @@ import { IOBuffer } from 'iobuffer';
 import { Parameters, getTechniqueParameters } from './utility/getParameters';
 import { techniqueLookUp } from './utility/techniquesAndParams';
 
-// Represents the data part of the module
 export interface ParseSettings {
   technique: string; // Unique technique ID.
   comments: string; // Pascal string.
@@ -19,12 +18,8 @@ export interface ParseSettings {
   referenceElectrode: string; //Pascal string
   characteristicMass: number; //characteristic mass
   batteryCapacity: number; //batery capacity C=
-  batteryCapacityUnit: number; //unit of the battery capacity
-  /*
-   * these will be useful parameters depending on the technique,
-   */
-  params: Parameters;
-  // I think it is actually Parameters[], but atm the parser is simplified.
+  batteryCapacityUnit: number; //unit of the battery capacity 
+  params: Parameters;/* technique dependent parameters, */
 }
 /**
  * Parses the experiments settings

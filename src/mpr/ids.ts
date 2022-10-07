@@ -1,7 +1,3 @@
-/**
- * DATA COLUMNS
- */
-
 interface FlagColumns {
   [key: number]: { bitMask: number; name: string };
 }
@@ -16,9 +12,13 @@ export const flagColumns: FlagColumns = {
   0x1f: { bitMask: 0b00100000, name: 'Ns changes' },
   0x41: { bitMask: 0b10000000, name: 'counter inc.' },
 };
+
 interface DataColumns {
   [key: number]: { dType: string; name: string; unit: string };
 }
+/**
+ * data columns look-up table
+ */
 export const dataColumns: DataColumns = {
   0x4: { dType: 'Float64', name: 'time', unit: 's' },
   0x5: { dType: 'Float32', name: 'control_V/I', unit: 'V/mA' },
@@ -119,7 +119,7 @@ export const dataColumns: DataColumns = {
   0x1f7: { dType: 'Float32', name: '|Ece h7|', unit: 'V' },
 };
 
-/** This function maps numeric values in I range to a string */
+/** maps numeric values in I range or unit to a string */
 export function unitsScale(key: 'I_range' | 'Is_unit', val: number): string {
   if (key === 'I_range') {
     switch (val) {

@@ -4,7 +4,7 @@ import { MPR, parseMPR } from './mpr/parseMPR';
 import { MPS, parseMPS } from './mps/parseMPS';
 import { MPT, parseMPT } from './mpt/parseMPT';
 
-export interface BioLogic {
+export interface Biologic {
   dir?: string;
   mpr?: MPR;
   mps?: MPS;
@@ -39,7 +39,7 @@ export async function convert(fileCol: FileCollection): Promise<BioLogic[]> {
 
   /* can not use `forEach` and pass `async` functions */
   for (const dir of dirs) {
-    let result: BioLogic = {};
+    let result: Biologic = {};
     result.dir = dir.key;
     for (const dataFile of dir.fileCollection) {
       const fName = dataFile.name;
