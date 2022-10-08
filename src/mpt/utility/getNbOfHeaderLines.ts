@@ -7,7 +7,7 @@ export function getNbOfHeaderLines(line: string): number {
   let val = parseInt(nOfHeaderLines[1].trim(), 10);
   if (isNaN(val)) {
     throw new Error(
-      'Can not find a numberic value for the number of lines. Aborting.',
+      'Can not find a numeric value for the number of lines. Aborting.',
     );
   } else {
     return val;

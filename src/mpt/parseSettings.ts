@@ -1,4 +1,5 @@
-
+import { ComplexObject } from '../Types';
+import { normalizeKeyValue } from '../utility/normalize';
 /**
  * Creates an mps object from an mps file
  * The output is similar, but not the same, than `MPR.settings`
@@ -9,7 +10,7 @@
  * @returns JSON object representing the parsed data
  */
 
-export function parseMPTSettings(
+export function parseSettings(
   lines: string[],
   technique: string,
 ): ComplexObject {
@@ -20,6 +21,7 @@ export function parseMPTSettings(
   const regex = {
     nothing: /^\s*$/,
     keyValue: / : | :$/,
+    multiline: /^[ \t]/,
     table: /^\w.*\s{2,}-*\w+.*\s{4,}$/,
   };
 
@@ -32,14 +34,14 @@ export function parseMPTSettings(
       const kV: string[] = currentLine.split(regex.keyValue); //if many " : " we fix below
       //function updates the index bc some values are multiline
       let key: string = kV[0].trim();
-      let val: string = kV[1].slice(1,).join(" : ").trim();
+      let val: string = kV.slice(1).join(' : ').trim();
       while (regex.multiline.test(lines[i + 1])) {
         //use original value then
         val = val.concat('\n', lines[++i].trim());
       }
       const [newKey, newVal] = normalizeKeyValue(key, val);
       result[newKey] = newVal;
-  } else if (regex.table.test(currentLine)) {
+    } else if (regex.table.test(currentLine)) {
       /* for not k : v */
       //regex.table
       const kV: string[] = currentLine.split(/\s{2,}/);
