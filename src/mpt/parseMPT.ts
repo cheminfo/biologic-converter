@@ -1,12 +1,10 @@
 import { MeasurementVariable, TextData } from 'cheminfo-types';
 import { ensureString } from 'ensure-string';
 
-import { parseSettings } from './parseSettings';
-import { parseData } from './parseData';
-
 import { ComplexObject } from '../Types';
-import { addKeyValueToResult } from '../utility/addKeyValueToResult';
 
+import { parseData } from './parseData';
+import { parseSettings } from './parseSettings';
 import { getNbOfHeaderLines } from './utility/getNbOfHeaderLines';
 
 export interface MPT {
@@ -40,4 +38,3 @@ export function parseMPT(data: TextData): MPT {
     data: { variables: parseData(lines.slice(i + 1)) },
   };
 }
-

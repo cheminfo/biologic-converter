@@ -1,3 +1,6 @@
+import { MeasurementVariable } from 'cheminfo-types';
+
+import { ComplexObject } from '../Types';
 /**
  * Parse the values
  */
