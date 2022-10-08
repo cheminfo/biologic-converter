@@ -21,7 +21,6 @@ describe('parseMPS', () => {
     const arrayBuffer = readFileSync(join(__dirname, './data/test.mps'));
 
     const result = parseMPS(arrayBuffer);
-    console.log(result)
     expect(Object.keys(result)).toHaveLength(20);
     expect(result).toMatchObject({
       electrodeMaterial: '',
@@ -29,12 +28,12 @@ describe('parseMPS', () => {
       electrolyte: '',
       comments: '',
       cable: 'standard',
-      electrodeSurfaceArea: { value:0.001, unit: 'cm²' },
-      characteristicMass: { value:0.001, unit: 'g' },
-      equivalentWeight: { value: 0.000, unit: 'g/eq.' },
-      density: { value: 0.000, unit: 'g/cm3' },
+      electrodeSurfaceArea: { value: 0.001, unit: 'cm²' },
+      characteristicMass: { value: 0.001, unit: 'g' },
+      equivalentWeight: { value: 0.0, unit: 'g/eq.' },
+      density: { value: 0.0, unit: 'g/cm3' },
       cycleDefinition: 'Charge/Discharge alternance',
-      numberOfLinkedTechniques: 2
+      numberOfLinkedTechniques: 2,
     });
   });
 });

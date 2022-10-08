@@ -2,13 +2,16 @@ import { MeasurementVariable, TextData } from 'cheminfo-types';
 import { ensureString } from 'ensure-string';
 
 import { ComplexObject } from '../Types';
-import { parseMeta } from '../parseMeta';
+import { addKeyValueToResult } from '../utility/addKeyValueToResult';
+
+import { getNbOfHeaderLines } from './utility/getNbOfHeaderLines';
 
 export interface MPT {
-  /* settings */
-  meta: ComplexObject;
-  /* body, i.e results */
-  variables: Record<string, MeasurementVariable>;
+  meta: { name: string; nbOfHeaderLines: number };
+  /* settings module */
+  settings: { variables: ComplexObject };
+  /* data module */
+  data: { variables: Record<string, MeasurementVariable> };
 }
 
 /**
@@ -21,18 +24,26 @@ export function parseMPT(data: TextData): MPT {
     encoding: 'latin1',
   }).split(/\r?\n/);
 
-  const header = headerMPT(lines.slice(0, 4));
-  const i = parseInt(header['Nb header lines'], 10) - 2;
+  const name = lines[0].trim(); //something like "MPT file"
+  const nbOfHeaderLines = getNbOfHeaderLines(lines[1]);
+  const technique = lines[3]; //seems to be safe to assume for now (always in line 4)
+
+  const offset = 4;
+  const i = nbOfHeaderLines - 2;
+
+  const settingsVars = parseMPTSettings(lines.slice(offset, i), technique);
+
   return {
-    meta: Object.assign(header, parseMeta(lines.slice(4, i))),
-    variables: parseData(lines.slice(i + 1)),
+    meta: { name, nbOfHeaderLines },
+    settings: { variables: settingsVars },
+    data: { variables: parseData(lines.slice(i + 1)) },
   };
 }
 
 /**
  * Parse the values
  */
-function parseData(data: string[]): MPT['variables'] {
+function parseData(data: string[]): ComplexObject {
   const variables: Record<string, MeasurementVariable> = {};
 
   let matrix = data.map((line) => line.split('\t'));
@@ -53,17 +64,57 @@ function parseData(data: string[]): MPT['variables'] {
   return variables;
 }
 
-interface HeaderMPT {
-  fileType: string;
-  Technique: string;
-  [other: string]: string;
-}
+/**
+ * Creates an mps object from an mps file
+ * The output is similar, but not the same, than `MPR.settings`
+ * MPS includes one or more techniques
+ * We will know what this means when using it.
+ *
+ * @param data - pass the file as string, Buffer or Arraybuffer.
+ * @returns JSON object representing the parsed data
+ */
 
-function headerMPT(lines: string[]): HeaderMPT {
-  const nOfLinesHeader = lines[1].split(' : ');
-  return {
-    fileType: lines[0],
-    'Nb header lines': nOfLinesHeader[1].trim() || '',
-    Technique: lines[3],
+export function parseMPTSettings(
+  lines: string[],
+  technique: string,
+): ComplexObject {
+  // file converted to an array of strings, each item a newline.
+
+  let result: ComplexObject = { technique, params: [] };
+
+  const regex = {
+    nothing: /^\s*$/,
+    keyValue: / : | :$/,
+    multiline: /^[ \t]/,
+    table: /^\w.*\s{2,}-*\w+.*\s{4,}$/,
   };
+
+  for (let i = 0; i < lines.length; i++) {
+    const currentLine = lines[i];
+
+    if (regex.nothing.test(currentLine)) {
+      continue;
+    } else if (regex.keyValue.test(currentLine)) {
+      //function updates the index bc some values are multiline
+      [result, i] = addKeyValueToResult(
+        result,
+        lines,
+        currentLine,
+        regex,
+        i,
+        'MPT',
+      );
+    } else if (regex.table.test(currentLine)) {
+      /* for not k : v */
+      //regex.table
+      const kV: string[] = currentLine.split(/\s{2,}/);
+      const [key, val] = [kV[0].trim(), kV.slice(1).join('  ').trim()];
+      result[key] = val;
+    } else if (Array.isArray(result.flags)) {
+      result.flags.push(currentLine);
+    } else {
+      result.flags = [currentLine];
+    }
+  }
+  return result;
 }

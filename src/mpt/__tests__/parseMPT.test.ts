@@ -6,21 +6,22 @@ import { parseMPT } from '../parseMPT';
 describe('parseMPT', () => {
   it('test', () => {
     const arrayBuffer = readFileSync(join(__dirname, './data/test.mpt'));
-    const result = parseMPT(arrayBuffer);
+    const { meta, settings, data } = parseMPT(arrayBuffer);
+    console.log(meta, settings,data)
 
-    const meta = result.meta;
-    expect(Object.keys(meta)).toHaveLength(50);
-
-    const vars = result.variables;
-    expect(Object.keys(vars)).toHaveLength(18);
+    expect(meta.nbOfHeaderLines).toBe(59);
 
     //some props in meta
-    expect(meta.Comments).toBe('');
-    expect(meta.User).toBe('');
-    expect(meta.flags).toHaveLength(3);
+    expect(settings.variables).toMatchObject({
+      comments: '',
+      user: '',
+      flags:  [ "EC-Lab for windows v11.32 (software)", 
+           "Internet server v11.32 (firmware)",
+           "Command interpretor v11.32 (firmware)" ],
+    });
 
     //some props in vars
-    expect(vars['Efficiency/%']).toMatchObject({
+    expect(data.variables['Efficiency/%']).toMatchObject({
       label: 'Efficiency',
       units: '%',
       isDependent: true,
