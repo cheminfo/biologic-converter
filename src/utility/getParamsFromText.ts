@@ -1,12 +1,15 @@
-import { StringObject } from '../Types';
-
-/*TODO: this function will actually accept the technique parameter,
-and try to match each parsed parameter to the ones we have from each technique,*/
+/*
+* this function will actually accept the technique parameter,
+and try to match each parsed parameter to the ones we have from each technique,
+*/
 /**
  * name:string,
  * params: Parameters;
  */
-export type GetParams = (lines: string[], i: number) => [StringObject, number];
+export type GetParams = (
+  lines: string[],
+  i: number,
+) => [Record<string, string | string[]>, number];
 /**
  * Parses technique from the _.mps_ file
  * @param lines - lines to read
@@ -14,16 +17,28 @@ export type GetParams = (lines: string[], i: number) => [StringObject, number];
  * @return `[params, newIndex]`, `boolean` indicates whether is a known technique
  */
 export const getParams: GetParams = function getParams(lines, i) {
-  let params: StringObject = {};
+  let params: Record<string, string | string[]> = {};
   for (i; i < lines.length; i++) {
     const thisLine = lines[i].trim();
 
     if (thisLine === '') break;
 
     // k-v pairs for this technique
-    let kV = thisLine.split(/\s{2,}/);
+    const kV = thisLine.split(/\s{2,}/);
     const k = kV[0].trim();
-    const v = kV.slice(1).join('  ').trim();
+    let v;
+    if (kV.length === 2) {
+      v = kV[1].trim();
+    } else if (kV.length > 2) {
+      for (let i = 1; i < kV.length - 2; i++) {
+        if (!Array.isArray(v)) {
+          v = [kV[i].trim()];
+        } else {
+          v.push();
+        }
+      }
+    }
+
     params[k] = v || '';
   }
   return [params, i - 1];

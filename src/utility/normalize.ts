@@ -1,20 +1,36 @@
 import { camelCase } from './camelCase';
+/*
+ * This module tries to make MPS and MPT more similar to MPR.
+ * It is very un-optimal, but there is no simple rule to convert them,
+ * so the code uses regex.
+ */
+/**
+ * This is just for guidance of what stuff being parsed should
+ * go to logs. May or may not be used as it is tricky to parse them.
+ */
+const logProperties = {
+  flags: [
+    //this is just a "startWith"
+    'Command interpretor', //misspell in the source code
+    'Internet server',
+    'Turn to OCV between techniques',
+    'Record Power',
+    'CE vs. WE compliance',
+    'EC-Lab for',
+    'Average data every',
+  ],
+  keyValues: [
+    'Run on channel',
+    'Ewe ctrl range',
+    'Address',
+    'Saved on',
+    'Device',
+    'Filename',
+  ],
+};
 
-const logProperties = [
-  'eweCtrlRange',
-  'oleTimestamp',
-  'filename',
-  'savedOn',
-  'host',
-  'address',
-  'ecLabVersion',
-  'serverVersion',
-  'interpreterVersion',
-  'deviceSerial',
-];
-
-//this parses a bit better values that are numeric, for compatibility with MPR
-const normalizeNumVal: Record<string, {type:string}> = {
+//parse values that are numeric, either from logs or settings
+const normalizeNumVal: Record<string, { type: string }> = {
   'Number of linked techniques': {
     type: 'number',
   },
@@ -47,51 +63,51 @@ type NormalizeKeyValue = [
   'log' | 'settings',
   string | number | { [key: string]: string | number },
 ];
-/** This function tries to solve a few problems:
- * First some key:val belong to the log object, some to settings
+/**
+ * Parse every key
+ * Some keys we have to parse fully manually (not as many) others follow
+ * a pattern and can be included in the chain of if elses
  */
 export function normalizeKeyValue(key: string, val: string): NormalizeKeyValue {
   let newVal;
+  // fully manual keys
   if (key.startsWith('Run on channel')) {
     const [number, serial] = /(?:.*) \(SN (?:.*) \)/.exec(val) ?? '';
-    return [
-      'averagingPoints',
-      'log',
-      { number: Number(number) || '', serial: Number(serial) || '' },
-    ];
-  } 
-
-const setting = normalizeNumVal[key];
-if (setting && val) {
-  if (setting.type === 'minMaxRange') {
-    const result =
-      /min = (?<min>.*) (?<minUnit>.*), max = (?<max>.*) (?<maxUnit>.*)$/.exec(
-        val,
-      );
-    if (result?.groups) {
-      newVal = {
-        min: Number(result.groups.min),
-        minUnit: result.groups.minUnit || '',
-        max: Number(result.groups.max),
-        maxUnit: result.groups.maxUnit || '',
-      };
-    }
-  } else if (setting.type === 'valueUnit') {
-    const both = val.split(' ');
-    if (both.length === 2) {
-      newVal = { value: Number(both[0]), unit: both[1] };
-    }
-  } else if (setting.type === 'number') {
-    newVal = Number(val);
+    newVal = { number: Number(number) || '', serial: Number(serial) || '' };
   }
+  // systemized keys
+  const setting = normalizeNumVal[key];
+  if (setting && val) {
+    if (setting.type === 'minMaxRange') {
+      const result =
+        /min = (?<min>.*) (?<minUnit>.*), max = (?<max>.*) (?<maxUnit>.*)$/.exec(
+          val,
+        );
+      if (result?.groups) {
+        newVal = {
+          min: Number(result.groups.min),
+          minUnit: result.groups.minUnit || '',
+          max: Number(result.groups.max),
+          maxUnit: result.groups.maxUnit || '',
+        };
+      }
+    } else if (setting.type === 'valueUnit') {
+      const both = val.split(' ');
+      if (both.length === 2) {
+        newVal = { value: Number(both[0]), unit: both[1] };
+      }
+    } else if (setting.type === 'number') {
+      newVal = Number(val);
+    }
+  }
+  /* If a k-v does not fall in any category, still needs tweaking */
+  const newKey = camelCase(key);
+  return [
+    newKey,
+    logProperties.keyValues.includes(key) ? 'log' : 'settings',
+    newVal || val,
+  ];
 }
-const newKey = camelCase(key);
-    return [
-      newKey,
-      logProperties.includes(newKey) ? 'log' : 'settings',
-      newVal || val,
-    ];
-  }
 
 /**
  * camelCase keys always, and try to find value and units if applies

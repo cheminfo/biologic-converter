@@ -23,8 +23,9 @@ describe('parseMPS', () => {
     const arrayBuffer = readFileSync(join(__dirname, './data/test.mps'));
 
     const result = parseMPS(arrayBuffer);
-    console.log(result)
-    expect(Object.keys(result)).toHaveLength(20);
+    expect(Object.keys(result)).toHaveLength(3);
+    expect(Object.keys(result.settings.variables.techniques)).toHaveLength(2);
+    console.log(result.settings.variables.techniques)
     expect(result).toMatchObject({
       settings:{
       variables: {
@@ -39,6 +40,11 @@ describe('parseMPS', () => {
       density: { value: 0.0, unit: 'g/cm3' },
       cycleDefinition: 'Charge/Discharge alternance',
       numberOfLinkedTechniques: 2,
-    }}});
+    }},
+   log:{
+        variables: {
+          filename: 'Z:\\Data group member\\Anna\\EC\\2021-10-20_AL0006_SolGel4_EC1_-0.5V_ref1021_1\\CA_AL0006_.mps',
+          device: 'SP-200',
+}}});
   });
 });

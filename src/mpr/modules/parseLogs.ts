@@ -10,8 +10,8 @@ export interface ParseLogs {
   interpreterVersion: string;
   deviceSerial: string;
   averagingPoints: number;
-  eweControlRange: {min:number, max:number};
-  channel:{number:number, serial:number}
+  eweControlRange: { min: number; max: number };
+  runOnChannel: { number: number; serial: number };
 }
 /*
  * Most files have logs, this parses logs
@@ -29,10 +29,10 @@ export function parseLogs(buffer: IOBuffer): ParseLogs {
   buffer.offset = zero + 0xab;
   const channelSerial = buffer.readUint16();
   buffer.offset = zero + 0x1f8;
-  object.channel = {number:channelNumber, serial:channelSerial}
+  object.runOnChannel = { number: channelNumber, serial: channelSerial };
   const eweControlMin = buffer.readFloat32();
   const eweControlMax = buffer.readFloat32();
-  object.eweControlRange = {min:eweControlMin, max:eweControlMax}//is it always same units (V) ?
+  object.eweControlRange = { min: eweControlMin, max: eweControlMax }; //is it always same units (V) ?
   buffer.offset = zero + 0x249;
   object.oleTimestamp = buffer.readFloat64();
   object.filename = buffer.decodeText(buffer.readUint8(), 'windows-1252');
