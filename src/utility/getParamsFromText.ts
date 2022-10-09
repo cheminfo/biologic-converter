@@ -1,5 +1,7 @@
 import { StringObject } from '../Types';
 
+/*TODO: this function will actually accept the technique parameter,
+and try to match each parsed parameter to the ones we have from each technique,*/
 /**
  * name:string,
  * params: Parameters;

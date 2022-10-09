@@ -2,6 +2,7 @@ import { TextData } from 'cheminfo-types';
 import { ensureString } from 'ensure-string';
 
 import { ComplexObject } from '../Types';
+import { normalizeFlag } from '../utility/normalize';
 
 import { addKeyValueToResult } from './utility/addKeyValueToResult';
 
@@ -17,7 +18,11 @@ import { addKeyValueToResult } from './utility/addKeyValueToResult';
 
 export function parseMPS(mps: TextData): ComplexObject {
   const lines = ensureString(mps, { encoding: 'windows-1252' }).split(/\r?\n/);
-  let result: ComplexObject = { name: lines.shift(), techniques: [] };
+  let result: ComplexObject = {
+    name: lines.shift(),
+    settings: { variables: { techniques: [] } },
+    log: { variables: { } },
+  };
   const regex = {
     nothing: /^\s*$/,
     keyValue: / : | :$/,
@@ -32,10 +37,9 @@ export function parseMPS(mps: TextData): ComplexObject {
       //function updates the index bc some values are multiline
       const kV: string[] = currentLine.split(regex.keyValue); //if many " : " we fix below
       [result, i] = addKeyValueToResult(result, lines, i, kV);
-    } else if (Array.isArray(result.flags)) {
-      result.flags.push(currentLine);
     } else {
-      result.flags = [currentLine];
+      const [key, logOrSettings, value] = normalizeFlag(currentLine.trim());
+      result[logOrSettings].variables[key] = value
     }
   }
   return result;

@@ -11,6 +11,8 @@ export interface MPT {
   meta: { name: string; nbOfHeaderLines: number };
   /* settings module */
   settings: { variables: ComplexObject };
+  /* log module */
+  log?: { variables: ComplexObject };
   /* data module */
   data: { variables: Record<string, MeasurementVariable> };
 }
@@ -31,10 +33,11 @@ export function parseMPT(data: TextData): MPT {
 
   const offset = 4;
   const i = nbOfHeaderLines - 2;
-
+  const result = parseSettings(lines.slice(offset, i), technique);
   return {
     meta: { name, nbOfHeaderLines },
-    settings: { variables: parseSettings(lines.slice(offset, i), technique) },
+    settings: result.settings,
+    log: result.logs,
     data: { variables: parseData(lines.slice(i + 1)) },
   };
 }
