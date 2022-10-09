@@ -1,4 +1,3 @@
-
 /**
  * parameters for each currently parsed technique (several not implemented.)
  */
@@ -165,7 +164,6 @@ export const preParamsLookUp: ParamsLookUp = {
   ],
 };
 
-
 /**
     - CA - Chronoamperometry / Chronocoulometry
     - CP - Chronopotentiometry
@@ -215,7 +213,6 @@ export function techniqueLookUp(id: number): TechniqueLookUp {
       );
   }
 }
-
 
 /**
     - LOOP - Loop ? what is it?
