@@ -17,7 +17,7 @@ export interface ParseSettings {
   electrodeSurfaceArea: number; //Electrode surface area
   referenceElectrode: string; //Pascal string
   characteristicMass: number; //characteristic mass
-  batteryCapacity: number; //batery capacity C=
+  batteryCapacity: number; //battery capacity C=
   batteryCapacityUnit: number; //unit of the battery capacity
   params: Parameters /* technique dependent parameters, */;
 }
