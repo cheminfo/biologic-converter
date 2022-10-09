@@ -1,8 +1,8 @@
 import { ComplexObject } from '../Types';
-import { normalizeKeyValue } from '../utility/normalize';
+import { normalizeFlag, normalizeKeyValue } from '../utility/normalize';
 /**
  * Creates an mps object from an mps file
- * The output is similar, but not the same, than `MPR.settings`
+ * The output is similar, but not the same, than `MPR`
  * MPS includes one or more techniques
  * We will know what this means when using it.
  *
@@ -16,7 +16,10 @@ export function parseSettings(
 ): ComplexObject {
   // file converted to an array of strings, each item a newline.
 
-  let result: ComplexObject = { technique, params: [] };
+  let result: ComplexObject = {
+    settings: { variables: { technique, params: [] } },
+    log: {},
+  };
 
   const regex = {
     nothing: /^\s*$/,
@@ -41,18 +44,19 @@ export function parseSettings(
           val.concat('\n', lines[++i].trim());
         } while (regex.multiline.test(lines[i + 1]));
       }
-      const [newKey, newVal] = normalizeKeyValue(key, val);
-      result[newKey] = newVal;
+      const [newKey, logOrSettings, newVal] = normalizeKeyValue(key, val);
+      result[logOrSettings].variables[newKey] = newVal || ""
     } else if (regex.table.test(currentLine)) {
       /* for not k : v */
       //regex.table
       const kV: string[] = currentLine.split(/\s{2,}/);
       const [key, val] = [kV[0].trim(), kV.slice(1).join('  ').trim()];
-      result[key] = val;
-    } else if (Array.isArray(result.flags)) {
-      result.flags.push(currentLine);
+      result.settings.variables[key] = val
     } else {
-      result.flags = [currentLine];
+      const [theKey, logOrSettings, theValue] = normalizeFlag(
+        currentLine.trim(),
+      );
+      result[logOrSettings].variables[theKey] = theValue || ""
     }
   }
   return result;

@@ -1,8 +1,8 @@
 /**
- * Make key of object camelcase, it is not fast or general,
- * just removes spaces and uppercases first letter when joining
+ * Make key of object camel-case, it is not fast or general,
+ * just removes spaces and uppercase first letter when joining
  */
-export function camalize(str: string): string {
+export function camelCase(str: string): string {
   const arr = str.trim().toLowerCase().split(' ');
   let camelized = arr[0];
   if (arr.length > 1) {

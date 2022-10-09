@@ -26,7 +26,7 @@ export function addKeyValueToResult(
     /* Special key parsing */
     const name = lines[++i].trim();
     const [params, lastLineRead] = getParams(lines, ++i);
-    result.techniques.push({ [name]: params || {} });
+    result.settings.variables.techniques.push({ [name]: params || {} });
     i = lastLineRead;
   } else if (regex.multiline.test(lines[i + 1])) {
     /* parse multiline */
@@ -37,8 +37,8 @@ export function addKeyValueToResult(
   }
   //normalize the values (not for technique as it is written already.)
   if (key !== 'Technique') {
-    const [newKey, newVal] = normalizeKeyValue(key, val);
-    result[newKey] = newVal;
+    const [newKey, logOrSettings, newVal] = normalizeKeyValue(key, val);
+    result[logOrSettings].variables[newKey] = newVal;
   }
   return [result, i];
 }
