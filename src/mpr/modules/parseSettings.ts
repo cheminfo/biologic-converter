@@ -18,8 +18,8 @@ export interface ParseSettings {
   referenceElectrode: string; //Pascal string
   characteristicMass: number; //characteristic mass
   batteryCapacity: number; //batery capacity C=
-  batteryCapacityUnit: number; //unit of the battery capacity 
-  params: Parameters;/* technique dependent parameters, */
+  batteryCapacityUnit: number; //unit of the battery capacity
+  params: Parameters /* technique dependent parameters, */;
 }
 /**
  * Parses the experiments settings

@@ -35,9 +35,11 @@ export function parseSettings(
       //function updates the index bc some values are multiline
       let key: string = kV[0].trim();
       let val: string = kV.slice(1).join(' : ').trim();
-      while (regex.multiline.test(lines[i + 1])) {
-        //use original value then
-        val = val.concat('\n', lines[++i].trim());
+      if (regex.multiline.test(lines[i + 1])) {
+        do {
+          //lines won't be more than a few short text lines
+          val.concat('\n', lines[++i].trim());
+        } while (regex.multiline.test(lines[i + 1]));
       }
       const [newKey, newVal] = normalizeKeyValue(key, val);
       result[newKey] = newVal;

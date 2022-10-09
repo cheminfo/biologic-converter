@@ -1,19 +1,24 @@
 import { FileCollection, groupFiles } from 'filelist-utils';
 
+import { ComplexObject } from './Types';
 import { MPR, parseMPR } from './mpr/parseMPR';
-import { MPS, parseMPS } from './mps/parseMPS';
-import { MPT, parseMPT } from './mpt/parseMPT';
+import { parseMPS } from './mps/parseMPS';
+import { parseMPT } from './mpt/parseMPT';
 
+/**
+ * Text files have no type at the moment, but they
+ * follow MPR as much as possible
+ */
 export interface Biologic {
   dir?: string;
   mpr?: MPR;
-  mps?: MPS;
-  mpt?: MPT;
+  mps?: ComplexObject;
+  mpt?: ComplexObject;
 }
 
 /**
- *  Parses BioLogic mpt, mps formats from multiple or single directories.
- *  The result contains an array of [[`BioLogic`]] `[{dir:'1', mps, mpt}, {dir:'2', mps, mpt},..]`
+ *  Parses Biologic mpr, mpt, mps formats from multiple or single directories.
+ *  The result contains an array of [[`Biologic`]] `[{dir:'1', mps, mpt}, {dir:'2', mps, mpt},..]`
  *
  *  Project structure example:
  *
@@ -30,12 +35,12 @@ export interface Biologic {
  *  ```
  *
  * @param fileCol - `path/to/parent` or `path/to/any/child`. (See tree above.)
- * @returns  JSON object passing **child** directory; array of children if you pass a **parent**.
+ * @returns JSON object passing **child** directory; array of children if you pass a **parent**.
  */
 
-export async function convert(fileCol: FileCollection): Promise<BioLogic[]> {
+export async function convert(fileCol: FileCollection): Promise<Biologic[]> {
   const dirs = groupFiles(fileCol);
-  let results: BioLogic[] = [];
+  let results: Biologic[] = [];
 
   /* can not use `forEach` and pass `async` functions */
   for (const dir of dirs) {

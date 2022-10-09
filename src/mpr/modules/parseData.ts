@@ -43,8 +43,8 @@ export function parseData(buffer: IOBuffer, header: ModuleHeader): ParseData {
   for (let i = 0; i < dataPoints; i++) {
     let flagByte = 256;
     for (const id of colIds) {
-
-      if (flagColumns[id] !== undefined) {//undefined if not a column (flag + data columns have unique ids)
+      if (flagColumns[id] !== undefined) {
+        //undefined if not a column (flag + data columns have unique ids)
         if (flagByte === 256) flagByte = buffer.readByte();
         const { bitMask, name: varName } = flagColumns[id];
         let twosComp = bitMask & -bitMask;
@@ -70,12 +70,12 @@ export function parseData(buffer: IOBuffer, header: ModuleHeader): ParseData {
         }
         variables[varName] = varsChildObject; //reassign
       } else if (dataColumns[id] !== undefined) {
-
-        const {name:varName, dType, unit} = dataColumns[id];
+        const { name: varName, dType, unit } = dataColumns[id];
         let varsChildObject: Partial<VarsChild> = variables[varName] || {};
 
         const read = readType(buffer, dType);
-        if (id === 0x27) { // If ID is I Range
+        if (id === 0x27) {
+          // If ID is I Range
           varsChildObject = addData(
             varsChildObject,
             unitsScale('I_range', read),
