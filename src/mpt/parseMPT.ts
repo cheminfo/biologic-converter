@@ -4,17 +4,17 @@ import { ensureString } from 'ensure-string';
 import { ComplexObject } from '../Types';
 
 import { parseData } from './parseData';
-import { parseSettings } from './parseSettings';
+import { parseLogAndSettings } from './parseLogAndSettings';
 import { getNbOfHeaderLines } from './utility/getNbOfHeaderLines';
 
 export interface MPT {
   meta: { name: string; nbOfHeaderLines: number };
   /* settings module */
   settings: { variables: ComplexObject };
-  /* log module */
-  log?: { variables: ComplexObject };
   /* data module */
   data: { variables: Record<string, MeasurementVariable> };
+  /* log module */
+  log?: { variables: ComplexObject };
 }
 
 /**
@@ -33,11 +33,11 @@ export function parseMPT(data: TextData): MPT {
 
   const offset = 4;
   const i = nbOfHeaderLines - 2;
-  const result = parseSettings(lines.slice(offset, i), technique);
+  const result = parseLogAndSettings(lines.slice(offset, i), technique);
   return {
     meta: { name, nbOfHeaderLines },
     settings: result.settings,
-    log: result.logs,
+    log: result.log,
     data: { variables: parseData(lines.slice(i + 1)) },
   };
 }

@@ -1,11 +1,3 @@
-/*
-* this function will actually accept the technique parameter,
-and try to match each parsed parameter to the ones we have from each technique,
-*/
-/**
- * name:string,
- * params: Parameters;
- */
 export type GetParams = (
   lines: string[],
   i: number,
@@ -24,22 +16,13 @@ export const getParams: GetParams = function getParams(lines, i) {
     if (thisLine === '') break;
 
     // k-v pairs for this technique
-    const kV = thisLine.split(/\s{2,}/);
-    const k = kV[0].trim();
-    let v;
-    if (kV.length === 2) {
-      v = kV[1].trim();
-    } else if (kV.length > 2) {
-      for (let i = 1; i < kV.length - 2; i++) {
-        if (!Array.isArray(v)) {
-          v = [kV[i].trim()];
-        } else {
-          v.push();
-        }
-      }
-    }
-
-    params[k] = v || '';
+    let [key, ...values] = thisLine.split(/\s{2,}/);
+    const newVals: string | string[] = !values
+      ? ''
+      : values.length === 1
+      ? values[0]
+      : values;
+    params[key] = newVals;
   }
   return [params, i - 1];
 };
