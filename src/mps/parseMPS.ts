@@ -21,7 +21,7 @@ export function parseMPS(mps: TextData): ComplexObject {
   let result: ComplexObject = {
     name: lines.shift(),
     settings: { variables: { techniques: [] } },
-    log: { variables: { } },
+    log: { variables: {} },
   };
   const regex = {
     nothing: /^\s*$/,
@@ -39,7 +39,7 @@ export function parseMPS(mps: TextData): ComplexObject {
       [result, i] = addKeyValueToResult(result, lines, i, kV);
     } else {
       const [key, logOrSettings, value] = normalizeFlag(currentLine.trim());
-      result[logOrSettings].variables[key] = value
+      result[logOrSettings].variables[key] = value;
     }
   }
   return result;

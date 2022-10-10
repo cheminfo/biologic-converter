@@ -72,32 +72,38 @@ export function normalizeKeyValue(key: string, val: string): NormalizeKeyValue {
   let newVal;
   // fully manual keys
   if (key.startsWith('Run on channel')) {
-    const [number, serial] = /(?:.*) \(SN (?:.*) \)/.exec(val) ?? '';
-    newVal = { number: Number(number) || '', serial: Number(serial) || '' };
-  }
-  // systemized keys
-  const setting = normalizeNumVal[key];
-  if (setting && val) {
-    if (setting.type === 'minMaxRange') {
-      const result =
-        /min = (?<min>.*) (?<minUnit>.*), max = (?<max>.*) (?<maxUnit>.*)$/.exec(
-          val,
-        );
-      if (result?.groups) {
-        newVal = {
-          min: Number(result.groups.min),
-          minUnit: result.groups.minUnit || '',
-          max: Number(result.groups.max),
-          maxUnit: result.groups.maxUnit || '',
-        };
+    const result = /(?<num>.*) \(SN (?<serial>.*)\)$/.exec(val);
+    if (result?.groups) {
+      newVal = {
+        number: parseInt(result.groups.num, 10) || '',
+        serial: parseInt(result.groups.serial, 10) || '',
+      };
+    }
+  } else {
+    // systemized keys
+    const setting = normalizeNumVal[key];
+    if (setting && val) {
+      if (setting.type === 'minMaxRange') {
+        const result =
+          /min = (?<min>.*) (?<minUnit>.*), max = (?<max>.*) (?<maxUnit>.*)$/.exec(
+            val,
+          );
+        if (result?.groups) {
+          newVal = {
+            min: parseFloat(result.groups.min),
+            minUnit: result.groups.minUnit || '',
+            max: parseFloat(result.groups.max),
+            maxUnit: result.groups.maxUnit || '',
+          };
+        }
+      } else if (setting.type === 'valueUnit') {
+        const both = val.split(' ');
+        if (both.length === 2) {
+          newVal = { value: parseFloat(both[0]), unit: both[1] };
+        }
+      } else if (setting.type === 'number') {
+        newVal = parseFloat(val);
       }
-    } else if (setting.type === 'valueUnit') {
-      const both = val.split(' ');
-      if (both.length === 2) {
-        newVal = { value: Number(both[0]), unit: both[1] };
-      }
-    } else if (setting.type === 'number') {
-      newVal = Number(val);
     }
   }
   /* If a k-v does not fall in any category, still needs tweaking */
@@ -125,19 +131,30 @@ type NormalizeFlag = [
  * @returns
  */
 export function normalizeFlag(flag: string): NormalizeFlag {
-  const regex = { version: / (?:v\d{1,}\.\d{1,}) / };
+  const regex = {
+    version: / (?<version>v\d{1,}\.\d{1,}) /,
+    points: /every (?<points>.*) points/,
+  };
+  let name;
+  let regexType = 'version';
+  //exec may return `null`
   if (flag.startsWith('Internet server')) {
-    const [version] = regex.version.exec(flag) ?? '';
-    return ['serverVersion', 'log', version || ''];
+    name = 'serverVersion';
   } else if (flag.startsWith('EC-Lab for')) {
-    const [version] = regex.version.exec(flag) ?? '';
-    return ['ecLabVersion', 'log', version || ''];
+    name = 'ecLabVersion';
   } else if (flag.startsWith('Command interpretor')) {
-    const [version] = regex.version.exec(flag) ?? '';
-    return ['interpreterVersion', 'log', version || ''];
+    name = 'interpreterVersion';
   } else if (flag.startsWith('Average data every')) {
-    const [points] = /every (?:.*) points/.exec(flag) ?? '';
-    return ['averagingPoints', 'log', Number(points)];
+    name = 'averagingPoints';
+  }
+  if (name && regexType === 'version') {
+    const result = regex.version.exec(flag);
+    const version = result?.groups?.version || '';
+    return [name, 'log', version];
+  } else if (name === 'averagingPoints') {
+    const result = regex.points.exec(flag);
+    const points = result?.groups?.points || '';
+    return [name, 'log', points];
   } else {
     return [flag, 'settings', ''];
   }

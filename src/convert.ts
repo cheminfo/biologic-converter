@@ -50,13 +50,10 @@ export async function convert(fileCol: FileCollection): Promise<Biologic[]> {
       const fName = dataFile.name;
       if (fName.endsWith('.mps')) {
         result.mps = parseMPS(await dataFile.arrayBuffer());
-        console.log(result.mps)
       } else if (fName.endsWith('.mpt')) {
         result.mpt = parseMPT(await dataFile.arrayBuffer());
-        console.log(result.mpt)
       } else if (fName.endsWith('.mpr')) {
         result.mpr = parseMPR(await dataFile.arrayBuffer());
-        console.log(result.mpr)
       }
     }
     if (Object.keys(result).length > 1) {
