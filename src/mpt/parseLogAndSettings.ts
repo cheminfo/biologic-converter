@@ -1,6 +1,7 @@
 import { ComplexObject } from '../Types';
 import { getParams } from '../utility/getParamsFromText';
 import { normalizeFlag, normalizeKeyValue } from '../utility/normalize';
+import { TechniqueLookUp } from '../utility/techniquesAndParams';
 /**
  * parses log and settings modules
  * @param data - pass the file as string, Buffer or Arraybuffer.
@@ -9,12 +10,12 @@ import { normalizeFlag, normalizeKeyValue } from '../utility/normalize';
 
 export function parseLogAndSettings(
   lines: string[],
-  technique: string,
+  technique: TechniqueLookUp,
 ): ComplexObject {
   // file converted to an array of strings, each item a newline.
 
   let result: ComplexObject = {
-    settings: { variables: { technique, params: {} } },
+    settings: { variables: { technique: technique.name, params: {} } },
     log: { variables: {} },
   };
 
@@ -35,10 +36,13 @@ export function parseLogAndSettings(
       val = val.trim();
       if (key === 'Cycle Definition') {
         /* Special key parsing */
-        const [params, lastLineRead] = getParams(lines, ++i);
+        const [params, lastLineRead] = getParams(
+          technique.preParameters,
+          lines,
+          ++i,
+        );
         result.settings.variables.params = params || {};
         i = lastLineRead;
-        continue;
       } else if (regex.multiline.test(lines[i + 1])) {
         do {
           //just a few short text lines
