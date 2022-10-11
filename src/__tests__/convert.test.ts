@@ -5,16 +5,28 @@ import { fileCollectionFromPath } from 'filelist-utils';
 import { convert } from '../convert';
 
 describe('test convert', () => {
-  it('directory', async () => {
-    const fl = await fileCollectionFromPath(
+  it('parses directory', async () => {
+    const fc = await fileCollectionFromPath(
       join(__dirname, 'data/testDirectory'),
     );
-    const directories = await convert(fl);
-    // test number of directories
+    const directories = await convert(fc);
     expect(directories).toHaveLength(2);
-    //each dir is an object with 'dir', 'mpr', 'mps', 'mpt' all optional.
-    expect(Object.keys(directories[0])).toStrictEqual(['dir', 'mpr', 'mps']);
-    directories.forEach((directory) => delete directory.dir);
+    expect(directories).toMatchObject([
+      {
+        dir: 'testDirectory/ca',
+        mpr: {
+          name: 'BIO-LOGIC MODULAR FILE',
+        },
+        mpt: { name: 'EC-Lab ASCII FILE' },
+      },
+      {
+        dir: 'testDirectory/jdb11-1',
+        mpr: {
+          name: 'BIO-LOGIC MODULAR FILE',
+        },
+        mps: { name: 'EC-LAB SETTING FILE' },
+      },
+    ]);
     expect(directories).toMatchSnapshot();
   });
 

@@ -1,7 +1,8 @@
 import { IOBuffer } from 'iobuffer';
 
+import { techniqueFromId } from '../../utility/techniquesAndParams';
+
 import { Parameters, getTechniqueParameters } from './utility/getParameters';
-import { techniqueLookUp } from './utility/techniquesAndParams';
 
 export interface ParseSettings {
   technique: string; // Unique technique ID.
@@ -31,7 +32,7 @@ export interface ParseSettings {
 export function parseSettings(buffer: IOBuffer) {
   let object: Partial<ParseSettings> = {};
   const zero = buffer.offset;
-  const { technique, preParameters } = techniqueLookUp(buffer.readByte());
+  const { technique, preParameters } = techniqueFromId(buffer.readByte());
   object.technique = technique;
   object.comments = buffer.decodeText(buffer.readUint8(), 'windows-1252');
   buffer.offset = zero + 0x107;

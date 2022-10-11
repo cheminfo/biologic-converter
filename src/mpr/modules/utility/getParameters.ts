@@ -1,9 +1,9 @@
 import { IOBuffer } from 'iobuffer';
 
+import { TechniqueLookUp } from '../../../utility/techniquesAndParams';
 import { unitsScale } from '../../ids';
 
 import { readType as pValue } from './readType';
-import { TechniqueLookUp } from './techniquesAndParams';
 
 export interface Parameters {
   [key: string]: string | number;
@@ -33,7 +33,7 @@ export function getTechniqueParameters(
        * https://github.com/dgbowl/yadg/blob/075f1708d03bdd4c4324871cc7bd4b1ffb7e1ccf/src/yadg/parsers/electrochem/eclabtechniques.py#L701
        */
       for (let i = 0; i < Math.min(preParameters.length, nParams); i++) {
-        const [pName, pReadType] = preParameters[i];
+        const { name: pName, mprReadType: pReadType } = preParameters[i];
         //if (param[1] === 'Pascal') parameters[param[0]] = pascalString(buffer); //we not using it
         //apparently
         const val = pValue(buffer, pReadType);

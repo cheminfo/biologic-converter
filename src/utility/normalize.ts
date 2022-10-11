@@ -153,8 +153,8 @@ export function normalizeFlag(flag: string): NormalizeFlag {
     return [name, 'log', version];
   } else if (name === 'averagingPoints') {
     const result = regex.points.exec(flag);
-    const points = result?.groups?.points || '';
-    return [name, 'log', points];
+    const points = result?.groups?.points;
+    return [name, 'log', points ? parseInt(points, 10) : ''];
   } else {
     return [flag, 'settings', ''];
   }
