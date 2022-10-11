@@ -20,8 +20,10 @@ export function parseMPS(mps: TextData): ComplexObject {
   const lines = ensureString(mps, { encoding: 'windows-1252' }).split(/\r?\n/);
   let result: ComplexObject = {
     name: lines.shift(),
-    settings: { variables: { techniques: [] } },
-    log: { variables: {} },
+    // the techniques appear in the order in which they appear in the MPS file
+    //which is the order they were applied.(presumably)
+    settings: { variables: { techniques: [], flags: [] } },
+    log: { variables: {}, flags: [] },
   };
   const regex = {
     nothing: /^\s*$/,
@@ -39,7 +41,11 @@ export function parseMPS(mps: TextData): ComplexObject {
       [result, i] = addKeyValueToResult(result, lines, i, kV);
     } else {
       const [key, logOrSettings, value] = normalizeFlag(currentLine.trim());
-      result[logOrSettings].variables[key] = value;
+      if (value === '') {
+        result[logOrSettings].variables.flags.push(key);
+      } else {
+        result[logOrSettings].variables[key] = value;
+      }
     }
   }
   return result;
