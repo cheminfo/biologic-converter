@@ -1,6 +1,7 @@
 import { ComplexObject } from '../../Types';
 import { getParams } from '../../utility/getParamsFromText';
 import { normalizeKeyValue } from '../../utility/normalize';
+import { techniqueFromLongName } from '../../utility/techniquesAndParams';
 
 /**
  * Adds key value pair to result object, this is used in the text parsers.
@@ -24,8 +25,8 @@ export function addKeyValueToResult(
   let val: string = kV.length >= 2 ? kV.slice(1).join(' : ').trim() : '';
   if (key === 'Technique') {
     /* Special key parsing */
-    const name = lines[++i].trim();
-    const [params, lastLineRead] = getParams(lines, ++i);
+    const { name, preParameters } = techniqueFromLongName(lines[++i].trim());
+    const [params, lastLineRead] = getParams(preParameters, lines, ++i);
     result.settings.variables.techniques.push({ [name]: params || {} });
     i = lastLineRead;
   } else if (regex.multiline.test(lines[i + 1])) {

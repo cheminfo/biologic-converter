@@ -425,63 +425,61 @@ export const preParamsLookUp: TechniquesToParams = {
     - ZIR - IR compensation (PEIS)
 */
 export interface TechniqueLookUp {
-  technique: string;
-  preParameters: ArraySS;
+  name: string;
+  preParameters: Param[];
 }
 
 export function techniqueFromId(id: number): TechniqueLookUp {
   switch (id) {
     case 0x4:
-      return { technique: 'GCPL', preParameters: preParamsLookUp.gcplParams };
+      return { name: 'GCPL', preParameters: preParamsLookUp.gcplParams };
     case 0x6:
-      return { technique: 'CV', preParameters: preParamsLookUp.cvParams };
+      return { name: 'CV', preParameters: preParamsLookUp.cvParams };
     case 0xb:
-      throw new Error(`Not implemented technique: OCV`);
+      throw new Error(`Not implemented name: OCV`);
     case 0x18:
-      return { technique: 'CA', preParameters: preParamsLookUp.caParams };
+      return { name: 'CA', preParameters: preParamsLookUp.caParams };
     case 0x19:
-      return { technique: 'CP', preParameters: preParamsLookUp.cpParams };
+      return { name: 'CP', preParameters: preParamsLookUp.cpParams };
     case 0x1c:
-      return { technique: 'WAIT', preParameters: preParamsLookUp.waitParams };
+      return { name: 'WAIT', preParameters: preParamsLookUp.waitParams };
     case 0x1d:
-      throw new Error(`Not implemented technique: PEIS`);
+      throw new Error(`Not implemented name: PEIS`);
     case 0x1e:
-      throw new Error(`Not implemented technique: GEIS`);
+      throw new Error(`Not implemented name: GEIS`);
     case 0x32:
-      return { technique: 'ZIR', preParameters: preParamsLookUp.zirParams };
+      return { name: 'ZIR', preParameters: preParamsLookUp.zirParams };
     case 0x6c:
-      return { technique: 'LSV', preParameters: preParamsLookUp.lsvParams };
+      return { name: 'LSV', preParameters: preParamsLookUp.lsvParams };
     case 0x7f:
-      throw new Error(`Not implemented technique: MB`);
+      throw new Error(`Not implemented name: MB`);
     default:
-      throw new Error(
-        `Not implemented technique: unknown (0x${id.toString(16)})`,
-      );
+      throw new Error(`Not implemented name: unknown (0x${id.toString(16)})`);
   }
 }
 
 export function techniqueFromLongName(id: string): TechniqueLookUp {
   switch (id) {
     case 'Galvanostatic Cycling with Potential Limitation':
-      return { technique: 'GCPL', preParameters: preParamsLookUp.gcplParams };
+      return { name: 'GCPL', preParameters: preParamsLookUp.gcplParams };
     case 'Cyclic Voltammetry':
-      return { technique: 'CV', preParameters: preParamsLookUp.cvParams };
+      return { name: 'CV', preParameters: preParamsLookUp.cvParams };
     case 'Open Circuit Voltage':
-      throw new Error(`Not implemented technique: OCV`);
+      throw new Error(`Not implemented name: OCV`);
     case 'Chronoamperometry / Chronocoulometry':
-      return { technique: 'CA', preParameters: preParamsLookUp.caParams };
+      return { name: 'CA', preParameters: preParamsLookUp.caParams };
     case 'Chronopotentiometry':
-      return { technique: 'CP', preParameters: preParamsLookUp.cpParams };
+      return { name: 'CP', preParameters: preParamsLookUp.cpParams };
     case 'Wait':
-      return { technique: 'WAIT', preParameters: preParamsLookUp.waitParams };
+      return { name: 'WAIT', preParameters: preParamsLookUp.waitParams };
     case 'Potentio Electrochemical Impedance Spectroscopy':
-      throw new Error('Not implemented technique: PEIS');
+      throw new Error('Not implemented name: PEIS');
     case 'Galvano Electrochemical Impedance Spectroscopy':
-      throw new Error('Not implemented technique: GEIS');
+      throw new Error('Not implemented name: GEIS');
     case 'IR compensation (ZIR)':
-      return { technique: 'ZIR', preParameters: preParamsLookUp.zirParams };
+      return { name: 'ZIR', preParameters: preParamsLookUp.zirParams };
     case 'Linear Sweep Voltammetry':
-      return { technique: 'LSV', preParameters: preParamsLookUp.lsvParams };
+      return { name: 'LSV', preParameters: preParamsLookUp.lsvParams };
     case 'Modulo Bat':
       throw new Error('Not implemented technique: MB');
     default:
