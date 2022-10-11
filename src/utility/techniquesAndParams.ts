@@ -408,6 +408,12 @@ export const preParamsLookUp: TechniquesToParams = {
     { name: 'use_results', mprReadType: 'Uint8', mpsReadType: 'int' },
     { name: 'comp_mode', mprReadType: 'Uint8', mpsReadType: 'string' },
   ],
+  mirParams: [
+    { name: 'Ru', mprReadType: 'Float32', mpsReadType: 'float' },
+    { name: 'Ru_unit', mprReadType: 'Uint8', mpsReadType: 'string' },
+    { name: 'comp_level', mprReadType: 'Uint8', mpsReadType: 'int' },
+    { name: 'comp_mode', mprReadType: 'Uint8', mpsReadType: 'string' },
+  ],
 };
 
 /**
@@ -482,6 +488,8 @@ export function techniqueFromLongName(id: string): TechniqueLookUp {
       return { name: 'LSV', preParameters: preParamsLookUp.lsvParams };
     case 'Modulo Bat':
       throw new Error('Not implemented technique: MB');
+    case 'Manual IR compensation': //this technique isn't listed anywhere else
+      return { name: 'MIR', preParameters: preParamsLookUp.mirParams };
     default:
       throw new Error(`Unknown technique: ${id}`);
   }

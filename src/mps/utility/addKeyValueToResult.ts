@@ -25,7 +25,8 @@ export function addKeyValueToResult(
   let val: string = kV.length >= 2 ? kV.slice(1).join(' : ').trim() : '';
   if (key === 'Technique') {
     /* Special key parsing */
-    const { name, preParameters } = techniqueFromLongName(lines[++i].trim());
+    const fullName = lines[++i].trim();
+    const { name, preParameters } = techniqueFromLongName(fullName);
     const [params, lastLineRead] = getParams(preParameters, lines, ++i);
     result.settings.variables.techniques.push({ [name]: params || {} });
     i = lastLineRead;
