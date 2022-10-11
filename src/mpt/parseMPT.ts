@@ -2,13 +2,15 @@ import { MeasurementVariable, TextData } from 'cheminfo-types';
 import { ensureString } from 'ensure-string';
 
 import { ComplexObject } from '../Types';
+import { techniqueFromLongName } from '../utility/techniquesAndParams';
 
 import { parseData } from './parseData';
 import { parseLogAndSettings } from './parseLogAndSettings';
 import { getNbOfHeaderLines } from './utility/getNbOfHeaderLines';
 
 export interface MPT {
-  meta: { name: string; nbOfHeaderLines: number };
+  name: string;
+  nbOfHeaderLines: number;
   /* settings module */
   settings: { variables: ComplexObject };
   /* data module */
@@ -29,13 +31,17 @@ export function parseMPT(data: TextData): MPT {
 
   const name = lines[0].trim(); //something like "MPT file"
   const nbOfHeaderLines = getNbOfHeaderLines(lines[1]);
-  const technique = lines[3]; //seems to be safe to assume for now (always in line 4)
+  const technique = techniqueFromLongName(lines[3].trim()); //seems to be safe to assume for now (always in line 4)
 
   const offset = 4;
   const i = nbOfHeaderLines - 2;
-  const result = parseLogAndSettings(lines.slice(offset, i), technique);
+  const result = parseLogAndSettings(
+    lines.slice(offset, i),
+    technique.technique,
+  );
   return {
-    meta: { name, nbOfHeaderLines },
+    name,
+    nbOfHeaderLines,
     settings: result.settings,
     log: result.log,
     data: { variables: parseData(lines.slice(i + 1)) },
