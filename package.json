@@ -37,8 +37,8 @@
   },
   "homepage": "https://github.com/cheminfo/biologic-converter#readme",
   "devDependencies": {
-    "@types/jest": "^29.1.1",
-    "eslint": "^8.24.0",
+    "@types/jest": "^29.1.2",
+    "eslint": "^8.25.0",
     "eslint-config-cheminfo-typescript": "^11.1.0",
     "jest": "^29.1.2",
     "jest-matcher-deep-close-to": "^3.0.2",
@@ -51,6 +51,6 @@
     "cheminfo-types": "^1.4.0",
     "ensure-string": "^1.2.0",
     "filelist-utils": "^0.11.0",
-    "iobuffer": "^5.2.0"
+    "iobuffer": "^5.2.1"
   }
 }
