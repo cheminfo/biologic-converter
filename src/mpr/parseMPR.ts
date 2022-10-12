@@ -8,12 +8,6 @@ import { parseModuleHeader, ModuleHeader } from './modules/parseModuleHeader';
 import { parseSettings, ParseSettings } from './modules/parseSettings';
 import { isModule } from './utility/isModule';
 
-/**
- * imagine the MPR file as a set of modules(blocks), each with a header, and then the data.
- * the modules are: `data`, `settings`, `log` and `loop`.
- * there is only one of each module.
- * Normally in the order: settings, data, log, loop
- */
 export interface MPR {
   name: string /** a string in the first line */;
   data: { header: ModuleHeader; variables: ParseData };
@@ -23,7 +17,7 @@ export interface MPR {
 }
 
 /**
- * Main function parsing the binary data from BioLogic tests
+ * Parses binary `.mpr` files
  * arrayBuffer - the data itself.
  * @returns the data as a JSON-like object.
  */
@@ -37,19 +31,18 @@ export function parseMPR(arrayBuffer: BinaryData): MPR {
     .replace(/\x1A|\x00/g, '')
     .trim();
 
-  //file is header + modules flagged as "MODULE" before starts
   while (isModule(buffer)) {
     const header = parseModuleHeader(buffer); //this is added to the objects below
     const dataStart = buffer.offset;
     const dataLength = header.length;
-    //header.longname flags the props in the module
-    if (/settings/i.exec(header.longName)) {
+
+    if (/settings/i.test(header.longName)) {
       mpr.settings = { header, variables: parseSettings(buffer) };
-    } else if (/data/i.exec(header.longName)) {
+    } else if (/data/i.test(header.longName)) {
       mpr.data = { header, variables: parseData(buffer, header) };
-    } else if (/log/i.exec(header.longName)) {
+    } else if (/log/i.test(header.longName)) {
       mpr.log = { header, variables: parseLogs(buffer) };
-    } else if (/loop/i.exec(header.longName)) {
+    } else if (/loop/i.test(header.longName)) {
       mpr.loop = { header, variables: parseLoop(buffer) };
     }
     buffer.offset = dataStart + dataLength; //end of module
