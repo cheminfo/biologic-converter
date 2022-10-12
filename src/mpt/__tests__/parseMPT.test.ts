@@ -7,17 +7,16 @@ describe('parseMPT', () => {
   it('test file', () => {
     const arrayBuffer = readFileSync(join(__dirname, './data/test.mpt'));
     const result = parseMPT(arrayBuffer);
-    const { meta, settings, log, data } = result;
+    const { name, nbOfHeaderLines, settings, log, data } = result;
 
-    expect(meta).toStrictEqual({
-      name: 'EC-Lab ASCII FILE',
-      nbOfHeaderLines: 59,
-    });
+    expect(name).toBe('EC-Lab ASCII FILE')
+    expect(nbOfHeaderLines).toEqual(59)
+
     //some props in meta
     expect(settings.variables).toMatchObject({
       comments: '',
       user: '',
-      technique: 'Chronoamperometry / Chronocoulometry',
+      technique: 'CA',
       electrodeConnection: 'standard',
       channel: 'Floating',
       density: { unit: 'g/cm3', value: 0 },

@@ -1,17 +1,21 @@
 import { camelCase } from './camelCase';
-/*
- * This module tries to make MPS and MPT more similar to MPR.
+/**
+ * @module
+ * This module tries to make MPS and MPT settings and log module
+ * more similar to MPR.
+ * It should be changed here if the format of the settings and log
+ * changes in the future.
  * It is very un-optimal, but there is no simple rule to convert them,
  * so the code uses regex.
  */
 /**
  * This is just for guidance of what stuff being parsed should
- * go to logs. May or may not be used as it is tricky to parse them.
+ * go to logs.
  */
 const logProperties = {
   flags: [
     //this is just a "startWith"
-    'Command interpretor', //misspell in the source code
+    'Command interpretor',
     'Internet server',
     'Turn to OCV between techniques',
     'Record Power',
@@ -106,7 +110,7 @@ export function normalizeKeyValue(key: string, val: string): NormalizeKeyValue {
       }
     }
   }
-  /* If a k-v does not fall in any category, still needs tweaking */
+  /* For any key, camel-case it and return it as a tuple */
   const newKey = camelCase(key);
   return [
     newKey,
@@ -115,10 +119,6 @@ export function normalizeKeyValue(key: string, val: string): NormalizeKeyValue {
   ];
 }
 
-/**
- * camelCase keys always, and try to find value and units if applies
- * Apparently there are only strings, numbers and ranges as results
- */
 type NormalizeFlag = [
   string,
   'log' | 'settings',

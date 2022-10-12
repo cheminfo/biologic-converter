@@ -46,13 +46,13 @@ function convertData(dataFile: Record<string, any>[]) {
   return data as ParseData;
 }
 
-describe('parseMPR', () => {
+describe('parseMPR DATA', () => {
   it('data', () => {
-    const arrayBuffer = readFileSync(join(__dirname, `${testFiles}/ca.mpr`));
+    const arrayBuffer = readFileSync(join(__dirname, testFiles, 'cp.mpr'));
     const parsed = parseMPR(arrayBuffer);
 
     const dataFile = JSON.parse(
-      readFileSync(join(__dirname, `${testFiles}/ca-data.json`), 'utf-8'),
+      readFileSync(join(__dirname, testFiles, 'cp-data.json'), 'utf-8'),
     );
     const data = convertData(dataFile);
     expect(data).toMatchObject(parsed.data.variables);

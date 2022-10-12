@@ -1,7 +1,7 @@
 import { ComplexObject } from '../../Types';
 import { getParams } from '../../utility/getParamsFromText';
 import { normalizeKeyValue } from '../../utility/normalize';
-import { techniqueFromLongName } from '../../utility/techniquesAndParams';
+import { techniqueFromLongName } from '../../utility/techniqueFromLongName';
 
 /**
  * Adds key value pair to result object, this is used in the text parsers.

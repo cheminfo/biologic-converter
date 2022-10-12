@@ -2,7 +2,7 @@ import { MeasurementVariable, TextData } from 'cheminfo-types';
 import { ensureString } from 'ensure-string';
 
 import { ComplexObject } from '../Types';
-import { techniqueFromLongName } from '../utility/techniquesAndParams';
+import { techniqueFromLongName } from '../utility/techniqueFromLongName';
 
 import { parseData } from './parseData';
 import { parseLogAndSettings } from './parseLogAndSettings';

@@ -1,22 +1,23 @@
 import { ComplexObject } from '../Types';
 import { getParams } from '../utility/getParamsFromText';
 import { normalizeFlag, normalizeKeyValue } from '../utility/normalize';
-import { TechniqueLookUp } from '../utility/techniquesAndParams';
+import { Technique } from '../utility/techniqueFromId';
 /**
- * parses log and settings modules
- * @param data - pass the file as string, Buffer or Arraybuffer.
+ * Parses log and settings modules, which are mixed up in the
+ * text files
+ * @param lines - file as string[]
+ * @param technique - the technique being processed
  * @returns JSON object representing the parsed data
  */
-
 export function parseLogAndSettings(
   lines: string[],
-  technique: TechniqueLookUp,
+  technique: Technique,
 ): ComplexObject {
-  // file converted to an array of strings, each item a newline.
-
   let result: ComplexObject = {
-    settings: { variables: { technique: technique.name, params: {} } },
-    log: { variables: {} },
+    settings: {
+      variables: { technique: technique.name, params: {}, flags: [] },
+    },
+    log: { variables: { flags: [] } },
   };
 
   const regex = {
@@ -28,7 +29,7 @@ export function parseLogAndSettings(
   for (let i = 0; i < lines.length; i++) {
     const currentLine = lines[i];
     if (regex.nothing.test(currentLine)) {
-      continue; //not necessary but might make it quicker
+      continue;
     } else if (regex.keyValue.test(currentLine)) {
       // eslint-disable-next-line prefer-named-capture-group
       let [key, val] = currentLine.split(/ :(.*)/);
@@ -55,7 +56,11 @@ export function parseLogAndSettings(
       const [theKey, logOrSettings, theValue] = normalizeFlag(
         currentLine.trim(),
       );
-      result[logOrSettings].variables[theKey] = theValue || '';
+      if (theValue) {
+        result[logOrSettings].variables[theKey] = theValue;
+      } else {
+        result[logOrSettings].variables.flags.push(theKey);
+      }
     }
   }
   return result;
