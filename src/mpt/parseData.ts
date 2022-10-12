@@ -1,11 +1,17 @@
 import { MeasurementVariable } from 'cheminfo-types';
 
-import { ComplexObject } from '../Types';
+interface Data {
+  [variableName: string]: MeasurementVariable;
+}
 /**
- * Parse the values
+ * Parses the data from the MPT file
+ * Data is ordered as a matrix, with a header being
+ * the fields and body being the values.
+ * @param data - string[] sliced where data starts
+ * @returns - the data as an object, keys are the names of the data-fields
  */
-export function parseData(data: string[]): ComplexObject {
-  const variables: Record<string, MeasurementVariable> = {};
+export function parseData(data: string[]): Data {
+  const variables: Data = {};
 
   let matrix = data.map((line) => line.split('\t'));
 

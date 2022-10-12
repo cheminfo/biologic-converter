@@ -1,5 +1,43 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Compare the technique (settings only) cp meta 1`] = `
+{
+  "acquisitionStart": 0,
+  "activeMaterialMass": 0.0010000000474974513,
+  "atX": 0,
+  "atomicWeight": 0.0010000000474974513,
+  "batteryCapacity": 3.615350037958028e-43,
+  "batteryCapacityUnit": 0,
+  "characteristicMass": 0.0010000000474974513,
+  "comments": "",
+  "eTransferred": 1,
+  "electrodeMaterial": "",
+  "electrodeSurfaceArea": 0.0010000000474974513,
+  "electrolyte": "",
+  "molecularWeight": 0.0010000000474974513,
+  "params": {
+    "EM": NaN,
+    "E_range_max": 10,
+    "E_range_min": -10,
+    "I_range": "1 A",
+    "Is": -100,
+    "Is_unit": "mA",
+    "Is_vs": 2,
+    "bandwidth": 8,
+    "dEs": 0,
+    "dQM": 3.3329999446868896,
+    "dQM_unit": 1,
+    "dts": 1,
+    "goto_Ns": 0,
+    "nc_cycles": 0,
+    "record": 1,
+    "ts": 120,
+  },
+  "referenceElectrode": "SCE Saturated Calomel Electrode",
+  "technique": "CP",
+}
+`;
+
 exports[`Compare the technique (settings parser) cp meta 1`] = `
 {
   "acquisitionStart": 0,

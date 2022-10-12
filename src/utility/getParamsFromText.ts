@@ -1,20 +1,27 @@
-import { TechniqueLookUp } from './techniquesAndParams';
+import { Param as InParam } from './preParamsLookUp';
+import { Technique } from './techniqueFromId';
+
+/**
+ * Object with this type helps to produce the out parameters
+ */
+type MetaParams = Technique['preParameters'];
 
 /**
  * Each parameter object
  */
-interface Param {
+interface OutParam {
   value: string | number | (string | number)[];
   units?: string;
 }
 /**
- * All paramaters
+ * Stores all parameters with value and optionally units
  */
 interface OutParams {
-  [name: string]: Param;
+  [name: string]: OutParam;
 }
+
 export type GetParams = (
-  metaParams: TechniqueLookUp['preParameters'],
+  metaParams: MetaParams,
   lines: string[],
   i: number,
 ) => [OutParams, number];
@@ -28,45 +35,66 @@ export type GetParams = (
 export const getParams: GetParams = function getParams(metaParams, lines, i) {
   let params: OutParams = {};
 
-  // TODO: fix Ns
   const initAt = i;
-  for (let j = 0; j < metaParams.length - 1; j++) {
+  if (lines[i].startsWith('Ns ')) {
+    metaParams.unshift({
+      name: 'Ns',
+      textReadType: 'int',
+      mprReadType: 'Uint8',
+    });
+  }
+  for (let j = 0; j < metaParams.length; j++) {
     const paramLine = lines[j + initAt].trim();
     if (paramLine === '') break;
 
-    const { name: paramName, regexUnits, mpsReadType } = metaParams[j];
-    let [fullName, ...paramValues] = paramLine.split(/\s{2,}/); //leave technique name out
+    const [longParameterName, ...paramValues] = paramLine.split(/\s{2,}/); //weak regex but seems ok.
 
-    if (!paramValues) {
+    if (!longParameterName || !paramValues) {
       throw new Error('expected at least 2 values.');
     } else {
-      //we have the parameter
-      let param: Partial<Param> = {};
-      // now we use metaparams to know how to parse the parameters
-      if (regexUnits) {
-        const result = regexUnits.exec(fullName.trim());
-        if (result?.groups?.units) {
-          param.units = result.groups.units;
-        }
-      }
-      if (mpsReadType === 'string') {
-        param.value = paramValues.length === 1 ? paramValues[0] : paramValues;
-      } else if (mpsReadType === 'float' || mpsReadType === 'float|string') {
-        const result = paramValues.map((v) => {
-          const n = parseFloat(v);
-          return isNaN(n) ? v : n;
-        });
-        param.value = result.length === 1 ? result[0] : result;
-      } else if (mpsReadType === 'int' || mpsReadType === 'int|string') {
-        const result = paramValues.map((v) => {
-          const n = parseInt(v, 10);
-          return isNaN(n) ? v : n;
-        });
-        param.value = result.length === 1 ? result[0] : result;
-      }
-      params[paramName] = param as Param;
+      /*order params in text file is === as in index `j`*/
+      params[metaParams[j].name] = setThisParameter(
+        metaParams[j],
+        longParameterName,
+        paramValues,
+      );
     }
     i++;
   }
   return [params, i - 1];
 };
+
+function setThisParameter(
+  metaParam: InParam,
+  longParameterName: string,
+  paramValues: string[],
+): OutParam {
+  const { regexUnits, textReadType } = metaParam;
+
+  let param: Partial<OutParam> = {};
+
+  if (regexUnits) {
+    //units from name
+    const result = regexUnits.exec(longParameterName.trim());
+    if (result?.groups?.units) {
+      param.units = result.groups.units;
+    }
+  }
+
+  if (textReadType === 'string') {
+    param.value = paramValues.length === 1 ? paramValues[0] : paramValues;
+  } else if (textReadType === 'float' || textReadType === 'float|string') {
+    const result = paramValues.map((v) => {
+      const n = parseFloat(v);
+      return isNaN(n) ? v : n;
+    });
+    param.value = result.length === 1 ? result[0] : result;
+  } else if (textReadType === 'int' || textReadType === 'int|string') {
+    const result = paramValues.map((v) => {
+      const n = parseInt(v, 10);
+      return isNaN(n) ? v : n;
+    });
+    param.value = result.length === 1 ? result[0] : result;
+  }
+  return param as OutParam;
+}

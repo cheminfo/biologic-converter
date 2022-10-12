@@ -1,6 +1,6 @@
 import { IOBuffer } from 'iobuffer';
 
-import { TechniqueLookUp } from '../../../utility/techniquesAndParams';
+import { Technique } from '../../../utility/techniqueFromId';
 import { unitsScale } from '../../ids';
 
 import { readType as pValue } from './readType';
@@ -16,7 +16,7 @@ export interface Parameters {
  */
 export function getTechniqueParameters(
   buffer: IOBuffer,
-  preParameters: TechniqueLookUp['preParameters'],
+  preParameters: Technique['preParameters'],
   zero: number,
 ): Parameters {
   const parameters: Parameters = {};

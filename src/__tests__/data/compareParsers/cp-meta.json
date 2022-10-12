@@ -1,0 +1,54 @@
+{
+  "settings": {
+    "technique": "CP",
+    "comments": "",
+    "active_material_mass": 0.0010000000474974513,
+    "at_x": 0.0,
+    "molecular_weight": 0.0010000000474974513,
+    "atomic_weight": 0.0010000000474974513,
+    "acquisition_start": 0.0,
+    "e_transferred": 1,
+    "electrode_material": "",
+    "electrolyte": "",
+    "electrode_area": 0.0010000000474974513,
+    "reference_electrode": "SCE Saturated Calomel Electrode",
+    "characteristic_mass": 0.0010000000474974513,
+    "battery_capacity": 0.0,
+    "battery_capacity_unit": 0
+  },
+  "params": [
+    {
+      "Is": -100.0,
+      "Is_unit": "mA",
+      "Is_vs": 2,
+      "ts": 120.0,
+      "EM": "nan",
+      "dQM": 3.3329999446868896,
+      "dQM_unit": 1,
+      "record": 1,
+      "dEs": 0.0,
+      "dts": 1.0,
+      "E_range_min": -10.0,
+      "E_range_max": 10.0,
+      "I_range": "1 A",
+      "bandwidth": 8,
+      "goto_Ns": 0,
+      "nc_cycles": 0
+    }
+  ],
+  "log": {
+    "channel_number": 0,
+    "channel_sn": 5304,
+    "Ewe_ctrl_min": -10.0,
+    "Ewe_ctrl_max": 10.0,
+    "ole_timestamp": 44257.67915509259,
+    "filename": "C:\\EmpaDaten\\Alessandro\\2021_03_02_spAg_Porex_01\\Batch_1_1_20210210_CP_100mA_-3.33V_02_CP_C01.mpr",
+    "host": "10.1.1.100",
+    "address": "USB",
+    "ec_lab_version": "11.33",
+    "server_version": "11.32",
+    "interpreter_version": "11.33",
+    "device_sn": "0200",
+    "averaging_points": 0
+  }
+}
