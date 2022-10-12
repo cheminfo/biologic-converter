@@ -9,8 +9,8 @@ describe('parseMPT', () => {
     const result = parseMPT(arrayBuffer);
     const { name, nbOfHeaderLines, settings, log, data } = result;
 
-    expect(name).toBe('EC-Lab ASCII FILE')
-    expect(nbOfHeaderLines).toEqual(59)
+    expect(name).toBe('EC-Lab ASCII FILE');
+    expect(nbOfHeaderLines).toBe(59);
 
     //some props in meta
     expect(settings.variables).toMatchObject({
