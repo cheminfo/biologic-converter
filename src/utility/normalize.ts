@@ -132,7 +132,7 @@ type NormalizeFlag = [
  */
 export function normalizeFlag(flag: string): NormalizeFlag {
   const regex = {
-    version: / (?<version>v\d{1,}\.\d{1,}) /,
+    version: / (?<version>v\d{1,}(?:\.\d{1,})+) /,
     points: /every (?<points>.*) points/,
   };
   let name;
@@ -146,6 +146,7 @@ export function normalizeFlag(flag: string): NormalizeFlag {
     name = 'interpreterVersion';
   } else if (flag.startsWith('Average data every')) {
     name = 'averagingPoints';
+    regexType = 'points';
   }
   if (name && regexType === 'version') {
     const result = regex.version.exec(flag);
