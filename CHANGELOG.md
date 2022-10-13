@@ -1,5 +1,32 @@
 # Changelog
 
+## [0.2.0](https://github.com/cheminfo/biologic-converter/compare/v0.1.0...v0.2.0) (2022-10-13)
+
+
+### Features
+
+* adds params parsing taken from MPR. ([2b7be5f](https://github.com/cheminfo/biologic-converter/commit/2b7be5f9f0e44fc010df66a25a8b785ea596b2ec))
+* adds params parsing taken from MPR. ([05e09ef](https://github.com/cheminfo/biologic-converter/commit/05e09ef1fa06d3c0283a8a02bff81dbc7fb4c50a))
+* mpr, mps, mpt settings and params seem aligned. TODO: more tests,  ssync data ([490902e](https://github.com/cheminfo/biologic-converter/commit/490902eed7c35a3101ec5157a866732274f7a4d5))
+* mpr, mps, mpt settings and params seem aligned. TODO: more tests,  ssync data ([1500966](https://github.com/cheminfo/biologic-converter/commit/1500966343e5a73b6fcfbeb9222e703f3f6f70eb))
+* MPS now closer to MPR[settings] ([5c9b948](https://github.com/cheminfo/biologic-converter/commit/5c9b948591f6a7a6b4ee52c4231c18fba22d7af0))
+* MPS now closer to MPR[settings] ([f799783](https://github.com/cheminfo/biologic-converter/commit/f799783d8a4270b044125a32e8dfd4371042745c))
+
+
+### Bug Fixes
+
+* a possible method to make the data more useful ([46b2929](https://github.com/cheminfo/biologic-converter/commit/46b2929fed80370e5eb33ae0a53b540d1f6bb0be))
+* a possible method to make the data more useful ([fcbc858](https://github.com/cheminfo/biologic-converter/commit/fcbc85896d76e6e8bd68cd375a5c26056629fe39))
+* added fileCollection support and fix missing ids ([ef1cf16](https://github.com/cheminfo/biologic-converter/commit/ef1cf1642f4cc8580bd8857fd80dd4531adaa90c))
+* added fileCollection support and fix missing ids ([bc82327](https://github.com/cheminfo/biologic-converter/commit/bc82327a6dd648ccdf0b1bfa784a281696636bc5))
+* map from number to string for current and isunit ([3047c42](https://github.com/cheminfo/biologic-converter/commit/3047c42c33107fa468bc8b5dc9fa9b03acb91320))
+* map from number to string for current and isunit ([b5acf74](https://github.com/cheminfo/biologic-converter/commit/b5acf746ab8b09fb51e81b5e7af487ebb6c05948))
+* normalize ([141d9ee](https://github.com/cheminfo/biologic-converter/commit/141d9eea4a09d77203c445e2ffc405bc5971d25c))
+* parses MPS, still params are all strings ([0323691](https://github.com/cheminfo/biologic-converter/commit/0323691f9a3571dc3c0eb6a7beae4e630041b201))
+* parses MPS, still params are all strings ([0228be4](https://github.com/cheminfo/biologic-converter/commit/0228be494deb1078d4d86a8dd12bd5c1c069064b))
+* several errors in the new feature ([79b1c0d](https://github.com/cheminfo/biologic-converter/commit/79b1c0d1f2c6f35427eefb28e64f32dc9c5ec11f))
+* several errors in the new feature ([61f6d4d](https://github.com/cheminfo/biologic-converter/commit/61f6d4de237025127e5bae40257a218eb295a5c9))
+
 ## [0.1.0](https://github.com/cheminfo/biologic-converter/compare/v0.0.1...v0.1.0) (2022-09-25)
 
 
