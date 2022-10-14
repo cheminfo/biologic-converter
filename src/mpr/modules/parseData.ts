@@ -84,6 +84,6 @@ export function parseData(buffer: IOBuffer, header: ModuleHeader): ParseData {
       }
     }
   }
-
+  //if necessary now we can convert the arrays to Float64 arrays
   return variables as ParseData;
 }

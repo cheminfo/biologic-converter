@@ -9,7 +9,7 @@ import { VarsChild } from '../parseData';
  */
 export function mapIRangeToMPT(experData: VarsChild): string[] {
   if (experData.label === 'I Range') {
-    return experData.data.map((val) => unitsScale('I Range', val));
+    return experData.data.map((val) => unitsScale('I_range', val));
   } else {
     throw new Error('The label should be I Range');
   }
@@ -20,8 +20,8 @@ export function mapIRangeToMPT(experData: VarsChild): string[] {
  * it is important to keep the output as string,
  * because the numeric values are processed differently
  * */
-function unitsScale(key: 'I Range' | 'Is_unit', val: number): string {
-  if (key === 'I Range') {
+export function unitsScale(key: 'I_range' | 'Is_unit', val: number): string {
+  if (key === 'I_range') {
     switch (val) {
       case 9:
         return '1 A';
@@ -70,7 +70,7 @@ function unitsScale(key: 'I Range' | 'Is_unit', val: number): string {
       case 4:
         return 'pA';
       default: //we dont yet have interpretation for all values
-        return key.toString();
+        return val.toString();
     }
   }
   throw new Error('Error mapping Is_unit or I_range to value');

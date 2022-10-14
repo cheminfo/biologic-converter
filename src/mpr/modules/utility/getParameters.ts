@@ -1,8 +1,8 @@
 import { IOBuffer } from 'iobuffer';
 
 import { Technique } from '../../../utility/techniqueFromId';
-import { unitsScale } from '../../ids';
 
+import { unitsScale } from './mapIRangeToMPT';
 import { readType as pValue } from './readType';
 
 export interface Parameters {
