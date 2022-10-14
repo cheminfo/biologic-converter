@@ -1,3 +1,4 @@
+import { MeasurementVariable } from 'cheminfo-types';
 import { IOBuffer } from 'iobuffer';
 
 import { flagColumns, dataColumns } from '../ids';
@@ -7,12 +8,12 @@ import { addData } from './utility/addData';
 import { readType } from './utility/readType';
 
 export interface VarsChild {
-  data: number[];
+  data: number[]; //notice the difference w MeasuremenVariable
   label: string;
   units: string;
   isDependent: boolean;
 }
-export type ParseData = Record<string, VarsChild>;
+export type ParseData = Record<string, MeasurementVariable>;
 
 export function parseData(buffer: IOBuffer, header: ModuleHeader): ParseData {
   const zero = buffer.offset; // relative 0x0
@@ -84,6 +85,5 @@ export function parseData(buffer: IOBuffer, header: ModuleHeader): ParseData {
       }
     }
   }
-  //if necessary now we can convert the arrays to Float64 arrays
-  return variables as ParseData;
+  return variables as Record<string, MeasurementVariable>;
 }
