@@ -119,7 +119,11 @@ export const dataColumns: DataColumns = {
   0x1f7: { dType: 'Float32', name: '|Ece h7|', unit: 'V' },
 };
 
-/** maps numeric values in I range or unit to a string */
+/**
+ * maps numeric values in I range or unit to a string
+ * it is important to keep the output as string,
+ * because the numeric values are processed differently
+ * */
 export function unitsScale(key: 'I_range' | 'Is_unit', val: number): string {
   if (key === 'I_range') {
     switch (val) {
@@ -153,10 +157,8 @@ export function unitsScale(key: 'I_range' | 'Is_unit', val: number): string {
         return '10 mA';
       case 40:
         return '1 mA';
-      case undefined: //not sure whether this will be equivalent, just trying now
-        return 'Auto';
-      default:
-        break;
+      default: //we don't yet have an interpretation for all values
+        return val.toString(10);
     }
   }
   if (key === 'Is_unit') {
@@ -171,8 +173,8 @@ export function unitsScale(key: 'I_range' | 'Is_unit', val: number): string {
         return 'nA';
       case 4:
         return 'pA';
-      default:
-        break;
+      default: //we dont yet have interpretation for all values
+        return key.toString();
     }
   }
   throw new Error('Error mapping Is_unit or I_range to value');
