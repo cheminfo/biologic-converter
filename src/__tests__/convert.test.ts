@@ -10,7 +10,7 @@ describe('test convert', () => {
       join(__dirname, 'data/testDirectory'),
     );
     const directories = await convert(fc);
-    expect(directories).toHaveLength(2);
+    expect(directories).toHaveLength(3);
     expect(directories).toMatchObject([
       {
         dir: 'testDirectory/ca',
@@ -26,8 +26,13 @@ describe('test convert', () => {
         },
         mps: { name: 'EC-LAB SETTING FILE' },
       },
+      {
+        dir: 'testDirectory/jdb11-4',
+        mpr: {
+          name: 'BIO-LOGIC MODULAR FILE',
+        },
+      },
     ]);
-    expect(directories).toMatchSnapshot();
   });
 
   it('passing a not-biologic dir should give []', async () => {
@@ -68,5 +73,6 @@ describe('test convert', () => {
     expect(r1).toMatch(mprSettings?.referenceElectrode as string);
     expect(e1.value).toBeCloseTo(mprSettings?.electrodeSurfaceArea as number);
     expect(c1.value).toBeCloseTo(mprSettings?.characteristicMass as number);
+    expect(mpr).toMatchSnapshot();
   });
 });

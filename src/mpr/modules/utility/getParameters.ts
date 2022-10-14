@@ -37,6 +37,7 @@ export function getTechniqueParameters(
         //if (param[1] === 'Pascal') parameters[param[0]] = pascalString(buffer); //we not using it
         //apparently
         const val = pValue(buffer, pReadType);
+
         parameters[pName] =
           pName === 'I_range'
             ? unitsScale('I_range', val + 1)
