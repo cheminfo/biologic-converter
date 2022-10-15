@@ -3,6 +3,8 @@ interface FlagColumns {
 }
 /**
  * flag column ID bytes to the corresponding bitmask and name
+ * As different from column IDs, flag column IDs don't need to be
+ * modified when reading from MPT files, they are exactly the same.
  */
 export const flagColumns: FlagColumns = {
   0x1: { bitMask: 0b00000011, name: 'mode' },
@@ -14,10 +16,10 @@ export const flagColumns: FlagColumns = {
 };
 
 interface DataColumns {
-  [key: number]: { dType: string; name: string; unit: string };
+  [columnId: number]: { dType: string; name: string; unit: string };
 }
 /**
- * data columns look-up table
+ * data columns look-up table by Id
  */
 export const dataColumns: DataColumns = {
   0x4: { dType: 'Float64', name: 'time', unit: 's' },
@@ -118,3 +120,102 @@ export const dataColumns: DataColumns = {
   0x1f6: { dType: 'Float32', name: '|Ece h7|', unit: 'V' },
   0x1f7: { dType: 'Float32', name: '|Ece h7|', unit: 'V' },
 };
+
+/**
+interface DataColumnsByName {
+  [columnNameFromMPT: string]: { mprName: string };
+}
+ * Map MPT to same MPR Type, plus add units and more concise names
+ * the units will be taken from the original MPT file, and it may help
+ * to spot any errors in MPR.
+export const dataColumnsByName: DataColumnsByName = {
+  'time/s': { unit: 's', mprName: 'time' },
+  'control_V/I': { mprName: 'control_V/I' },
+  'Ewe/V': { unit: 'V', mprName: 'Ewe' },
+  dq: { mprName: 'dq' },
+  'I/mA': { unit: 'mA', mprName: 'I' },
+  Ece: { mprName: 'Ece' },
+  '<I>': { mprName: '<I>' },
+  '(Q-Qo)': { mprName: '(Q-Qo)' },
+  'Analog IN 1': { mprName: 'Analog IN 1' },
+  'Analog IN 2': { mprName: 'Analog IN 2' },
+  control_V: { mprName: 'control_V' },
+  'control/mA': { mprName: 'control_I' },
+  dQ: { mprName: 'dQ' },
+  'cycle number': { mprName: 'cycle number' },
+  freq: { mprName: 'freq' },
+  '|Ewe|': { mprName: '|Ewe|' },
+  '|I|': { mprName: '|I|' },
+  'Phase(Z)': { mprName: 'Phase(Z)' },
+  '|Z|': { mprName: '|Z|' },
+  'Re(Z)': { mprName: 'Re(Z)' },
+  '-Im(Z)': { mprName: '-Im(Z)' },
+  'I Range': { mprName: 'I Range' },
+  P: { mprName: 'P' },
+  Energy: { mprName: 'Energy' },
+  'Analog OUT': { mprName: 'Analog OUT' },
+  '<Ewe>': { mprName: '<Ewe>' },
+  'Cs⁻²': { mprName: 'Cs⁻²' },
+  '|Ece|': { mprName: '|Ece|' },
+  'Phase(Zce)': { mprName: 'Phase(Zce)' },
+  '|Zce|': { mprName: '|Zce|' },
+  'Re(Zce)': { mprName: 'Re(Zce)' },
+  '-Im(Zce)': { mprName: '-Im(Zce)' },
+  'Energy charge': { mprName: 'Energy charge' },
+  'Energy discharge': { mprName: 'Energy discharge' },
+  'Capacitance charge': { mprName: 'Capacitance charge' },
+  'Capacitance discharge': { mprName: 'Capacitance discharge' },
+  Ns: { mprName: 'Ns' },
+  '|Estack|': { mprName: '|Estack|' },
+  Rcmp: { mprName: 'Rcmp' },
+  Cs: { mprName: 'Cs' },
+  Cp: { mprName: 'Cp' },
+  'Cp⁻²': { mprName: 'Cp⁻²' },
+  '|E1|': { mprName: '|E1|' },
+  '|E2|': { mprName: '|E2|' },
+  'Phase(Z1)': { mprName: 'Phase(Z1)' },
+  'Phase(Z2)': { mprName: 'Phase(Z2)' },
+  '|Z1|': { mprName: '|Z1|' },
+  '|Z2|': { mprName: '|Z2|' },
+  'Re(Z1)': { mprName: 'Re(Z1)' },
+  'Re(Z2)': { mprName: 'Re(Z2)' },
+  '-Im(Z1)': { mprName: '-Im(Z1)' },
+  '-Im(Z2)': { mprName: '-Im(Z2)' },
+  '<E1>': { mprName: '<E1>' },
+  '<E2>': { mprName: '<E2>' },
+  'Phase(Zstack)': { mprName: 'Phase(Zstack)' },
+  '|Zstack|': { mprName: '|Zstack|' },
+  'Re(Zstack)': { mprName: 'Re(Zstack)' },
+  '-Im(Zstack)': { mprName: '-Im(Zstack)' },
+  '<Estack>': { mprName: '<Estack>' },
+  'Phase(Zwe-ce)': { mprName: 'Phase(Zwe-ce)' },
+  '|Zwe-ce|': { mprName: '|Zwe-ce|' },
+  'Re(Zwe-ce)': { mprName: 'Re(Zwe-ce)' },
+  '-Im(Zwe-ce)': { mprName: '-Im(Zwe-ce)' },
+  '<Ece>': { mprName: '<Ece>' },
+  Temperature: { mprName: 'Temperature' },
+  'Q charge/discharge': { mprName: 'Q charge/discharge' },
+  'half cycle': { mprName: 'half cycle' },
+  'z cycle': { mprName: 'z cycle' },
+  'THD Ewe': { mprName: 'THD Ewe' },
+  'THD I': { mprName: 'THD I' },
+  'NSD Ewe': { mprName: 'NSD Ewe' },
+  'NSD I': { mprName: 'NSD I' },
+  'NSR Ewe': { mprName: 'NSR Ewe' },
+  'NSR I': { mprName: 'NSR I' },
+  '|Ewe h2|': { mprName: '|Ewe h2|' },
+  '|Ewe h3|': { mprName: '|Ewe h3|' },
+  '|Ewe h4|': { mprName: '|Ewe h4|' },
+  '|Ewe h5|': { mprName: '|Ewe h5|' },
+  '|Ewe h6|': { mprName: '|Ewe h6|' },
+  '|Ewe h7|': { mprName: '|Ewe h7|' },
+  '|I h2|': { mprName: '|I h2|' },
+  '|I h3|': { mprName: '|I h3|' },
+  '|I h4|': { mprName: '|I h4|' },
+  '|I h5|': { mprName: '|I h5|' },
+  '|I h6|': { mprName: '|I h6|' },
+  '|I h7|': { mprName: '|I h7|' },
+  '|Ece h2|': { mprName: '|Ece h2|' },
+  '|Ece h7|': { mprName: '|Ece h7|' },
+};
+*/
