@@ -32,7 +32,7 @@ describe('parseMPT', () => {
     });
 
     //some props in vars
-    expect(data.variables['Efficiency']).toMatchObject({
+    expect(data.variables.Efficiency).toMatchObject({
       label: 'Efficiency',
       units: '%',
       isDependent: true,
