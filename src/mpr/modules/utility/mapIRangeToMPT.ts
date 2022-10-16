@@ -1,4 +1,4 @@
-import { VarsChild } from '../parseData';
+import { MeasurementVariable } from 'cheminfo-types';
 /**
  * MPT returns I Range as a string, and it seems that the number
  * returned in the binary (MPR) parser maps to it.
@@ -7,12 +7,17 @@ import { VarsChild } from '../parseData';
  * @param experData - pass only the I Range column (object)
  * @returns - the map to I Range as a string[]
  */
-export function mapIRangeToMPT(experData: VarsChild): string[] {
+export function mapIRangeToMPT(experData: MeasurementVariable): string[] {
+  let res = [];
   if (experData.label === 'I Range') {
-    return experData.data.map((val) => unitsScale('I_range', val));
-  } else {
-    throw new Error('The label should be I Range');
+    for (let v of experData.data) {
+      res.push(unitsScale('I_range', v));
+    }
+    if (res.length !== 0) {
+      return res;
+    }
   }
+  throw new Error('The label should be I Range');
 }
 
 /**
