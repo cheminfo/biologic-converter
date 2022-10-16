@@ -16,7 +16,7 @@ export interface MPT {
   /* data module */
   data: { variables: Record<string, MeasurementVariable> };
   /* log module */
-  log?: { variables: ComplexObject };
+  log: { variables: ComplexObject };
 }
 
 /**
@@ -35,12 +35,15 @@ export function parseMPT(data: TextData): MPT {
 
   const offset = 4;
   const i = nbOfHeaderLines - 2;
-  const result = parseLogAndSettings(lines.slice(offset, i), technique);
+  const { settings, log } = parseLogAndSettings(
+    lines.slice(offset, i),
+    technique,
+  );
   return {
     name,
     nbOfHeaderLines,
-    settings: result.settings,
-    log: result.log,
+    settings,
+    log,
     data: { variables: parseData(lines.slice(i + 1)) },
   };
 }

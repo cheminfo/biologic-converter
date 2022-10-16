@@ -8,20 +8,18 @@ import { addKeyValueToResult } from './utility/addKeyValueToResult';
 
 /**
  * Creates an mps object from an mps file
- * The output is similar, but not the same, than `MPR.settings.variables`
- * MPS includes one or more techniques
- * We will know what this means when using it.
+ * output is similar to `MPR.settings.variables`
+ * MPS may include one or more techniques
  *
  * @param mps - pass the file as string, Buffer or Arraybuffer.
- * @returns JSON object representing the parsed data
+ * @returns json-like object representing the file
  */
 
 export function parseMPS(mps: TextData): ComplexObject {
   const lines = ensureString(mps, { encoding: 'windows-1252' }).split(/\r?\n/);
   let result: ComplexObject = {
     name: lines.shift(),
-    // the techniques appear in the order in which they appear in the MPS file
-    //which is the order they were applied.(presumably)
+    // techniques appear in the order in which they appear in the MPS file
     settings: { variables: { techniques: [], flags: [] } },
     log: { variables: {}, flags: [] },
   };
@@ -36,8 +34,7 @@ export function parseMPS(mps: TextData): ComplexObject {
     if (regex.nothing.test(currentLine)) {
       continue;
     } else if (regex.keyValue.test(currentLine)) {
-      //function updates the index bc some values are multiline
-      const kV: string[] = currentLine.split(regex.keyValue); //if many " : " we fix below
+      const kV: string[] = currentLine.split(regex.keyValue);
       [result, i] = addKeyValueToResult(result, lines, i, kV);
     } else {
       const [key, logOrSettings, value] = normalizeFlag(currentLine.trim());

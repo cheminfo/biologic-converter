@@ -4,7 +4,7 @@ import { normalizeKeyValue } from '../../utility/normalize';
 import { techniqueFromLongName } from '../../utility/techniqueFromLongName';
 
 /**
- * Adds key value pair to result object, this is used in the text parsers.
+ * Adds key value pair to result object
  * @param result - the result object we are populating
  * @param lines - the file as array of lines
  * @param i - the current index because we will update it
@@ -24,7 +24,6 @@ export function addKeyValueToResult(
   //fixes any extra split on value.
   let val: string = kV.length >= 2 ? kV.slice(1).join(' : ').trim() : '';
   if (key === 'Technique') {
-    /* Special key parsing */
     const fullName = lines[++i].trim();
     const { name, preParameters } = techniqueFromLongName(fullName);
     const [params, lastLineRead] = getParams(preParameters, lines, ++i);

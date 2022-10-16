@@ -38,7 +38,7 @@ describe('techniqueFromLongName', () => {
     ).toThrow('Not implemented name: GEIS');
   });
   it('ZIR', () => {
-    expect(techniqueFromLongName('IR compensation (ZIR)').name).toBe('ZIR');
+    expect(techniqueFromLongName('IR compensation (PEIS)').name).toBe('ZIR');
   });
   it('LSV', () => {
     expect(techniqueFromLongName('Linear Sweep Voltammetry').name).toBe('LSV');

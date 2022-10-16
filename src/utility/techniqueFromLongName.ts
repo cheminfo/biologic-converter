@@ -23,7 +23,7 @@ export function techniqueFromLongName(id: string): Technique {
       throw new Error('Not implemented name: PEIS');
     case 'Galvano Electrochemical Impedance Spectroscopy':
       throw new Error('Not implemented name: GEIS');
-    case 'IR compensation (ZIR)':
+    case 'IR compensation (PEIS)':
       return { name: 'ZIR', preParameters: preParamsLookUp.zirParams };
     case 'Linear Sweep Voltammetry':
       return { name: 'LSV', preParameters: preParamsLookUp.lsvParams };
