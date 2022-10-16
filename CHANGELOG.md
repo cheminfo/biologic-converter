@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.3.0](https://github.com/cheminfo/biologic-converter/compare/v0.2.0...v0.3.0) (2022-10-16)
+
+
+### Features
+
+* more compatibility between mpt and mpr and more tests ([0f2a13e](https://github.com/cheminfo/biologic-converter/commit/0f2a13e6b6cf791769d9d44ad50771ccc1f996e5))
+
+
+### Bug Fixes
+
+* **IRange:** if the value isnt found, it will temporarily convert it to string, until we know what is the real mapping (not available anywhere). ([7e4607c](https://github.com/cheminfo/biologic-converter/commit/7e4607c7285016f1af0d22f66faa2b21cf4b0804))
+* mpr and mpt similarity, first steps ([a17a06b](https://github.com/cheminfo/biologic-converter/commit/a17a06b8e1251789823412a17e89df06f6d9afd5))
+* return MeasurementVariable explicitly ([d2a7a56](https://github.com/cheminfo/biologic-converter/commit/d2a7a568e653ef9cf962d558b45734c306aec9f4))
+
 ## [0.2.0](https://github.com/cheminfo/biologic-converter/compare/v0.1.0...v0.2.0) (2022-10-13)
 
 
