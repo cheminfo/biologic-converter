@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.2](https://github.com/cheminfo/biologic-converter/compare/v0.3.1...v0.3.2) (2022-10-16)
+
+
+### Bug Fixes
+
+* added missing type ([61d064c](https://github.com/cheminfo/biologic-converter/commit/61d064c44eb2a6be2db1f110b163fdd5a08a2560))
+
 ## [0.3.1](https://github.com/cheminfo/biologic-converter/compare/v0.3.0...v0.3.1) (2022-10-16)
 
 
