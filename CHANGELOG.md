@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.1](https://github.com/cheminfo/biologic-converter/compare/v0.3.0...v0.3.1) (2022-10-16)
+
+
+### Bug Fixes
+
+* compatible to MeasurementVariable ([c36f722](https://github.com/cheminfo/biologic-converter/commit/c36f722426150cefd7f944a26a6f43bf564ad49c))
+
 ## [0.3.0](https://github.com/cheminfo/biologic-converter/compare/v0.2.0...v0.3.0) (2022-10-16)
 
 
