@@ -64,11 +64,9 @@ describe('test convert', () => {
     expect(mprSettings).toMatchObject(comparisonObject);
     expect(mptSettings).toMatchObject(comparisonObject);
 
-    const {
-      electrodeSurfaceArea: e1,
-      characteristicMass: c1,
-      referenceElectrode: r1,
-    } = mptSettings;
+    const e1 = mptSettings?.electrodeSurfaceArea;
+    const c1 = mptSettings?.characteristicMass;
+    const r1 = mptSettings?.referenceElectrode;
 
     expect(r1).toMatch(mprSettings?.referenceElectrode as string);
     expect(e1.value).toBeCloseTo(mprSettings?.electrodeSurfaceArea as number);

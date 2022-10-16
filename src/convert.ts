@@ -3,7 +3,7 @@ import { FileCollection, groupFiles } from 'filelist-utils';
 import { ComplexObject } from './Types';
 import { MPR, parseMPR } from './mpr/parseMPR';
 import { parseMPS } from './mps/parseMPS';
-import { parseMPT } from './mpt/parseMPT';
+import { MPT, parseMPT } from './mpt/parseMPT';
 
 /**
  * Text files have no type at the moment, but they
@@ -13,7 +13,7 @@ export interface Biologic {
   dir?: string;
   mpr?: MPR;
   mps?: ComplexObject;
-  mpt?: ComplexObject;
+  mpt?: MPT;
 }
 
 /**
