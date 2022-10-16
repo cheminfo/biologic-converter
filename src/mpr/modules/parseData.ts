@@ -7,12 +7,6 @@ import { ModuleHeader } from './parseModuleHeader';
 import { addData } from './utility/addData';
 import { readType } from './utility/readType';
 
-export interface VarsChild {
-  data: number[]; //notice the difference w MeasuremenVariable
-  label: string;
-  units: string;
-  isDependent: boolean;
-}
 export type ParseData = Record<string, MeasurementVariable>;
 
 export function parseData(buffer: IOBuffer, header: ModuleHeader): ParseData {
@@ -21,7 +15,7 @@ export function parseData(buffer: IOBuffer, header: ModuleHeader): ParseData {
   const columns = buffer.readByte(); // Number of columns
   const colIds = new Uint16Array(columns); // array of Ids of the columns
 
-  const variables: Record<string, VarsChild> = {};
+  const variables: ParseData = {};
 
   for (let i = 0; i < columns; i++) {
     //we set the variables object
@@ -85,5 +79,5 @@ export function parseData(buffer: IOBuffer, header: ModuleHeader): ParseData {
       }
     }
   }
-  return variables as Record<string, MeasurementVariable>;
+  return variables;
 }
