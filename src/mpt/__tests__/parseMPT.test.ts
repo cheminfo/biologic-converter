@@ -22,7 +22,7 @@ describe('parseMPT', () => {
       density: { unit: 'g/cm3', value: 0 },
     });
 
-    expect(log?.variables).toMatchObject({
+    expect(log.variables).toMatchObject({
       runOnChannel: { number: 1, serial: 3441 },
       address: 'USB',
       eweCtrlRange: { min: -10, minUnit: 'V', max: 10, maxUnit: 'V' },
@@ -37,5 +37,45 @@ describe('parseMPT', () => {
       units: '%',
       isDependent: true,
     });
+  });
+
+  it('cyclic voltammetry', () => {
+    const arrayBuffer = readFileSync(join(__dirname, './data/cv.mpt'));
+    const result = parseMPT(arrayBuffer);
+    const { name, nbOfHeaderLines, settings, log, data } = result;
+    expect(name).toBe('EC-Lab ASCII FILE');
+    expect(nbOfHeaderLines).toBe(55);
+    //some props in meta
+    expect(settings.variables).toMatchObject({
+      comments: '',
+      user: '',
+      technique: 'CV',
+      electrodeConnection: 'standard',
+      initialState: '',
+      electrodeMaterial: '',
+      electrolyte: '',
+      electrodeSurfaceArea: { unit: 'cm²', value: 0.001 },
+      equivalentWeight: { value: 0.0, unit: 'g/eq.' },
+      cycleDefinition: 'Charge/Discharge alternance',
+      density: { unit: 'g/cm3', value: 0 },
+    });
+
+    expect(log.variables).toMatchObject({
+      averagingPoints: 50,
+      runOnChannel: { number: 11, serial: 9636 },
+      address: '192.109.209.128',
+      eweCtrlRange: { min: 0, minUnit: 'V', max: 10, maxUnit: 'V' },
+      serverVersion: 'v11.12',
+      ecLabVersion: 'v11.12',
+      interpreterVersion: 'v11.12',
+    });
+
+    expect(Object.keys(data.variables)).toHaveLength(12);
+    expect(data.variables.time).toMatchObject({
+      label: 'time',
+      units: 's',
+      isDependent: false,
+    });
+    expect(Object.keys(data.variables.time.data)).toHaveLength(5103);
   });
 });

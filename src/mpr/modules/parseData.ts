@@ -1,7 +1,7 @@
 import { MeasurementVariable } from 'cheminfo-types';
 import { IOBuffer } from 'iobuffer';
 
-import { flagColumns, dataColumns } from '../ids';
+import { flagColumns, dataColumns } from '../../utility/ids';
 
 import { ModuleHeader } from './parseModuleHeader';
 import { addData } from './utility/addData';
