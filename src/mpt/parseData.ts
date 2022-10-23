@@ -21,8 +21,13 @@ export function parseData(data: string[]): Data {
   for (let i = 0; i < fields.length; i++) {
     const fieldName = fields[i];
     if (fieldName === '') continue;
+    const lowerCaseZ = 122;
+    const oneLetter =
+      lowerCaseZ - i > 96
+        ? String.fromCharCode(122 - i)
+        : String.fromCharCode(90 - (i % 26)); //we don't expect more than 52 variables
     const { name, unit } = mptNameToMPRName(fieldName);
-    variables[name] = {
+    variables[oneLetter] = {
       label: name,
       units: unit,
       isDependent: fieldName !== 'time/s',

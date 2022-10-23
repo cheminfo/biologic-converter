@@ -79,5 +79,18 @@ export function parseData(buffer: IOBuffer, header: ModuleHeader): ParseData {
       }
     }
   }
-  return variables;
+
+  // use single letters starting from a to z (lowercases)
+  const oneLetterVariables: Partial<ParseData> = {};
+
+  const allVarKeys = Object.keys(variables);
+  for (let i = 0; i < allVarKeys.length; i++) {
+    const lowerCaseZ = 122;
+    const oneLetter =
+      lowerCaseZ - i > 96
+        ? String.fromCharCode(122 - i)
+        : String.fromCharCode(90 - (i % 26)); //we don't expect more than 52 variables
+    oneLetterVariables[oneLetter] = variables[allVarKeys[i]];
+  }
+  return oneLetterVariables as ParseData;
 }
