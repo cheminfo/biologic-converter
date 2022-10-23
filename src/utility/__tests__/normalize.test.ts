@@ -1,6 +1,6 @@
 import { normalizeFlag, normalizeKeyValue } from '../normalize';
 
-describe('normalizeKeyValue', () => {
+describe('individual key value', () => {
   it('Run on channel key-value pair', () => {
     const [key, type, value] = normalizeKeyValue(
       'Run on channel',
@@ -11,7 +11,7 @@ describe('normalizeKeyValue', () => {
     expect(value).toStrictEqual({ number: 1, serial: 123456 });
   });
 
-  it('Numeric key value', () => {
+  it('Patterned key-value, number', () => {
     const [key, type, value] = normalizeKeyValue(
       'Number of linked techniques',
       '501',
@@ -20,8 +20,16 @@ describe('normalizeKeyValue', () => {
     expect(type).toBe('settings');
     expect(value).toBe(501);
   });
-
-  it('value is a range like value', () => {
+  it('patterned key-value, valueUnit', () => {
+    const [key, type, value] = normalizeKeyValue(
+      'Characteristic mass',
+      '1.5 g',
+    );
+    expect(key).toBe('characteristicMass');
+    expect(type).toBe('settings');
+    expect(value).toStrictEqual({ value: 1.5, unit: 'g' });
+  });
+  it('patterned key-value, minMaxRange', () => {
     const [key, type, value] = normalizeKeyValue(
       'Ewe ctrl range',
       ' min = 0.1 V, max = 0.2 V',
@@ -41,6 +49,11 @@ describe('normalizeKeyValue', () => {
     expect(flag).toBe('serverVersion');
     expect(val).toBe('v11.32.0.0');
     expect(type).toBe('log');
+
+    const [flag1, type1, val1] = normalizeFlag('Internet server unknown');
+    expect(flag1).toBe('serverVersion');
+    expect(val1).toBe('');
+    expect(type1).toBe('log');
   });
 
   it('average data', () => {
@@ -48,6 +61,13 @@ describe('normalizeKeyValue', () => {
     expect(flag).toBe('averagingPoints');
     expect(val).toBe(50);
     expect(type).toBe('log');
+
+    const [flag1, type1, val1] = normalizeFlag(
+      'Average data every unknown points',
+    );
+    expect(flag1).toBe('averagingPoints');
+    expect(val1).toBe('');
+    expect(type1).toBe('log');
   });
 
   it('not individually parsed flag', () => {

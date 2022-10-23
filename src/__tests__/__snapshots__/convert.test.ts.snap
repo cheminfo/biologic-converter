@@ -12,7 +12,7 @@ exports[`test convert compare parsers cp.[mpt,mpr] 1`] = `
     },
     "variables": {
       "j": {
-        "data": [
+        "data": Float64Array [
           5.399894714355469,
           5.201961517333984,
           5.206384181976318,
@@ -140,7 +140,7 @@ exports[`test convert compare parsers cp.[mpt,mpr] 1`] = `
         "units": "V",
       },
       "k": {
-        "data": [
+        "data": Float64Array [
           37,
           37,
           37,
@@ -268,7 +268,7 @@ exports[`test convert compare parsers cp.[mpt,mpr] 1`] = `
         "units": "",
       },
       "l": {
-        "data": [
+        "data": Float64Array [
           0,
           -0.027751181493971083,
           -0.05550360520553589,
@@ -396,7 +396,7 @@ exports[`test convert compare parsers cp.[mpt,mpr] 1`] = `
         "units": "mA·h",
       },
       "m": {
-        "data": [
+        "data": Float64Array [
           0,
           0,
           0,
@@ -524,7 +524,7 @@ exports[`test convert compare parsers cp.[mpt,mpr] 1`] = `
         "units": "",
       },
       "n": {
-        "data": [
+        "data": Float64Array [
           0,
           -0.09990425407886505,
           -0.19981297850608826,
@@ -652,7 +652,7 @@ exports[`test convert compare parsers cp.[mpt,mpr] 1`] = `
         "units": "C",
       },
       "o": {
-        "data": [
+        "data": Float64Array [
           0,
           -0.09990425407886505,
           -0.19981297850608826,
@@ -780,7 +780,7 @@ exports[`test convert compare parsers cp.[mpt,mpr] 1`] = `
         "units": "C",
       },
       "p": {
-        "data": [
+        "data": Float64Array [
           -99.88800048828125,
           -99.91472625732422,
           -99.92618560791016,
@@ -908,7 +908,7 @@ exports[`test convert compare parsers cp.[mpt,mpr] 1`] = `
         "units": "mA",
       },
       "q": {
-        "data": [
+        "data": Float64Array [
           -3.2463197708129883,
           -3.449388027191162,
           -3.4547317028045654,
@@ -1036,7 +1036,7 @@ exports[`test convert compare parsers cp.[mpt,mpr] 1`] = `
         "units": "V",
       },
       "r": {
-        "data": [
+        "data": Float64Array [
           -100,
           -100,
           -100,
@@ -1164,7 +1164,7 @@ exports[`test convert compare parsers cp.[mpt,mpr] 1`] = `
         "units": "mA",
       },
       "s": {
-        "data": [
+        "data": Float64Array [
           328.3641917048226,
           329.36419167956046,
           330.36419165429834,
@@ -1292,7 +1292,7 @@ exports[`test convert compare parsers cp.[mpt,mpr] 1`] = `
         "units": "s",
       },
       "t": {
-        "data": [
+        "data": Float64Array [
           0,
           0,
           0,

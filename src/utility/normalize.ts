@@ -1,10 +1,8 @@
 import { camelCase } from './camelCase';
 /**
  * @module
- * This module tries to make MPS and MPT settings and log module
+ * Tries to make MPS and MPT settings and log module
  * more similar to MPR.
- * It should be changed here if the format of the settings and log
- * changes in the future.
  * It is very un-optimal, but there is no simple rule to convert them,
  * so the code uses regex.
  */
@@ -58,46 +56,45 @@ const normalizeNumVal: Record<string, { type: string }> = {
   },
 };
 
-/**
- * camelCase keys always, and try to find value and units if applies
- * Apparently there are only strings, numbers and ranges as results
- */
 type NormalizeKeyValue = [
-  string,
-  'log' | 'settings',
-  string | number | { [key: string]: string | number },
+  string, //camelCase key
+  'log' | 'settings', //where to put it
+  string | number | { [key: string]: string | number }, //value
 ];
 /**
  * Parse every key
- * Some keys we have to parse fully manually (not as many) others follow
- * a pattern and can be included in the chain of if elses
+ * Some keys we have to parse individually
+ * others follow a pattern
+ * @param key - key to parse
+ * @param val - value to parse
+ * @returns [camelKey, logOrSettings, value]
  */
 export function normalizeKeyValue(key: string, val: string): NormalizeKeyValue {
   let newVal;
-  // fully manual keys
+  // "individual" keys
   if (key.startsWith('Run on channel')) {
-    const result = /(?<num>.*) \(SN (?<serial>.*)\)$/.exec(val);
+    const result = /(?<num>\d+) \(SN (?<serial>\d+)\)$/.exec(val);
     if (result?.groups) {
       newVal = {
-        number: parseInt(result.groups.num, 10) || '',
-        serial: parseInt(result.groups.serial, 10) || '',
+        number: parseInt(result.groups.num, 10),
+        serial: parseInt(result.groups.serial, 10),
       };
     }
   } else {
-    // systemized keys
+    // "patterned" keys
     const setting = normalizeNumVal[key];
     if (setting && val) {
       if (setting.type === 'minMaxRange') {
         const result =
-          /min = (?<min>.*) (?<minUnit>.*), max = (?<max>.*) (?<maxUnit>.*)$/.exec(
+          /min = (?<min>-?\d+\.?\d*) (?<minUnit>[a-zA-Z]+), max = (?<max>-?\d+\.?\d*) (?<maxUnit>[a-zA-Z]+)$/.exec(
             val,
           );
         if (result?.groups) {
           newVal = {
             min: parseFloat(result.groups.min),
-            minUnit: result.groups.minUnit || '',
+            minUnit: result.groups.minUnit,
             max: parseFloat(result.groups.max),
-            maxUnit: result.groups.maxUnit || '',
+            maxUnit: result.groups.maxUnit,
           };
         }
       } else if (setting.type === 'valueUnit') {
@@ -110,30 +107,23 @@ export function normalizeKeyValue(key: string, val: string): NormalizeKeyValue {
       }
     }
   }
-  /* For any key, camel-case it and return it as a tuple */
-  const newKey = camelCase(key);
+
   return [
-    newKey,
+    camelCase(key),
     logProperties.keyValues.includes(key) ? 'log' : 'settings',
     newVal || val,
   ];
 }
 
-type NormalizeFlag = [
-  string,
-  'log' | 'settings',
-  string | number | { [key: string]: string | number },
-];
 /**
- * Parses the keys that have no values, and normally the value is either
- * inside the key or it is just a boolean value
+ * similar for keys, but value will be '' and fixed later
  * @param flag
  * @returns
  */
-export function normalizeFlag(flag: string): NormalizeFlag {
+export function normalizeFlag(flag: string): NormalizeKeyValue {
   const regex = {
     version: / (?<version>v\d{1,}(?:\.\d{1,})+) /,
-    points: /every (?<points>.*) points/,
+    points: /every (?<points>\d+) points/,
   };
   let name;
   let regexType = 'version';
