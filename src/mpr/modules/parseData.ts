@@ -1,10 +1,10 @@
 import { MeasurementVariable } from 'cheminfo-types';
 import { IOBuffer } from 'iobuffer';
 
+import { getOneLetter } from '../../utility/getOneLetter';
 import { flagColumns, dataColumns } from '../../utility/ids';
 
 import { ModuleHeader } from './parseModuleHeader';
-import { addData } from './utility/addData';
 import { readType } from './utility/readType';
 
 export type ParseData = Record<string, MeasurementVariable>;
@@ -27,7 +27,7 @@ export function parseData(buffer: IOBuffer, header: ModuleHeader): ParseData {
         label: dataCol.name,
         units: dataCol.unit,
         isDependent: id !== 0x04,
-        data: [],
+        data: new Float64Array(dataPoints),
       };
     } else if (flagColumns[id] !== undefined) {
       const flagCol = flagColumns[id];
@@ -61,21 +61,14 @@ export function parseData(buffer: IOBuffer, header: ModuleHeader): ParseData {
           twosComp >>= 1;
           shift++;
         }
-
-        let varsChildObject = variables[varName];
-
-        varsChildObject = addData(
-          varsChildObject,
-          (bitMask & flagByte) >> shift,
-        ); //adds data key or pushes to data key
-
-        variables[varName] = varsChildObject; //reassign
+        //mutates the variable object
+        const newValue = (bitMask & flagByte) >> shift;
+        variables[varName].data[i] = Number(newValue);
       } else if (dataColumns[id] !== undefined) {
         const { name: varName, dType } = dataColumns[id];
-        let varsChildObject = variables[varName];
         const read = readType(buffer, dType);
-        varsChildObject = addData(varsChildObject, read);
-        variables[varName] = varsChildObject; //now reassign
+        //mutates the variable object
+        variables[varName].data[i] = Number(read);
       }
     }
   }
@@ -85,11 +78,7 @@ export function parseData(buffer: IOBuffer, header: ModuleHeader): ParseData {
 
   const allVarKeys = Object.keys(variables);
   for (let i = 0; i < allVarKeys.length; i++) {
-    const lowerCaseZ = 122;
-    const oneLetter =
-      lowerCaseZ - i > 96
-        ? String.fromCharCode(122 - i)
-        : String.fromCharCode(90 - (i % 26)); //we don't expect more than 52 variables
+    const oneLetter = getOneLetter(i);
     oneLetterVariables[oneLetter] = variables[allVarKeys[i]];
   }
   return oneLetterVariables as ParseData;

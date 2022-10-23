@@ -1,5 +1,6 @@
 import { MeasurementVariable } from 'cheminfo-types';
 
+import { getOneLetter } from '../utility/getOneLetter';
 import { dataColumnsByName } from '../utility/ids';
 
 interface Data {
@@ -21,11 +22,7 @@ export function parseData(data: string[]): Data {
   for (let i = 0; i < fields.length; i++) {
     const fieldName = fields[i];
     if (fieldName === '') continue;
-    const lowerCaseZ = 122;
-    const oneLetter =
-      lowerCaseZ - i > 96
-        ? String.fromCharCode(122 - i)
-        : String.fromCharCode(90 - (i % 26)); //we don't expect more than 52 variables
+    const oneLetter = getOneLetter(i);
     const { name, unit } = mptNameToMPRName(fieldName);
     variables[oneLetter] = {
       label: name,
