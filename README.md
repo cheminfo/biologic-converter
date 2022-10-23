@@ -13,27 +13,28 @@ There are 3 possible extensions:
 - .mpt : .mpr into _Text_ file
 - .mps : experiment _Settings_ text file.
 
+Other files: sometimes the data may be in a `.txt` file. This is very rare but if this is the case,
+report it and we will add support for these. Other files created by the software are ignored by the
+parser.
+
 ## Installation
 
-`$ npm i biologic-converter`
+`npm i biologic-converter`
 
 ## Usage
 
 ```js
 import { join } from 'path';
-import { fileListFromPath } from 'filelist-utils';
+import { fileCollectionFromPath } from 'filelist-utils';
+
 import { convert as cv } from 'biologic-converter';
 
 async function run() {
   /* path to the root dir of experiments or any child */
-  const fl = fileListFromPath(join(__dirname, 'data'));
+  const fl = fileCollectionFromPath(join(__dirname, 'data'));
 
-  const experiments = await cv(fl);
+  const experiments = await cv(fl); //array of directories
 
-  /*
- retrieves them as an array, each item is an object 
- representing the directory (stores `mps` and `mpt`)
-*/
   return experiments;
 }
 
@@ -46,9 +47,6 @@ run()
 
 Test files from https://github.com/dgbowl/yadg
 
-## ToDos
-
-The code parses text files (mps, mpt). Now writing the binary parser.
 
 [MIT](./LICENSE)
 
