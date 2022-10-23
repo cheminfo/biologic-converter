@@ -45,10 +45,9 @@ run()
 
 ## License
 
-Test files from https://github.com/dgbowl/yadg
-
-
 [MIT](./LICENSE)
+
+Test files from https://github.com/dgbowl/yadg
 
 [ci-image]: https://github.com/cheminfo/biologic-converter/workflows/Node.js%20CI/badge.svg?branch=main
 [ci-url]: https://github.com/cheminfo/biologic-converter/actions?query=workflow%3A%22Node.js+CI%22

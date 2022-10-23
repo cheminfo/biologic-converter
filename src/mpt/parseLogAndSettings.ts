@@ -2,6 +2,12 @@ import { ComplexObject } from '../Types';
 import { getParams } from '../utility/getParamsFromText';
 import { normalizeFlag, normalizeKeyValue } from '../utility/normalize';
 import { Technique } from '../utility/techniqueFromId';
+
+export interface LogAndSettings {
+  settings: ComplexObject;
+  log: { variables: ComplexObject };
+}
+
 /**
  * Parses log and settings modules, which are mixed up in the
  * text files
@@ -12,8 +18,8 @@ import { Technique } from '../utility/techniqueFromId';
 export function parseLogAndSettings(
   lines: string[],
   technique: Technique,
-): ComplexObject {
-  let result: ComplexObject = {
+): LogAndSettings {
+  let result: LogAndSettings = {
     settings: {
       variables: { technique: technique.name, params: {}, flags: [] },
     },

@@ -1,7 +1,7 @@
-import { ComplexObject } from '../../Types';
 import { getParams } from '../../utility/getParamsFromText';
 import { normalizeKeyValue } from '../../utility/normalize';
 import { techniqueFromLongName } from '../../utility/techniqueFromLongName';
+import { MPS } from '../parseMPS';
 
 /**
  * Adds key value pair to result object
@@ -12,11 +12,11 @@ import { techniqueFromLongName } from '../../utility/techniqueFromLongName';
  * @returns `[newObject, newIndex]` tuple
  */
 export function addKeyValueToResult(
-  result: ComplexObject,
+  result: MPS,
   lines: string[],
   i: number,
   kV: string[],
-): [ComplexObject, number] {
+): [MPS, number] {
   const regex = {
     multiline: /^[ \t]/,
   };
@@ -25,9 +25,10 @@ export function addKeyValueToResult(
   let val: string = kV.length >= 2 ? kV.slice(1).join(' : ').trim() : '';
   if (key === 'Technique') {
     const fullName = lines[++i].trim();
-    const { name, preParameters } = techniqueFromLongName(fullName);
+    const { name: shortName, preParameters } = techniqueFromLongName(fullName);
+    //from the technique short name we know how many lines to read.
     const [params, lastLineRead] = getParams(preParameters, lines, ++i);
-    result.settings.variables.techniques.push({ [name]: params || {} });
+    result.settings.variables.techniques.push({ [shortName]: params });
     i = lastLineRead;
   } else if (regex.multiline.test(lines[i + 1])) {
     /* parse multiline */
