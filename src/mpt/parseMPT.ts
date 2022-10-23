@@ -33,10 +33,6 @@ export function parseMPT(data: TextData): MPT {
     encoding: 'windows-1252', //i.e ascii
   }).split(/\r?\n/);
 
-  if (lines.length === 0) {
-    throw new Error('Empty file');
-  }
-
   let result: MPT = {};
   //MPT File magic, if present then expect structures.
   const name = lines[0].trim();
@@ -64,6 +60,7 @@ export function parseMPT(data: TextData): MPT {
         result.data = { variables: parseData(lines.slice(i + 1)) };
         break;
       }
+      i++;
     }
   }
   // If no data there may be some problem in the MPT file.

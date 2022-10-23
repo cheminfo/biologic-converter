@@ -77,4 +77,18 @@ describe('parseMPT', () => {
     });
     expect(Object.keys(data?.variables.u.data || {})).toHaveLength(5103);
   });
+
+  it('empty file throws', () => {
+    const arrayBuffer = readFileSync(join(__dirname, './data/noData.mpt'));
+    expect(() => parseMPT(arrayBuffer)).toThrow(
+      'No data was found by the parser',
+    );
+  });
+
+  it('no header / only data file', () => {
+    const arrayBuffer = readFileSync(join(__dirname, './data/noHeader.mpt'));
+    const result = parseMPT(arrayBuffer) as Required<MPT>;
+    const { data } = result;
+    expect(data).toBeDefined();
+  });
 });
