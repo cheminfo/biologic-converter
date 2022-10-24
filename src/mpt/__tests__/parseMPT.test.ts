@@ -1,12 +1,12 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
-import { parseMPT } from '../parseMPT';
+import { MPT, parseMPT } from '../parseMPT';
 
 describe('parseMPT', () => {
   it('test file', () => {
     const arrayBuffer = readFileSync(join(__dirname, './data/test.mpt'));
-    const result = parseMPT(arrayBuffer);
+    const result = parseMPT(arrayBuffer) as Required<MPT>;
     const { name, nbOfHeaderLines, settings, log, data } = result;
 
     expect(name).toBe('EC-Lab ASCII FILE');
@@ -22,7 +22,7 @@ describe('parseMPT', () => {
       density: { unit: 'g/cm3', value: 0 },
     });
 
-    expect(log.variables).toMatchObject({
+    expect(log?.variables).toMatchObject({
       runOnChannel: { number: 1, serial: 3441 },
       address: 'USB',
       eweCtrlRange: { min: -10, minUnit: 'V', max: 10, maxUnit: 'V' },
@@ -32,7 +32,7 @@ describe('parseMPT', () => {
     });
 
     //some props in vars
-    expect(data.variables.Efficiency).toMatchObject({
+    expect(data?.variables.b).toMatchObject({
       label: 'Efficiency',
       units: '%',
       isDependent: true,
@@ -46,7 +46,7 @@ describe('parseMPT', () => {
     expect(name).toBe('EC-Lab ASCII FILE');
     expect(nbOfHeaderLines).toBe(55);
     //some props in meta
-    expect(settings.variables).toMatchObject({
+    expect(settings?.variables).toMatchObject({
       comments: '',
       user: '',
       technique: 'CV',
@@ -60,7 +60,7 @@ describe('parseMPT', () => {
       density: { unit: 'g/cm3', value: 0 },
     });
 
-    expect(log.variables).toMatchObject({
+    expect(log?.variables).toMatchObject({
       averagingPoints: 50,
       runOnChannel: { number: 11, serial: 9636 },
       address: '192.109.209.128',
@@ -69,13 +69,26 @@ describe('parseMPT', () => {
       ecLabVersion: 'v11.12',
       interpreterVersion: 'v11.12',
     });
-
-    expect(Object.keys(data.variables)).toHaveLength(12);
-    expect(data.variables.time).toMatchObject({
+    expect(Object.keys(data?.variables || {})).toHaveLength(12);
+    expect(data?.variables.u).toMatchObject({
       label: 'time',
       units: 's',
       isDependent: false,
     });
-    expect(Object.keys(data.variables.time.data)).toHaveLength(5103);
+    expect(Object.keys(data?.variables.u.data || {})).toHaveLength(5103);
+  });
+
+  it('empty file throws', () => {
+    const arrayBuffer = readFileSync(join(__dirname, './data/noData.mpt'));
+    expect(() => parseMPT(arrayBuffer)).toThrow(
+      'No data was found by the parser',
+    );
+  });
+
+  it('no header / only data file', () => {
+    const arrayBuffer = readFileSync(join(__dirname, './data/noHeader.mpt'));
+    const result = parseMPT(arrayBuffer) as Required<MPT>;
+    const { data } = result;
+    expect(data).toBeDefined();
   });
 });

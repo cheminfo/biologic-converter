@@ -5,8 +5,12 @@ import { Technique } from '../../../utility/techniqueFromId';
 import { unitsScale } from './mapIRangeToMPT';
 import { readType as pValue } from './readType';
 
+/*
+ * the binary is way less informative than the MPT file so
+ * we use a map to get the information from the MPT file
+ */
 export interface Parameters {
-  [key: string]: string | number;
+  [name: string]: string | number;
 }
 /**
  * Parses current technique (type of experiment carried out.)

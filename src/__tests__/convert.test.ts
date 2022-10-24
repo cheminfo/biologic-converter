@@ -54,7 +54,7 @@ describe('test convert', () => {
     expect(mpt?.name).toBe('EC-Lab ASCII FILE');
 
     const mprSettings = mpr?.settings.variables;
-    const mptSettings = mpt?.settings.variables;
+    const mptSettings = mpt?.settings?.variables;
     const comparisonObject = {
       technique: 'CP',
       comments: '',
