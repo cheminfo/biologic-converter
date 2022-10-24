@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.0](https://github.com/cheminfo/biologic-converter/compare/v0.3.3...v0.4.0) (2022-10-24)
+
+
+### Features
+
+* **both parsers:** resolve variables to single letter  ([#20](https://github.com/cheminfo/biologic-converter/issues/20)) ([7ffbb3c](https://github.com/cheminfo/biologic-converter/commit/7ffbb3c0abd02f64023909887333b0ed0603b4d4))
+
 ## [0.3.3](https://github.com/cheminfo/biologic-converter/compare/v0.3.2...v0.3.3) (2022-10-20)
 
 
