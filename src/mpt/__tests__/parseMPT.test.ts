@@ -1,11 +1,13 @@
-import { readFileSync } from 'fs';
-import { join } from 'path';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 
 import { MPT, parseMPT } from '../parseMPT';
 
+const dataFiles = join(__dirname, '../../__tests__/data/all/');
+
 describe('parseMPT', () => {
   it('test file', () => {
-    const arrayBuffer = readFileSync(join(__dirname, './data/test.mpt'));
+    const arrayBuffer = readFileSync(join(dataFiles, 'test', 'test.mpt'));
     const result = parseMPT(arrayBuffer) as Required<MPT>;
     const { name, nbOfHeaderLines, settings, log, data } = result;
 
@@ -40,7 +42,7 @@ describe('parseMPT', () => {
   });
 
   it('cyclic voltammetry', () => {
-    const arrayBuffer = readFileSync(join(__dirname, './data/cv.mpt'));
+    const arrayBuffer = readFileSync(join(dataFiles, 'cv/cv.mpt'));
     const result = parseMPT(arrayBuffer);
     const { name, nbOfHeaderLines, settings, log, data } = result;
     expect(name).toBe('EC-Lab ASCII FILE');
@@ -79,14 +81,14 @@ describe('parseMPT', () => {
   });
 
   it('empty file throws', () => {
-    const arrayBuffer = readFileSync(join(__dirname, './data/noData.mpt'));
+    const arrayBuffer = readFileSync(join(dataFiles, 'noData.mpt'));
     expect(() => parseMPT(arrayBuffer)).toThrow(
       'No data was found by the parser',
     );
   });
 
   it('no header / only data file', () => {
-    const arrayBuffer = readFileSync(join(__dirname, './data/noHeader.mpt'));
+    const arrayBuffer = readFileSync(join(dataFiles, 'noHeader.mpt'));
     const result = parseMPT(arrayBuffer) as Required<MPT>;
     const { data } = result;
     expect(data).toBeDefined();
