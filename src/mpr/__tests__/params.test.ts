@@ -1,13 +1,13 @@
-import { readFileSync } from 'fs';
-import { join } from 'path';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 
 import { parseMPR } from '../parseMPR';
 
-const data = 'data/all/';
+const data = join(__dirname, '/../../__tests__/data/all/');
 // test a few different keys from each file,
 describe('Compare the technique (settings only)', () => {
   it('ca meta', () => {
-    const dir = join(__dirname, data, 'ca');
+    const dir = join(data, 'ca');
     const trueMeta = JSON.parse(
       readFileSync(join(dir, 'ca-meta.json'), 'utf8'),
     );
@@ -31,7 +31,7 @@ describe('Compare the technique (settings only)', () => {
     ); // we store params inside variables
   });
   it('cp meta', () => {
-    const dir = join(__dirname, data, 'cp');
+    const dir = join(data, 'cp');
     const trueMeta = JSON.parse(
       readFileSync(join(dir, 'cp-meta.json'), 'utf8'),
     );
@@ -54,8 +54,10 @@ describe('Compare the technique (settings only)', () => {
   });
 
   it('lsv params', () => {
-    const dir = join(__dirname, data, 'lsv');
-    const trueMeta = JSON.parse(readFileSync(join(dir, 'lsv-meta'), 'utf8'));
+    const dir = join(data, 'lsv');
+    const trueMeta = JSON.parse(
+      readFileSync(join(dir, 'lsv-meta.json'), 'utf8'),
+    );
     const trueParams = trueMeta.params[0];
 
     // we organize the data a bit differently
@@ -69,8 +71,10 @@ describe('Compare the technique (settings only)', () => {
   });
 
   it('zirParams', () => {
-    const dir = join(__dirname, data, 'zir');
-    const trueMeta = JSON.parse(readFileSync(join(dir, 'zir-meta'), 'utf8'));
+    const dir = join(data, 'zir');
+    const trueMeta = JSON.parse(
+      readFileSync(join(dir, 'zir-meta.json'), 'utf8'),
+    );
     const trueParams = trueMeta.params[0];
 
     // we organize the data a bit differently
@@ -84,7 +88,7 @@ describe('Compare the technique (settings only)', () => {
   });
 
   it('wait params', () => {
-    const dir = join(__dirname, data, 'wait');
+    const dir = join(data, 'wait');
     //the python script fails w this file, here we only testing part of the parsing
     const trueMeta = JSON.parse(
       readFileSync(join(dir, 'WAITmeta.json'), 'utf8'),

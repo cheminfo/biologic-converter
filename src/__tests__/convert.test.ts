@@ -1,52 +1,35 @@
-import { join } from 'path';
+import { join } from 'node:path';
 
 import { fileCollectionFromPath } from 'filelist-utils';
 
 import { convert } from '../convert';
 
+const testFiles = join(__dirname, 'data');
+
 describe('test convert', () => {
-  it('parses directory', async () => {
-    const fc = await fileCollectionFromPath(
-      join(__dirname, 'data/testDirectory'),
-    );
-    const directories = await convert(fc);
-    expect(directories).toHaveLength(3);
-    expect(directories).toMatchObject([
+  it('parse ca directory', async () => {
+    const fc = await fileCollectionFromPath(join(testFiles, 'all', 'ca'));
+    const directory = await convert(fc);
+    expect(directory).toHaveLength(1);
+    expect(directory).toMatchObject([
       {
-        dir: 'testDirectory/ca',
+        dir: 'ca',
         mpr: {
           name: 'BIO-LOGIC MODULAR FILE',
         },
         mpt: { name: 'EC-Lab ASCII FILE' },
       },
-      {
-        dir: 'testDirectory/jdb11-1',
-        mpr: {
-          name: 'BIO-LOGIC MODULAR FILE',
-        },
-        mps: { name: 'EC-LAB SETTING FILE' },
-      },
-      {
-        dir: 'testDirectory/jdb11-4',
-        mpr: {
-          name: 'BIO-LOGIC MODULAR FILE',
-        },
-      },
     ]);
   });
 
   it('passing a not-biologic dir should give []', async () => {
-    const fl = await fileCollectionFromPath(
-      join(__dirname, 'data/not-biologic'),
-    );
-    const directories = await convert(fl);
+    const fc = await fileCollectionFromPath(join(testFiles, 'not-biologic'));
+    const directories = await convert(fc);
     expect(directories).toStrictEqual([]);
   });
 
   it('compare parsers cp.[mpt,mpr]', async () => {
-    const fc = await fileCollectionFromPath(
-      join(__dirname, 'data/compareParsers'),
-    );
+    const fc = await fileCollectionFromPath(join(testFiles, 'all', 'cp'));
     const directory = await convert(fc);
     expect(directory).toHaveLength(1);
     const { mpr, mpt } = directory[0];
