@@ -5,51 +5,15 @@ import { fileCollectionFromPath } from 'filelist-utils';
 import { convert } from '../convert';
 
 describe('test convert', () => {
-  it('parses directory', async () => {
-    const fc = await fileCollectionFromPath(
-      join(__dirname, 'data/testDirectory'),
-    );
-    const directories = await convert(fc);
-    expect(directories).toHaveLength(3);
-    expect(directories).toMatchObject([
-      {
-        dir: 'testDirectory/ca',
-        mpr: {
-          name: 'BIO-LOGIC MODULAR FILE',
-        },
-        mpt: { name: 'EC-Lab ASCII FILE' },
-      },
-      {
-        dir: 'testDirectory/jdb11-1',
-        mpr: {
-          name: 'BIO-LOGIC MODULAR FILE',
-        },
-        mps: { name: 'EC-LAB SETTING FILE' },
-      },
-      {
-        dir: 'testDirectory/jdb11-4',
-        mpr: {
-          name: 'BIO-LOGIC MODULAR FILE',
-        },
-      },
-    ]);
-  });
-
-  it('passing a not-biologic dir should give []', async () => {
-    const fl = await fileCollectionFromPath(
-      join(__dirname, 'data/not-biologic'),
-    );
-    const directories = await convert(fl);
-    expect(directories).toStrictEqual([]);
-  });
-
-  it('compare parsers cp.[mpt,mpr]', async () => {
+  it('compare parsers cp.{mpt,mpr}', async () => {
     const fc = await fileCollectionFromPath(
       join(__dirname, 'data/compareParsers'),
     );
-    const directory = await convert(fc);
-    expect(directory).toHaveLength(1);
-    const { mpr, mpt } = directory[0];
+    const mprFile = fc.files.filter((f) => f.name.endsWith('.mpr'))[0];
+    const mptFile = fc.files.filter((f) => f.name.endsWith('.mpt'))[0];
+    const mpr = (await convert(mprFile))?.mpr;
+    const mpt = (await convert(mptFile))?.mpt;
+
     expect(mpr?.name).toBe('BIO-LOGIC MODULAR FILE');
     expect(mpt?.name).toBe('EC-Lab ASCII FILE');
 

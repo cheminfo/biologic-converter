@@ -31,10 +31,13 @@ import { convert as cv } from 'biologic-converter';
 
 async function run() {
   /* path to the root dir of experiments or any child */
-  const fl = fileCollectionFromPath(join(__dirname, 'data'));
-
-  const experiments = await cv(fl); //array of directories
-
+  const fc = fileCollectionFromPath(join(__dirname, 'data'));
+  const experiments = [];
+  for (const experiment of fc.files) {
+    const rawData = await experiment.arrayBuffer();
+    const result = await cv(rawData); //result or undefined
+    if (result) experiments.push(result);
+  }
   return experiments;
 }
 

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`test convert compare parsers cp.[mpt,mpr] 1`] = `
+exports[`test convert compare parsers cp.{mpt,mpr} 1`] = `
 {
   "data": {
     "header": {
@@ -1420,7 +1420,7 @@ exports[`test convert compare parsers cp.[mpt,mpr] 1`] = `
         "units": "",
       },
       "u": {
-        "data": [
+        "data": Float64Array [
           0,
           0,
           0,
@@ -1548,7 +1548,7 @@ exports[`test convert compare parsers cp.[mpt,mpr] 1`] = `
         "units": "flag",
       },
       "v": {
-        "data": [
+        "data": Float64Array [
           0,
           0,
           0,
@@ -1676,7 +1676,7 @@ exports[`test convert compare parsers cp.[mpt,mpr] 1`] = `
         "units": "flag",
       },
       "w": {
-        "data": [
+        "data": Float64Array [
           0,
           0,
           0,
@@ -1804,7 +1804,7 @@ exports[`test convert compare parsers cp.[mpt,mpr] 1`] = `
         "units": "flag",
       },
       "x": {
-        "data": [
+        "data": Float64Array [
           0,
           0,
           0,
@@ -1932,7 +1932,7 @@ exports[`test convert compare parsers cp.[mpt,mpr] 1`] = `
         "units": "flag",
       },
       "y": {
-        "data": [
+        "data": Float64Array [
           0,
           0,
           0,
@@ -2060,7 +2060,7 @@ exports[`test convert compare parsers cp.[mpt,mpr] 1`] = `
         "units": "flag",
       },
       "z": {
-        "data": [
+        "data": Float64Array [
           1,
           1,
           1,
