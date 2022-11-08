@@ -10,8 +10,7 @@ describe('test convert', () => {
   it('parse ca directory', async () => {
     const fc = await fileCollectionFromPath(join(testFiles, 'all', 'ca'));
     const directory = await convert(fc);
-    expect(directory).toHaveLength(1);
-    expect(directory).toMatchObject([
+    expect(directory.data).toMatchObject([
       {
         dir: 'ca',
         mpr: {
@@ -20,19 +19,42 @@ describe('test convert', () => {
         mpt: { name: 'EC-Lab ASCII FILE' },
       },
     ]);
+    expect(directory.logs).toHaveLength(1);
   });
 
   it('passing a not-biologic dir should give []', async () => {
     const fc = await fileCollectionFromPath(join(testFiles, 'not-biologic'));
     const directories = await convert(fc);
-    expect(directories).toStrictEqual([]);
+    expect(directories.data).toStrictEqual([]);
+    expect(directories.logs[0]).toMatchObject({
+      parser: 'biologic-converter',
+      kind: 'summary',
+    });
+  });
+
+  it('Not implemented experiment logs', async () => {
+    const fc = await fileCollectionFromPath(join(testFiles, 'all', 'geis'));
+    const directories = await convert(fc);
+    expect(directories.data).toStrictEqual([]);
+    expect(directories.logs).toHaveLength(2);
+    const error = directories.logs.find((log) => log.kind === 'error');
+    const summary = directories.logs.find((log) => log.kind === 'summary');
+    expect(error).toMatchObject({
+      parser: 'biologic-converter',
+      kind: 'error',
+      relativePath: 'geis/geis.mpt',
+    });
+    expect(summary).toMatchObject({
+      parser: 'biologic-converter',
+      kind: 'summary',
+    });
   });
 
   it('compare parsers cp.[mpt,mpr]', async () => {
     const fc = await fileCollectionFromPath(join(testFiles, 'all', 'cp'));
     const directory = await convert(fc);
-    expect(directory).toHaveLength(1);
-    const { mpr, mpt } = directory[0];
+    expect(directory.data).toHaveLength(1);
+    const { mpr, mpt } = directory.data[0];
     expect(mpr?.name).toBe('BIO-LOGIC MODULAR FILE');
     expect(mpt?.name).toBe('EC-Lab ASCII FILE');
 
