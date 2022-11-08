@@ -1,8 +1,9 @@
-import { readFileSync } from 'fs';
-import { join } from 'path';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 
 import { parseMPS } from '../parseMPS';
 
+const data = join(__dirname, '/../../__tests__/data/all/');
 describe('parseMPS', () => {
   it('basic test: parse string', () => {
     //test a simple string
@@ -22,7 +23,7 @@ describe('parseMPS', () => {
   });
 
   it('parse an mps file', () => {
-    const arrayBuffer = readFileSync(join(__dirname, './data/test.mps'));
+    const arrayBuffer = readFileSync(join(data, 'test', 'test.mps'));
 
     const result = parseMPS(arrayBuffer);
     expect(Object.keys(result)).toHaveLength(3);

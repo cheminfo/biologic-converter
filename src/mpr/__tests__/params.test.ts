@@ -1,30 +1,22 @@
-import { readFileSync } from 'fs';
-import { join } from 'path';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 
 import { parseMPR } from '../parseMPR';
 
-const testFiles = './data';
-const testFilesInRoot = '../../__tests__/data/';
-
+const data = join(__dirname, '/../../__tests__/data/all/');
 // test a few different keys from each file,
 describe('Compare the technique (settings only)', () => {
   it('ca meta', () => {
+    const dir = join(data, 'ca');
     const trueMeta = JSON.parse(
-      readFileSync(
-        join(__dirname, `${testFilesInRoot}/testDirectory/ca/ca-meta.json`),
-        'utf8',
-      ),
+      readFileSync(join(dir, 'ca-meta.json'), 'utf8'),
     );
     const trueParams = trueMeta.params[0];
 
     // we organize the data a bit differently
     const {
       settings: { variables },
-    } = parseMPR(
-      readFileSync(
-        join(__dirname, `${testFilesInRoot}/testDirectory/ca/ca.mpr`),
-      ),
-    );
+    } = parseMPR(readFileSync(join(dir, 'ca.mpr')));
     const ourParams = variables.params;
 
     // First compara the params key
@@ -39,20 +31,16 @@ describe('Compare the technique (settings only)', () => {
     ); // we store params inside variables
   });
   it('cp meta', () => {
+    const dir = join(data, 'cp');
     const trueMeta = JSON.parse(
-      readFileSync(
-        join(__dirname, `${testFilesInRoot}/compareParsers/cp-meta.json`),
-        'utf8',
-      ),
+      readFileSync(join(dir, 'cp-meta.json'), 'utf8'),
     );
     const trueParams = trueMeta.params[0];
 
     // we organize the data a bit differently
     const {
       settings: { variables },
-    } = parseMPR(
-      readFileSync(join(__dirname, `${testFilesInRoot}/compareParsers/cp.mpr`)),
-    );
+    } = parseMPR(readFileSync(join(dir, 'cp.mpr')));
     const ourParams = variables.params;
 
     // First compare the params key
@@ -65,36 +53,17 @@ describe('Compare the technique (settings only)', () => {
     expect(variables).toMatchSnapshot();
   });
 
-  it('cp params', () => {
-    const trueMeta = JSON.parse(
-      readFileSync(
-        join(__dirname, `${testFilesInRoot}/compareParsers/cp-meta.json`),
-        'utf8',
-      ),
-    );
-    const trueParams = trueMeta.params[0];
-
-    // we organize the data a bit differently
-    const {
-      settings: { variables },
-    } = parseMPR(
-      readFileSync(join(__dirname, `${testFilesInRoot}/compareParsers/cp.mpr`)),
-    );
-    const ourParams = variables.params;
-
-    // First compare the params key
-    expect(Object.keys(ourParams)).toHaveLength(Object.keys(trueParams).length);
-  });
   it('lsv params', () => {
+    const dir = join(data, 'lsv');
     const trueMeta = JSON.parse(
-      readFileSync(join(__dirname, `${testFiles}/lsv-meta.json`), 'utf8'),
+      readFileSync(join(dir, 'lsv-meta.json'), 'utf8'),
     );
     const trueParams = trueMeta.params[0];
 
     // we organize the data a bit differently
     const {
       settings: { variables },
-    } = parseMPR(readFileSync(join(__dirname, `${testFiles}/lsv.mpr`)));
+    } = parseMPR(readFileSync(join(dir, 'lsv.mpr')));
     const ourParams = variables.params;
 
     // First compare the params key
@@ -102,15 +71,16 @@ describe('Compare the technique (settings only)', () => {
   });
 
   it('zirParams', () => {
+    const dir = join(data, 'zir');
     const trueMeta = JSON.parse(
-      readFileSync(join(__dirname, `${testFiles}/zir-meta.json`), 'utf8'),
+      readFileSync(join(dir, 'zir-meta.json'), 'utf8'),
     );
     const trueParams = trueMeta.params[0];
 
     // we organize the data a bit differently
     const {
       settings: { variables },
-    } = parseMPR(readFileSync(join(__dirname, `${testFiles}/zir.mpr`)));
+    } = parseMPR(readFileSync(join(dir, 'zir.mpr')));
     const ourParams = variables.params;
 
     // First compare the params key
@@ -118,9 +88,10 @@ describe('Compare the technique (settings only)', () => {
   });
 
   it('wait params', () => {
+    const dir = join(data, 'wait');
     //the python script fails w this file, here we only testing part of the parsing
     const trueMeta = JSON.parse(
-      readFileSync(join(__dirname, `${testFiles}/WAITmeta.json`), 'utf8'),
+      readFileSync(join(dir, 'WAITmeta.json'), 'utf8'),
     );
     const trueParams = trueMeta.params[0];
     delete trueParams.technique;
@@ -128,7 +99,7 @@ describe('Compare the technique (settings only)', () => {
     // we organize the data a bit differently
     const {
       settings: { variables },
-    } = parseMPR(readFileSync(join(__dirname, `${testFiles}/wait.mpr`)));
+    } = parseMPR(readFileSync(join(dir, 'wait.mpr')));
     const ourParams = variables.params;
     // First compare the params key
     expect(ourParams).toMatchObject(trueParams);
