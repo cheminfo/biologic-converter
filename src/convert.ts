@@ -4,16 +4,23 @@ import { ComplexObject } from './Types';
 import { MPR, parseMPR } from './mpr/parseMPR';
 import { parseMPS } from './mps/parseMPS';
 import { MPT, parseMPT } from './mpt/parseMPT';
+import type { ParserLog } from './utility/createParserLog';
+import { createLogEntry } from './utility/createParserLog';
 
-/**
- * Text files have no type at the moment, but they
- * follow MPR as much as possible
- */
-export interface Biologic {
+/** each item in the data array */
+interface Biologic {
   dir?: string;
   mpr?: MPR;
   mps?: ComplexObject;
   mpt?: MPT;
+}
+/**
+ * Return object from parser, including information about
+ * any errors, warnings or debug messages.
+ */
+interface Convert {
+  data: Biologic[];
+  logs: ParserLog[];
 }
 
 /**
@@ -35,30 +42,48 @@ export interface Biologic {
  *  ```
  *
  * @param fileCol - `path/to/parent` or `path/to/any/child`. (See tree above.)
- * @returns JSON object passing **child** directory; array of children if you pass a **parent**.
+ * @returns JSON object with the biologic `data` array, and an array of logs.
  */
-
-export async function convert(fileCol: FileCollection): Promise<Biologic[]> {
+export async function convert(fileCol: FileCollection): Promise<Convert> {
   const dirs = groupFiles(fileCol);
-  let results: Biologic[] = [];
-
+  const results: Convert = { logs: [], data: [] };
+  let errorCounter = 0;
+  let filesParsed = 0;
   /* can not use `forEach` and pass `async` functions */
   for (const dir of dirs) {
-    let result: Biologic = {};
-    result.dir = dir.key;
+    const result: Biologic = { dir: dir.key };
     for (const dataFile of dir.fileCollection) {
-      const fName = dataFile.name;
-      if (fName.endsWith('.mps')) {
-        result.mps = parseMPS(await dataFile.arrayBuffer());
-      } else if (fName.endsWith('.mpt')) {
-        result.mpt = parseMPT(await dataFile.arrayBuffer());
-      } else if (fName.endsWith('.mpr')) {
-        result.mpr = parseMPR(await dataFile.arrayBuffer());
+      const { relativePath: path, name } = dataFile;
+      const buffer = await dataFile.arrayBuffer();
+      try {
+        if (name.endsWith('.mps')) {
+          result.mps = parseMPS(buffer);
+        } else if (name.endsWith('.mpt')) {
+          result.mpt = parseMPT(buffer);
+        } else if (name.endsWith('.mpr')) {
+          result.mpr = parseMPR(buffer);
+        } else {
+          continue;
+        }
+        filesParsed += 1;
+      } catch (error) {
+        if (error instanceof Error) {
+          results.logs.push(createLogEntry({ relativePath: path, error }));
+          errorCounter += 1;
+        }
       }
     }
     if (Object.keys(result).length > 1) {
-      results.push(result);
+      results.data.push(result);
     }
   }
+
+  const message = `
+  ${dirs.length} directories. 
+  ${errorCounter} parsing errors. 
+  ${filesParsed} files parsed.`;
+
+  results.logs.push(createLogEntry({ kind: 'summary', message }));
+
   return results;
 }
