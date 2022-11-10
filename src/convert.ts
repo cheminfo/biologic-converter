@@ -4,9 +4,9 @@ import { parseMPR } from './mpr/parseMPR';
 import { parseMPS } from './mps/parseMPS';
 import { parseMPT } from './mpt/parseMPT';
 
-type Extensions = 'mpr' | 'mpt' | 'mps';
-export async function convert(data: BinaryData, extension: Extensions) {
-  switch (extension) {
+export type FileType = 'mpr' | 'mpt' | 'mps';
+export async function convert(data: BinaryData, fileType: FileType) {
+  switch (fileType) {
     case 'mps':
       return { mps: parseMPS(data) };
     case 'mpt':
@@ -14,5 +14,6 @@ export async function convert(data: BinaryData, extension: Extensions) {
     case 'mpr':
       return { mpr: parseMPR(data) };
     default:
+      throw new Error('File type not recognized');
   }
 }

@@ -6,21 +6,29 @@ import { convert } from '../convert';
 const testFiles = join(__dirname, 'data');
 
 describe('test convert', () => {
-  it('parse ca mpr', async () => {
-    const fc = rfs(join(testFiles, 'all', 'ca', 'ca.mpr'));
+  it('parse test mpr', async () => {
+    const fc = rfs(join(testFiles, 'all', 'test', 'test.mpr'));
     const mpr = await convert(fc, 'mpr');
     expect(mpr?.mpr).toBeDefined();
   });
 
-  it('parse ca mpt', async () => {
-    const fc = rfs(join(testFiles, 'all', 'ca', 'ca.mpt'));
+  it('parse test mpt', async () => {
+    const fc = rfs(join(testFiles, 'all', 'test', 'test.mpt'));
     const mpt = await convert(fc, 'mpt');
     expect(mpt?.mpt).toBeDefined();
   });
 
-  it('parse ca mps', async () => {
-    const fc = rfs(join(testFiles, 'all', 'ca', 'ca.mps'));
+  it('parse test mps', async () => {
+    const fc = rfs(join(testFiles, 'all', 'test', 'test.mps'));
     const mps = await convert(fc, 'mps');
     expect(mps?.mps).toBeDefined();
+  });
+
+  it('parse not recognized file extension', async () => {
+    const fc = rfs(join(testFiles, 'all', 'test', 'test.mps'));
+    // @ts-expect-error
+    await expect(convert(fc, 'txt')).rejects.toThrow(
+      'File type not recognized',
+    );
   });
 });

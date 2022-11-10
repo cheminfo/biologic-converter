@@ -10,7 +10,7 @@ describe('compare parsers', () => {
     const mprFile = rfs(join(testFiles, 'all', 'cp', 'cp.mpr'));
 
     const mpt = (await convert(mptFile, 'mpt'))?.mpt;
-    const mpr = (await convert(mprFile, 'mpt'))?.mpr;
+    const mpr = (await convert(mprFile, 'mpr'))?.mpr;
 
     expect(mpr?.name).toBe('BIO-LOGIC MODULAR FILE');
     expect(mpt?.name).toBe('EC-Lab ASCII FILE');
