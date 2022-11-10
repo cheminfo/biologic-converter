@@ -50,7 +50,6 @@
   "dependencies": {
     "cheminfo-types": "^1.4.0",
     "ensure-string": "^1.2.0",
-    "filelist-utils": "^1.1.0",
     "iobuffer": "^5.2.1"
   }
 }
