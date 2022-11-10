@@ -26,7 +26,7 @@ describe('test convert', () => {
 
   it('parse not recognized file extension', async () => {
     const fc = rfs(join(testFiles, 'all', 'test', 'test.mps'));
-    // @ts-expect-error
+    // @ts-expect-error user inputs non accepted fileinput
     await expect(convert(fc, 'txt')).rejects.toThrow(
       'File type not recognized',
     );
