@@ -1,7 +1,8 @@
 import { readFileSync as rfs } from 'node:fs';
 import { join } from 'node:path';
 
-import { convert } from '../convert';
+import { parseMPR } from '../mpr/parseMPR';
+import { parseMPT } from '../mpt/parseMPT';
 
 const testFiles = join(__dirname, 'data');
 describe('compare parsers', () => {
@@ -9,8 +10,8 @@ describe('compare parsers', () => {
     const mptFile = rfs(join(testFiles, 'all', 'cp', 'cp.mpt'));
     const mprFile = rfs(join(testFiles, 'all', 'cp', 'cp.mpr'));
 
-    const mpt = (await convert(mptFile, 'mpt'))?.mpt;
-    const mpr = (await convert(mprFile, 'mpr'))?.mpr;
+    const mpt = parseMPT(mptFile);
+    const mpr = parseMPR(mprFile);
 
     expect(mpr?.name).toBe('BIO-LOGIC MODULAR FILE');
     expect(mpt?.name).toBe('EC-Lab ASCII FILE');
@@ -30,9 +31,9 @@ describe('compare parsers', () => {
     const c1 = mptSettings?.characteristicMass;
     const r1 = mptSettings?.referenceElectrode;
 
-    expect(r1).toMatch(mprSettings?.referenceElectrode as string);
-    expect(e1.value).toBeCloseTo(mprSettings?.electrodeSurfaceArea as number);
-    expect(c1.value).toBeCloseTo(mprSettings?.characteristicMass as number);
+    expect(r1).toMatch(mprSettings?.referenceElectrode);
+    expect(e1.value).toBeCloseTo(mprSettings?.electrodeSurfaceArea);
+    expect(c1.value).toBeCloseTo(mprSettings?.characteristicMass);
     expect(mpr).toMatchSnapshot();
   });
 });

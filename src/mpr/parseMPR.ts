@@ -23,7 +23,7 @@ export interface MPR {
  */
 export function parseMPR(arrayBuffer: BinaryData): MPR {
   const buffer = new IOBuffer(arrayBuffer);
-  let mpr: Partial<MPR> = {};
+  const mpr: Partial<MPR> = {};
 
   // top level properties
   mpr.name = buffer
