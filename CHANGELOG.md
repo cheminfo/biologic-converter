@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.5.0](https://github.com/cheminfo/biologic-converter/compare/v0.4.0...v0.5.0) (2022-11-11)
+
+
+### ⚠ BREAKING CHANGES
+
+* parse single files (#26)
+
+### Code Refactoring
+
+* parse single files ([#26](https://github.com/cheminfo/biologic-converter/issues/26)) ([8189d63](https://github.com/cheminfo/biologic-converter/commit/8189d63ed4a1ed6886a0ce4e20ec5ebdda4c22e7))
+
 ## [0.4.0](https://github.com/cheminfo/biologic-converter/compare/v0.3.3...v0.4.0) (2022-10-24)
 
 
