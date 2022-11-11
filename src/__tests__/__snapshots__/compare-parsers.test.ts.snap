@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`test convert compare parsers cp.[mpt,mpr] 1`] = `
+exports[`compare parsers compare parsers cp.[mpt,mpr] 1`] = `
 {
   "data": {
     "header": {
