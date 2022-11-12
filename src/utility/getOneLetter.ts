@@ -6,7 +6,7 @@ export function getOneLetter(i: number): string {
   if (i < 0) {
     throw new Error('expected a positive number');
   } else if (i < 26) {
-    return String.fromCharCode(96 + i);
+    return String.fromCharCode(97 + i);
   } else if (i < 52) {
     return String.fromCharCode(65 + (i % 26));
   } else {

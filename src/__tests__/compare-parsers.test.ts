@@ -16,8 +16,8 @@ describe('compare parsers', () => {
     expect(mpr?.name).toBe('BIO-LOGIC MODULAR FILE');
     expect(mpt?.name).toBe('EC-Lab ASCII FILE');
 
-    const mprSettings = mpr?.settings.variables;
-    const mptSettings = mpt?.settings?.variables;
+    const mprSettings = mpr.settings.variables;
+    const mptSettings = mpt.settings?.variables;
     const comparisonObject = {
       technique: 'CP',
       comments: '',
@@ -27,9 +27,9 @@ describe('compare parsers', () => {
     expect(mprSettings).toMatchObject(comparisonObject);
     expect(mptSettings).toMatchObject(comparisonObject);
 
-    const e1 = mptSettings?.electrodeSurfaceArea;
-    const c1 = mptSettings?.characteristicMass;
-    const r1 = mptSettings?.referenceElectrode;
+    const e1 = mptSettings?.electrodeSurfaceArea as { value: number };
+    const c1 = mptSettings?.characteristicMass as { value: number };
+    const r1 = mptSettings?.referenceElectrode as string;
 
     expect(r1).toMatch(mprSettings?.referenceElectrode);
     expect(e1.value).toBeCloseTo(mprSettings?.electrodeSurfaceArea);

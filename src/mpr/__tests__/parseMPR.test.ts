@@ -16,27 +16,27 @@ describe('parse zir data', () => {
   const mpt = parseMPT(mptBuffer) as Required<MPT>;
   const mptVariables = mpt.data?.variables;
   it('time', () => {
-    const mprTime = variables.u;
-    const mptTime = mptVariables.u;
+    const mprTime = variables.f;
+    const mptTime = mptVariables.f;
     expect(mprTime.data).toHaveLength(mptTime.data.length);
     expect(mptTime).toMatchObject(mprTime);
     expect(mprTime.data[0]).toBeCloseTo(mptTime.data[0], 5);
   });
   it('freq', () => {
-    const mprFreq = variables.z;
-    const mptFreq = mptVariables.z;
+    const mprFreq = variables.a;
+    const mptFreq = mptVariables.a;
     expect(mprFreq.data).toHaveLength(mptFreq.data.length);
     expect(mprFreq.data[0]).toBeCloseTo(mptFreq.data[0], 3);
   });
   it('Re(Z)', () => {
-    const mprRe = variables.y;
-    const mptRe = mptVariables.y;
+    const mprRe = variables.b;
+    const mptRe = mptVariables.b;
     expect(mprRe.data).toHaveLength(mptRe.data.length);
     expect(mprRe.data[0]).toBeCloseTo(mptRe.data[0], 2);
   });
   it('I Range', () => {
-    const mprRe = variables.r;
-    const mptRe = mptVariables.r;
+    const mprRe = variables.g;
+    const mptRe = mptVariables.g;
     expect(mprRe.data).toHaveLength(mptRe.data.length);
     expect(mprRe.data[0]).toBeCloseTo(mptRe.data[0], 2);
   });
