@@ -1,29 +1,49 @@
-import { ComplexObject } from '../Types';
-import { getParams } from '../utility/getParamsFromText';
+import { OutParams, getParams } from '../utility/getParamsFromText';
 import { normalizeFlag, normalizeKeyValue } from '../utility/normalize';
-import { Technique } from '../utility/techniqueFromId';
+import type { Technique } from '../utility/techniqueFromId';
 
 export interface LogAndSettings {
-  settings: ComplexObject;
-  log: { variables: ComplexObject };
+  settings: {
+    variables: {
+      //similar to the ParseSettings of MPR format
+      technique: string;
+      params: OutParams;
+      flags: string[];
+      [key: string]: unknown;
+    };
+  };
+  log: {
+    variables: {
+      flags: string[];
+      [key: string]: unknown;
+    };
+  };
 }
 
 /**
- * Parses log and settings modules, which are mixed up in the
- * text files
+ * Parses log and settings modules of text files
  * @param lines - file as string[]
- * @param technique - the technique being processed
+ * @param technique - the technique being processed,
+ * used to format the parameters to MPR format
  * @returns JSON object representing the parsed data
  */
 export function parseLogAndSettings(
   lines: string[],
   technique: Technique,
 ): LogAndSettings {
-  let result: LogAndSettings = {
+  const result: LogAndSettings = {
     settings: {
-      variables: { technique: technique.name, params: {}, flags: [] },
+      variables: {
+        technique: technique.name,
+        params: {},
+        flags: [],
+      },
     },
-    log: { variables: { flags: [] } },
+    log: {
+      variables: {
+        flags: [],
+      },
+    },
   };
 
   const regex = {

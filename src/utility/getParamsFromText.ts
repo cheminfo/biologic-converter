@@ -16,7 +16,7 @@ interface OutParam {
 /**
  * Stores all parameters with value and optionally units
  */
-interface OutParams {
+export interface OutParams {
   [name: string]: OutParam;
 }
 

@@ -35,7 +35,7 @@ export function parseData(buffer: IOBuffer, header: ModuleHeader): ParseData {
         label: flagCol.name,
         units: 'flag',
         isDependent: false,
-        data: [],
+        data: new Float64Array(dataPoints),
       };
     }
   }
