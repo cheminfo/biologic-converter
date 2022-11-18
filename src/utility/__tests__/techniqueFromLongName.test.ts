@@ -12,9 +12,7 @@ describe('techniqueFromLongName', () => {
     expect(techniqueFromLongName('Cyclic Voltammetry').name).toBe('CV');
   });
   it('OCV', () => {
-    expect(() => techniqueFromLongName('Open Circuit Voltage')).toThrow(
-      'Not implemented name: OCV',
-    );
+    expect(techniqueFromLongName('Open Circuit Voltage').name).toBe('OCV');
   });
   it('CA', () => {
     expect(

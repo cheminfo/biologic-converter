@@ -10,7 +10,7 @@ describe('techniqueFromId', () => {
     expect(techniqueFromId(0x6).name).toBe('CV');
   });
   it('OCV', () => {
-    expect(() => techniqueFromId(0xb)).toThrow('Not implemented name: OCV');
+    expect(techniqueFromId(0xb).name).toBe('OCV');
   });
   it('CA', () => {
     expect(techniqueFromId(0x18).name).toBe('CA');

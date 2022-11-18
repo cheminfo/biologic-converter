@@ -12,7 +12,7 @@ export function techniqueFromLongName(id: string): Technique {
     case 'Cyclic Voltammetry':
       return { name: 'CV', preParameters: preParamsLookUp.cvParams };
     case 'Open Circuit Voltage':
-      throw new Error(`Not implemented name: OCV`);
+      return { name: 'OCV', preParameters: preParamsLookUp.ocvParams };
     case 'Chronoamperometry / Chronocoulometry':
       return { name: 'CA', preParameters: preParamsLookUp.caParams };
     case 'Chronopotentiometry':

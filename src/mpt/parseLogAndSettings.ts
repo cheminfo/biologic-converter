@@ -2,6 +2,8 @@ import { OutParams, getParams } from '../utility/getParamsFromText';
 import { normalizeFlag, normalizeKeyValue } from '../utility/normalize';
 import type { Technique } from '../utility/techniqueFromId';
 
+import { addKVToLog, addKVToSettings } from './utility/addKeyWithoutOverwrite';
+
 export interface LogAndSettings {
   settings: {
     variables: {
@@ -77,7 +79,13 @@ export function parseLogAndSettings(
         } while (regex.multiline.test(lines[i + 1]));
       }
       const [newKey, logOrSettings, newVal] = normalizeKeyValue(key, val);
-      result[logOrSettings].variables[newKey] = newVal;
+
+      if (logOrSettings === 'settings') {
+        //sometimes there is Comment : value, then agan Comment : value
+        addKVToSettings(result, newKey, newVal);
+      } else if (logOrSettings === 'log') {
+        addKVToLog(result, newKey, newVal);
+      }
     } else {
       const [theKey, logOrSettings, theValue] = normalizeFlag(
         currentLine.trim(),

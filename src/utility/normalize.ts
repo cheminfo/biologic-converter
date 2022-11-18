@@ -56,7 +56,7 @@ const normalizeNumVal: Record<string, { type: string }> = {
   },
 };
 
-type NormalizeKeyValue = [
+export type NormalizeKeyValue = [
   string, //camelCase key
   'log' | 'settings', //where to put it
   string | number | { [key: string]: string | number }, //value

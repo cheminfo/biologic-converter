@@ -17,7 +17,12 @@ export function techniqueFromId(id: number): Technique {
     case 0x6:
       return { name: 'CV', preParameters: preParamsLookUp.cvParams };
     case 0xb:
-      throw new Error(`Not implemented name: OCV`);
+      return { name: 'OCV', preParameters: preParamsLookUp.ocvParams };
+    /**
+     * can add SOCV ("Special OCV") once we know the code and have a file to test.
+    case 0xb:
+      return { name: 'OCV', preParameters: preParamsLookUp.ocvParams };
+      */
     case 0x18:
       return { name: 'CA', preParameters: preParamsLookUp.caParams };
     case 0x19:
