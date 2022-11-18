@@ -40,8 +40,12 @@ export function getTechniqueParameters(
         const { name: pName, mprReadType: pReadType } = preParameters[i];
         //if (param[1] === 'Pascal') parameters[param[0]] = pascalString(buffer); //we not using it
         //apparently
+        // if name in limits list and NaN then set to "pass"
         const val = pValue(buffer, pReadType);
-
+        if (['Imax', 'Imin', 'EL'].includes(pName) && Number.isNaN(val)) {
+          parameters[pName] = 'pass';
+          continue;
+        }
         parameters[pName] =
           pName === 'I_range'
             ? unitsScale('I_range', val + 1)
