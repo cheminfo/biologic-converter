@@ -27,9 +27,9 @@ describe('compare parsers', () => {
     expect(mprSettings).toMatchObject(comparisonObject);
     expect(mptSettings).toMatchObject(comparisonObject);
 
-    const e1 = mptSettings?.electrodeSurfaceArea as { value: number };
-    const c1 = mptSettings?.characteristicMass as { value: number };
-    const r1 = mptSettings?.referenceElectrode as string;
+    const e1 = mptSettings?.electrodeSurfaceArea;
+    const c1 = mptSettings?.characteristicMass;
+    const r1 = mptSettings?.referenceElectrode;
 
     expect(r1).toMatch(mprSettings?.referenceElectrode);
     expect(e1.value).toBeCloseTo(mprSettings?.electrodeSurfaceArea);
@@ -70,8 +70,8 @@ describe('compare parsers', () => {
     comparisonObject.comments = '';
     expect(mprSettings).toMatchObject(comparisonObject);
 
-    const e1 = mptSettings?.electrodeSurfaceArea as { value: number };
-    const c1 = mptSettings?.characteristicMass as { value: number };
+    const e1 = mptSettings?.electrodeSurfaceArea;
+    const c1 = mptSettings?.characteristicMass;
 
     expect(e1.value).toBeCloseTo(mprSettings?.electrodeSurfaceArea);
     expect(c1.value).toBeCloseTo(mprSettings?.characteristicMass);

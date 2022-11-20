@@ -2,7 +2,7 @@ import { OutParams, getParams } from '../utility/getParamsFromText';
 import { normalizeFlag, normalizeKeyValue } from '../utility/normalize';
 import type { Technique } from '../utility/techniqueFromId';
 
-import { addKVToLog, addKVToSettings } from './utility/addKeyWithoutOverwrite';
+import { addKVToObject } from './utility/addKeyWithoutOverwrite';
 
 export interface LogAndSettings {
   settings: {
@@ -11,13 +11,15 @@ export interface LogAndSettings {
       technique: string;
       params: OutParams;
       flags: string[];
-      [key: string]: unknown;
+      /* looking for a better definition */
+      [key: string]: any;
     };
   };
   log: {
     variables: {
       flags: string[];
-      [key: string]: unknown;
+      /* looking for a better definition */
+      [key: string]: any;
     };
   };
 }
@@ -80,12 +82,7 @@ export function parseLogAndSettings(
       }
       const [newKey, logOrSettings, newVal] = normalizeKeyValue(key, val);
 
-      if (logOrSettings === 'settings') {
-        //sometimes there is Comment : value, then agan Comment : value
-        addKVToSettings(result, newKey, newVal);
-      } else if (logOrSettings === 'log') {
-        addKVToLog(result, newKey, newVal);
-      }
+      addKVToObject(result[logOrSettings].variables, newKey, newVal);
     } else {
       const [theKey, logOrSettings, theValue] = normalizeFlag(
         currentLine.trim(),
