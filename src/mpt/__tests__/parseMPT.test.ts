@@ -34,9 +34,9 @@ describe('parseMPT', () => {
     });
 
     //some props in vars
-    expect(data?.variables.b).toMatchObject({
-      label: 'Efficiency',
-      units: '%',
+    expect(data.variables.c).toMatchObject({
+      label: 'error',
+      units: '',
       isDependent: true,
     });
   });
@@ -71,13 +71,13 @@ describe('parseMPT', () => {
       ecLabVersion: 'v11.12',
       interpreterVersion: 'v11.12',
     });
-    expect(Object.keys(data?.variables || {})).toHaveLength(12);
-    expect(data?.variables.u).toMatchObject({
+    expect(Object.keys(data.variables || {})).toHaveLength(12);
+    expect(data?.variables.f).toMatchObject({
       label: 'time',
       units: 's',
       isDependent: false,
     });
-    expect(Object.keys(data?.variables.u.data || {})).toHaveLength(5103);
+    expect(Object.keys(data.variables.f.data || {})).toHaveLength(5103);
   });
 
   it('empty file throws', () => {

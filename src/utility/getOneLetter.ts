@@ -1,18 +1,15 @@
 /**
- * @param i - Natural number. Index of the letter (interpreted as negative offset from `z`)
- * @returns a letter from z to a, or Z to A if those are exhausted.
+ * @param i - numeric code for the ascii letter
+ * @returns a letter from a to z, or A to Z if those are exhausted.
  */
 export function getOneLetter(i: number): string {
-  if (!Number.isInteger(i) || i < 0) {
-    throw new Error(`Expected positive number. Received ${i}`);
-  }
-  const zCharCode = 122;
-  const ZCharCode = 90;
-  if (i < 26) {
-    return String.fromCharCode(zCharCode - i);
+  if (i < 0) {
+    throw new Error('expected a positive number');
+  } else if (i < 26) {
+    return String.fromCharCode(97 + i);
   } else if (i < 52) {
-    return String.fromCharCode(ZCharCode - (i % 26));
+    return String.fromCharCode(65 + (i % 26));
   } else {
-    throw new Error(`Expect i to be integer less than 52. Received ${i}`);
+    throw new Error('expected a number less than 52');
   }
 }

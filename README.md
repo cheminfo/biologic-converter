@@ -24,23 +24,76 @@ parser.
 ## Usage
 
 ```js
-import { join } from 'path';
-import { fileCollectionFromPath } from 'filelist-utils';
+import { readFileSync as rfs } from 'node:fs';
+import {fileURLToPath} from 'url';
+import { dirname, join } from 'node:path';
 
-import { convert as cv } from 'biologic-converter';
+// import the parser you need
+import { parseMPR, /*parseMPT, parseMPS*/ } from 'biologic-converter';
 
-async function run() {
-  /* path to the root dir of experiments or any child */
-  const fl = fileCollectionFromPath(join(__dirname, 'data'));
+// build the path
+const __dirname = dirname(fileURLToPath(import.meta.url))
+// get buffer
+const mpr = rfs(join(__dirname, 'testDirectory/ca/ca.mpr'));
+const result = parseMPR(mpr); //JSON-like object
+console.log(result)
+```
 
-  const experiments = await cv(fl); //array of directories
-
-  return experiments;
+**Sample output**
+```text
+{
+  name: 'BIO-LOGIC MODULAR FILE',
+  settings: {
+    header: {
+      shortName: 'VMP Set',
+      longName: 'VMP settings',
+      length: 6691,
+      version: 0,
+      date: '04/29/19'
+    },
+    variables: {
+      technique: 'CA',
+      comments: '',
+      activeMaterialMass: 0.875,
+      atX: 0,
+      molecularWeight: 0.0010000000474974513,
+      atomicWeight: 0.0010000000474974513,
+      //...
+      params: [Object]
+    }
+  },
+  data: {
+    header: {
+      shortName: 'VMP data',
+      longName: 'VMP data',
+      length: 55923,
+      version: 3,
+      date: '04/29/19'
+    },
+    variables: {
+      z: [Object],
+      y: [Object],
+      x: [Object],
+      w: [Object],
+      //...
+    }
+  },
+  log: {
+    header: {
+      shortName: 'VMP LOG',
+      longName: 'VMP LOG',
+      length: 7742,
+      version: 0,
+      date: '05/01/19'
+    },
+    variables: {
+      runOnChannel: [Object],
+      eweControlRange: [Object],
+      oleTimestamp: 43584.65494212963,
+      //...
+    }
+  }
 }
-
-run()
-  .then((r) => console.log(r))
-  .catch((e) => console.error(e));
 ```
 
 ## License

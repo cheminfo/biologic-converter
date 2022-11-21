@@ -18,7 +18,6 @@ describe('Compare the technique (settings only)', () => {
       settings: { variables },
     } = parseMPR(readFileSync(join(dir, 'ca.mpr')));
     const ourParams = variables.params;
-
     // First compare the params key
     expect(Object.keys(ourParams)).toHaveLength(Object.keys(trueParams).length);
     expect(ourParams.I_range).toBe(trueParams.I_range);

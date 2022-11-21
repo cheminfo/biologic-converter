@@ -422,4 +422,42 @@ export const preParamsLookUp: TechniquesToParams = {
     { name: 'comp_level', mprReadType: 'Uint8', textReadType: 'int' },
     { name: 'comp_mode', mprReadType: 'Uint8', textReadType: 'string' },
   ],
+  ocvParams: [
+    {
+      name: 'tR',
+      mprReadType: 'Float32',
+      textReadType: 'float',
+      regexUnits: / \((?<units>.*)\)/,
+    },
+    {
+      name: 'dER/dt',
+      mprReadType: 'Float32',
+      textReadType: 'float',
+      regexUnits: / \((?<units>.*)\)/,
+    },
+    {
+      name: 'dER',
+      mprReadType: 'Float32',
+      textReadType: 'float',
+      regexUnits: / \((?<units>.*)\)/,
+    },
+    {
+      name: 'dtR',
+      mprReadType: 'Float32',
+      textReadType: 'float',
+      regexUnits: / \((?<units>.*)\)/,
+    },
+    {
+      name: 'E_range_min',
+      mprReadType: 'Float32',
+      textReadType: 'float',
+      regexUnits: / \((?<units>.*)\)/,
+    },
+    {
+      name: 'E_range_max',
+      mprReadType: 'Float32',
+      textReadType: 'float',
+      regexUnits: / \((?<units>.*)\)/,
+    },
+  ],
 };

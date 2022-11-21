@@ -7,7 +7,7 @@ interface Data {
   [variableName: string]: MeasurementVariable;
 }
 /**
- * Parses the data from the MPT file
+ * Parses the data from the MPT file, which is a matrix of data.
  * @param data - string[] sliced where data starts
  * @returns - the data as an object, keys are the names of the data-fields
  */
@@ -34,6 +34,11 @@ export function parseData(data: string[]): Data {
   return variables;
 }
 
+/**
+ * Maps MPT column name to the ones in MPR file, or returns just formats it.
+ * @param fieldName - the name of the column as it appears in the MPT file
+ * @returns
+ */
 function mptNameToMPRName(fieldName: string) {
   const mapToLabelUnit = dataColumnsByName[fieldName];
   if (mapToLabelUnit !== undefined) {

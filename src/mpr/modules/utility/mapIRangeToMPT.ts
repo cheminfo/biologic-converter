@@ -8,9 +8,9 @@ import { MeasurementVariable } from 'cheminfo-types';
  * @returns - the map to I Range as a string[]
  */
 export function mapIRangeToMPT(experData: MeasurementVariable): string[] {
-  let res = [];
+  let res: string[] = [];
   if (experData.label === 'I Range') {
-    for (let v of experData.data) {
+    for (const v of experData.data) {
       res.push(unitsScale('I_range', v));
     }
     if (res.length !== 0) {

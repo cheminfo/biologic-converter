@@ -8,9 +8,7 @@ import { LogAndSettings, parseLogAndSettings } from './parseLogAndSettings';
 import { getNbOfHeaderLines } from './utility/getNbOfHeaderLines';
 
 /**
- * Normally files contain all of the 5 keys, but some test files
- * found in ec-lab (and all of the ones stored as .txt files)
- * lack some formatting and most would not contain the header (only contain `data`)
+ * some files may only store data
  */
 export interface MPT {
   name?: string;
@@ -20,21 +18,21 @@ export interface MPT {
   /* log module */
   log?: LogAndSettings['log'];
   /* data module */
-  data?: { variables: Record<string, MeasurementVariable> };
+  data: { variables: Record<string, MeasurementVariable> };
 }
 
 /**
- * Parses BioLogic MPT and TXT files (TXT files are MPT files that only contain the data)
+ * Parses BioLogic MPT (with or without the header, only data files)
  * @param data - as a string, Buffer, ArrayBuffer.
  * @returns JSON Object with parsed data
  */
 export function parseMPT(data: TextData): MPT {
   const lines = ensureString(data, {
-    encoding: 'windows-1252', //i.e ascii
+    encoding: 'windows-1252', //ascii
   }).split(/\r?\n/);
 
-  let result: MPT = {};
-  //MPT File magic, if present then expect structures.
+  let result: Partial<MPT> = {};
+
   const name = lines[0].trim();
 
   if (name === 'EC-Lab ASCII FILE') {
@@ -53,23 +51,17 @@ export function parseMPT(data: TextData): MPT {
 
     result = { name, nbOfHeaderLines, log, settings, data };
   } else {
-    //if no header or strange header still try to find the data
-    let i = 0;
-    while (i < lines.length) {
+    //"data only" files
+    for (let i = 0; i < lines.length; i++) {
       if (lines[i].startsWith('mode')) {
         result.data = { variables: parseData(lines.slice(i + 1)) };
         break;
       }
-      i++;
     }
   }
   // If no data there may be some problem in the MPT file.
-  const topLevelKeys = Object.keys(result);
-  if (
-    topLevelKeys.length === 0 ||
-    (topLevelKeys.length === 1 && topLevelKeys[0] === 'name')
-  ) {
+  if (!result.data) {
     throw new Error('No data was found by the parser in the MPT file.');
   }
-  return result;
+  return result as MPT;
 }
