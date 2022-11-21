@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.6.0](https://github.com/cheminfo/biologic-converter/compare/v0.5.0...v0.6.0) (2022-11-21)
+
+
+### ⚠ BREAKING CHANGES
+
+* release refactored code
+
+### Features
+
+* release refactored code ([2679eb0](https://github.com/cheminfo/biologic-converter/commit/2679eb033431eaf6fb971ed438bc74f81a450080))
+
 ## [0.5.0](https://github.com/cheminfo/biologic-converter/compare/v0.4.0...v0.5.0) (2022-11-11)
 
 
