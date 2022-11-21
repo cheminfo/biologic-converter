@@ -7,6 +7,7 @@
 
 Convert BioLogic file format.
 
+
 There are 3 possible extensions:
 
 - .mpr : _Raw_ binary file containing the data
