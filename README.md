@@ -25,7 +25,7 @@ parser.
 
 ```js
 import { readFileSync as rfs } from 'node:fs';
-import {fileURLToPath} from 'url';
+import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
 // import the parser you need
@@ -39,7 +39,12 @@ const result = parseMPR(mpr); //JSON-like object
 console.log(result)
 ```
 
+<details>
+
+<summary>
 **Sample output**
+</summary<
+
 ```text
 {
   name: 'BIO-LOGIC MODULAR FILE',
@@ -95,6 +100,7 @@ console.log(result)
   }
 }
 ```
+</details>
 
 ## License
 
