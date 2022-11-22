@@ -13,7 +13,7 @@ export function mapIRangeToMPT(experData: MeasurementVariable): string[] {
     for (const v of experData.data) {
       res.push(unitsScale('I_range', v));
     }
-    if (res.length !== 0) {
+    if (res.length > 0) {
       return res;
     }
   }

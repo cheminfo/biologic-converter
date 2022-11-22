@@ -85,14 +85,14 @@ function setThisParameter(
     param.value = paramValues.length === 1 ? paramValues[0] : paramValues;
   } else if (textReadType === 'float' || textReadType === 'float|string') {
     const result = paramValues.map((v) => {
-      const n = parseFloat(v);
-      return isNaN(n) ? v : n;
+      const n = Number.parseFloat(v);
+      return Number.isNaN(n) ? v : n;
     });
     param.value = result.length === 1 ? result[0] : result;
   } else if (textReadType === 'int' || textReadType === 'int|string') {
     const result = paramValues.map((v) => {
-      const n = parseInt(v, 10);
-      return isNaN(n) ? v : n;
+      const n = Number.parseInt(v, 10);
+      return Number.isNaN(n) ? v : n;
     });
     param.value = result.length === 1 ? result[0] : result;
   }

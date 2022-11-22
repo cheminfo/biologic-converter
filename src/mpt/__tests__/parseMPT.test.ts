@@ -57,7 +57,7 @@ describe('parseMPT', () => {
       electrodeMaterial: '',
       electrolyte: '',
       electrodeSurfaceArea: { unit: 'cm²', value: 0.001 },
-      equivalentWeight: { value: 0.0, unit: 'g/eq.' },
+      equivalentWeight: { value: 0, unit: 'g/eq.' },
       cycleDefinition: 'Charge/Discharge alternance',
       density: { unit: 'g/cm3', value: 0 },
     });

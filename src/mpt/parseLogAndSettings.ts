@@ -53,7 +53,7 @@ export function parseLogAndSettings(
   const regex = {
     nothing: /^\s*$/,
     keyValue: / : | :$/,
-    multiline: /^[ \t]/,
+    multiline: /^[\t ]/,
   };
 
   for (let i = 0; i < lines.length; i++) {

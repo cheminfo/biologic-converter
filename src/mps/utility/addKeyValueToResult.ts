@@ -18,7 +18,7 @@ export function addKeyValueToResult(
   kV: string[],
 ): [MPS, number] {
   const regex = {
-    multiline: /^[ \t]/,
+    multiline: /^[\t ]/,
   };
   const key: string = kV[0].trim();
   //fixes any extra split on value.

@@ -76,8 +76,8 @@ export function normalizeKeyValue(key: string, val: string): NormalizeKeyValue {
     const result = /(?<num>\d+) \(SN (?<serial>\d+)\)$/.exec(val);
     if (result?.groups) {
       newVal = {
-        number: parseInt(result.groups.num, 10),
-        serial: parseInt(result.groups.serial, 10),
+        number: Number.parseInt(result.groups.num, 10),
+        serial: Number.parseInt(result.groups.serial, 10),
       };
     }
   } else {
@@ -86,24 +86,24 @@ export function normalizeKeyValue(key: string, val: string): NormalizeKeyValue {
     if (setting && val) {
       if (setting.type === 'minMaxRange') {
         const result =
-          /min = (?<min>-?\d+\.?\d*) (?<minUnit>[a-zA-Z]+), max = (?<max>-?\d+\.?\d*) (?<maxUnit>[a-zA-Z]+)$/.exec(
+          /min = (?<min>-?\d+\.?\d*) (?<minUnit>[A-Za-z]+), max = (?<max>-?\d+\.?\d*) (?<maxUnit>[A-Za-z]+)$/.exec(
             val,
           );
         if (result?.groups) {
           newVal = {
-            min: parseFloat(result.groups.min),
+            min: Number.parseFloat(result.groups.min),
             minUnit: result.groups.minUnit,
-            max: parseFloat(result.groups.max),
+            max: Number.parseFloat(result.groups.max),
             maxUnit: result.groups.maxUnit,
           };
         }
       } else if (setting.type === 'valueUnit') {
         const both = val.split(' ');
         if (both.length === 2) {
-          newVal = { value: parseFloat(both[0]), unit: both[1] };
+          newVal = { value: Number.parseFloat(both[0]), unit: both[1] };
         }
       } else if (setting.type === 'number') {
-        newVal = parseFloat(val);
+        newVal = Number.parseFloat(val);
       }
     }
   }
@@ -122,7 +122,7 @@ export function normalizeKeyValue(key: string, val: string): NormalizeKeyValue {
  */
 export function normalizeFlag(flag: string): NormalizeKeyValue {
   const regex = {
-    version: / (?<version>v\d{1,}(?:\.\d{1,})+) /,
+    version: / (?<version>v\d+(?:\.\d+)+) /,
     points: /every (?<points>\d+) points/,
   };
   let name;
@@ -145,7 +145,7 @@ export function normalizeFlag(flag: string): NormalizeKeyValue {
   } else if (name === 'averagingPoints') {
     const result = regex.points.exec(flag);
     const points = result?.groups?.points;
-    return [name, 'log', points ? parseInt(points, 10) : ''];
+    return [name, 'log', points ? Number.parseInt(points, 10) : ''];
   } else {
     return [flag, 'settings', ''];
   }

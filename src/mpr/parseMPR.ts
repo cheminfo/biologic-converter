@@ -28,7 +28,8 @@ export function parseMPR(arrayBuffer: BinaryData): MPR {
   // top level properties
   mpr.name = buffer
     .readUtf8(0x34)
-    .replace(/\x1A|\x00/g, '')
+    // eslint-disable-next-line no-control-regex
+    .replace(/\u001A|\u0000/g, '')
     .trim();
 
   while (isModule(buffer)) {
