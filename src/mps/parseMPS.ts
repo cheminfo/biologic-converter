@@ -17,12 +17,14 @@ export interface MPS {
  * output is similar to `MPR.settings.variables`
  * MPS may include one or more techniques
  *
- * @param mps - pass the file as string, Buffer or Arraybuffer.
+ * @param mpsData - pass the file as string, Buffer or Arraybuffer.
  * @returns json-like object representing the file
  */
 
-export function parseMPS(mps: TextData): MPS {
-  const lines = ensureString(mps, { encoding: 'windows-1252' }).split(/\r?\n/);
+export function parseMPS(mpsData: TextData): MPS {
+  const lines = ensureString(mpsData, { encoding: 'windows-1252' }).split(
+    /\r?\n/,
+  );
 
   if (lines.length === 0) {
     throw new Error('Empty file');

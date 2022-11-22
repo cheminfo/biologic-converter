@@ -18,11 +18,11 @@ export interface MPR {
 
 /**
  * Parses binary `.mpr` files
- * arrayBuffer - the data itself.
- * @returns the data as a JSON-like object.
+ * @param mprData - The data itself.
+ * @returns The data as a JSON-like object.
  */
-export function parseMPR(arrayBuffer: BinaryData): MPR {
-  const buffer = new IOBuffer(arrayBuffer);
+export function parseMPR(mprData: BinaryData): MPR {
+  const buffer = new IOBuffer(mprData);
   const mpr: Partial<MPR> = {};
 
   // top level properties
