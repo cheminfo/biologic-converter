@@ -53,7 +53,7 @@ export function parseLogAndSettings(
   const regex = {
     isEmpty: /^\s*$/,
     isKeyValue: / : | :$/,
-    isMultiline: /^[ \t]/,
+    isMultiline: /^[\t ]/,
     //detect parameter and parse it
     isParameters: /\s{3,}$/,
     //parameter end of line
