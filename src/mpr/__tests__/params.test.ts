@@ -20,7 +20,7 @@ describe('Compare the technique (settings only)', () => {
     const ourParams = variables.params;
     // First compare the params key
     expect(Object.keys(ourParams)).toHaveLength(Object.keys(trueParams).length);
-    expect(ourParams.I_range).toBe(trueParams.I_range);
+    expect(ourParams['I Range']).toBe(trueParams.I_range);
     expect(ourParams.eTransferred).toBe(trueParams.e_transferred);
     expect(ourParams.Ei).toBe(trueParams.Ei);
 
@@ -64,7 +64,6 @@ describe('Compare the technique (settings only)', () => {
       settings: { variables },
     } = parseMPR(readFileSync(join(dir, 'lsv.mpr')));
     const ourParams = variables.params;
-
     // First compare the params key
     expect(Object.keys(ourParams)).toHaveLength(Object.keys(trueParams).length);
   });
@@ -101,6 +100,6 @@ describe('Compare the technique (settings only)', () => {
     } = parseMPR(readFileSync(join(dir, 'wait.mpr')));
     const ourParams = variables.params;
     // First compare the params key
-    expect(ourParams).toMatchObject(trueParams);
+    expect(Object.keys(ourParams)).toHaveLength(Object.keys(trueParams).length);
   });
 });

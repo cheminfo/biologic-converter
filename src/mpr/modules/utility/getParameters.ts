@@ -47,10 +47,10 @@ export function getTechniqueParameters(
           continue;
         }
         parameters[pName] =
-          pName === 'I_range'
-            ? unitsScale('I_range', val + 1)
-            : pName === 'Is_unit'
-            ? unitsScale('Is_unit', val)
+          pName === 'I Range'
+            ? unitsScale(pName, val + 1)
+            : pName === 'unit Is'
+            ? unitsScale('unit Is', val)
             : val;
       }
       return parameters;

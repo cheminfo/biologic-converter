@@ -1,15 +1,12 @@
 /**
- * @module
- * @description this module contains the ids of the mpr and also
- * some mappings that make mpt, mpr output similar.
+ * map `flagId` to the corresponding bitmask and name
+ * `name`s are the same appearing in mpt text file.
  */
 interface FlagColumns {
-  [key: number]: { bitMask: number; name: string };
+  [flagId: number]: { bitMask: number; name: string };
 }
 /**
- * flag column ID bytes to the corresponding bitmask and name
- * As different from column IDs, flag column IDs don't need to be
- * modified when reading from MPT files, they are exactly the same.
+ * How to recognize and read a `flag` data value.
  */
 export const flagColumns: FlagColumns = {
   0x1: { bitMask: 0b00000011, name: 'mode' },
@@ -20,15 +17,22 @@ export const flagColumns: FlagColumns = {
   0x41: { bitMask: 0b10000000, name: 'counter inc.' },
 };
 
+/**
+ * map `columnId` to the corresponding bitmask and name
+ * `name`s are the same appearing in mpt text file.
+ */
 interface DataColumns {
   [columnId: number]: { dType: string; name: string; unit: string };
 }
+
 /**
- * data columns look-up table by Id
+ * How to recognize and read a value, plus the unit.
+ * They are separated from flags for the sake of
+ * having more typing information.
  */
 export const dataColumns: DataColumns = {
   0x4: { dType: 'Float64', name: 'time', unit: 's' },
-  0x5: { dType: 'Float32', name: 'control_V/I', unit: 'V/mA' },
+  0x5: { dType: 'Float32', name: 'control V/I', unit: 'V/mA' },
   0x6: { dType: 'Float32', name: 'Ewe', unit: 'V' },
   0x7: { dType: 'Float64', name: 'dq', unit: 'mA·h' },
   0x8: { dType: 'Float32', name: 'I', unit: 'mA' },
@@ -37,8 +41,8 @@ export const dataColumns: DataColumns = {
   0xd: { dType: 'Float64', name: '(Q-Qo)', unit: 'mA·h' },
   0x10: { dType: 'Float32', name: 'Analog IN 1', unit: 'V' },
   0x11: { dType: 'Float32', name: 'Analog IN 2', unit: 'V' },
-  0x13: { dType: 'Float32', name: 'control_V', unit: 'V' },
-  0x14: { dType: 'Float32', name: 'control_I', unit: 'mA' },
+  0x13: { dType: 'Float32', name: 'control V', unit: 'V' },
+  0x14: { dType: 'Float32', name: 'control I', unit: 'mA' },
   0x17: { dType: 'Float64', name: 'dQ', unit: 'mA·h' },
   0x18: { dType: 'Float64', name: 'cycle number', unit: '' },
   0x20: { dType: 'Float32', name: 'freq', unit: 'Hz' },
@@ -126,14 +130,12 @@ export const dataColumns: DataColumns = {
   0x1f7: { dType: 'Float32', name: '|Ece h7|', unit: 'V' },
 };
 
+/**
+ * MPT name to MPR name, and units.
+ */
 export interface DataColumnsByName {
   [MPTName: string]: { [mprName: string]: string; unit: string };
 }
-/**
- * Map MPT to same MPR Type, plus add unit and more concise names
- * the unit will be taken from the original MPT file, and it may help
- * to spot any errors in MPR.
- */
 export const dataColumnsByName: DataColumnsByName = {
   'Ri/Ohm': { name: 'Ri', unit: 'Ohm' },
   '-Im(Z)/Ohm': { name: '-Im(Z)', unit: 'Ohm' },

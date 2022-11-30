@@ -6,9 +6,9 @@ export interface Technique {
 }
 
 /**
- * maps the technique id to the technique name and parameters.
- * @param id  - technique id
- * @returns - technique name and parameters
+ * Map Technique ID to its name and available parameters.
+ * @param id - technique ID
+ * @returns - name and preParameters
  */
 export function techniqueFromId(id: number): Technique {
   switch (id) {

@@ -11,7 +11,7 @@ export function mapIRangeToMPT(experData: MeasurementVariable): string[] {
   let res: string[] = [];
   if (experData.label === 'I Range') {
     for (const v of experData.data) {
-      res.push(unitsScale('I_range', v));
+      res.push(unitsScale('I Range', v));
     }
     if (res.length > 0) {
       return res;
@@ -25,8 +25,8 @@ export function mapIRangeToMPT(experData: MeasurementVariable): string[] {
  * it is important to keep the output as string,
  * because the numeric values are processed differently
  * */
-export function unitsScale(key: 'I_range' | 'Is_unit', val: number): string {
-  if (key === 'I_range') {
+export function unitsScale(key: 'I Range' | 'unit Is', val: number): string {
+  if (key === 'I Range') {
     switch (val) {
       case 9:
         return '1 A';
@@ -62,7 +62,7 @@ export function unitsScale(key: 'I_range' | 'Is_unit', val: number): string {
         return val.toString(10);
     }
   }
-  if (key === 'Is_unit') {
+  if (key === 'unit Is') {
     switch (val) {
       case 0:
         return 'A';

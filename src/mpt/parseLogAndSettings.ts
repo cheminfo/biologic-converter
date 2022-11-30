@@ -51,38 +51,40 @@ export function parseLogAndSettings(
   };
 
   const regex = {
-    nothing: /^\s*$/,
-    keyValue: / : | :$/,
-    multiline: /^[\t ]/,
+    isEmpty: /^\s*$/,
+    isKeyValue: / : | :$/,
+    isMultiline: /^[ \t]/,
+    //detect parameter and parse it
+    isParameters: /\s{3,}$/,
+    //parameter end of line
   };
 
   for (let i = 0; i < lines.length; i++) {
     const currentLine = lines[i];
-    if (regex.nothing.test(currentLine)) {
+    if (regex.isEmpty.test(currentLine)) {
       continue;
-    } else if (regex.keyValue.test(currentLine)) {
+    } else if (regex.isKeyValue.test(currentLine)) {
       // eslint-disable-next-line prefer-named-capture-group
       let [key, val] = currentLine.split(/ :(.*)/);
       key = key.trim();
       val = val.trim();
-      if (key === 'Cycle Definition') {
-        /* Special key parsing */
-        const [params, lastLineRead] = getParams(
-          technique.preParameters,
-          lines,
-          ++i,
-        );
-        result.settings.variables.params = params || {};
-        i = lastLineRead;
-      } else if (regex.multiline.test(lines[i + 1])) {
+      if (regex.isMultiline.test(lines[i + 1])) {
         do {
           //just a few short text lines
           val.concat('\n', lines[++i]);
-        } while (regex.multiline.test(lines[i + 1]));
+        } while (regex.isMultiline.test(lines[i + 1]));
       }
       const [newKey, logOrSettings, newVal] = normalizeKeyValue(key, val);
-
       addKVToObject(result[logOrSettings].variables, newKey, newVal);
+    } else if (regex.isParameters.test(currentLine)) {
+      /* Special key parsing */
+      const [params, lastLineRead] = getParams(
+        technique.preParameters,
+        lines,
+        i,
+      );
+      result.settings.variables.params = params || {};
+      i = lastLineRead;
     } else {
       const [theKey, logOrSettings, theValue] = normalizeFlag(
         currentLine.trim(),
