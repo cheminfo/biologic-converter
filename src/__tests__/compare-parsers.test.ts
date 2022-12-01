@@ -87,7 +87,7 @@ describe('compare parsers', () => {
     const mprFile = rfs(join(testFiles, 'all', 'ca', 'ca.mpr'));
     const mpt = parseMPT(mptFile)?.settings?.variables.params;
     const mpr = parseMPR(mprFile).settings.variables.params;
-    expect(mpr['I Range max']).toBe('pass');
-    expect(mpt?.['I Range max'].value).toBe('pass');
+    expect(mpr.Imax).toBe('pass');
+    expect(mpt?.Imax.value).toBe('pass');
   });
 });
