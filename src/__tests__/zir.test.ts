@@ -1,10 +1,9 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-import { MPT, parseMPT } from '../../mpt/parseMPT';
-import { parseMPR } from '../parseMPR';
+import { parseMPR, parseMPT } from '../index';
 
-const testFiles = join(__dirname, '/../../__tests__/data/all/zir');
+const testFiles = join(__dirname, 'data/all/zir');
 
 describe('parse zir data', () => {
   const mprBuffer = readFileSync(join(testFiles, 'zir.mpr'));
@@ -13,7 +12,7 @@ describe('parse zir data', () => {
   const mpr = parseMPR(mprBuffer);
   const variables = mpr.data.variables;
 
-  const mpt = parseMPT(mptBuffer) as Required<MPT>;
+  const mpt = parseMPT(mptBuffer) as Required<ReturnType<typeof parseMPT>>;
   const mptVariables = mpt.data?.variables;
   it('time', () => {
     const mprTime = variables.f;

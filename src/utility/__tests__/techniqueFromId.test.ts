@@ -1,10 +1,8 @@
 import { techniqueFromId } from '../techniqueFromId';
-
+// the length is tested in technique from long name
 describe('techniqueFromId', () => {
   it('GCPL', () => {
-    const res = techniqueFromId(0x4);
-    expect(res.name).toBe('GCPL');
-    expect(res.preParameters).toHaveLength(32);
+    expect(techniqueFromId(0x4).name).toBe('GCPL');
   });
   it('CV', () => {
     expect(techniqueFromId(0x6).name).toBe('CV');
@@ -25,7 +23,7 @@ describe('techniqueFromId', () => {
     expect(() => techniqueFromId(0x1d)).toThrow('Not implemented name: PEIS');
   });
   it('GEIS', () => {
-    expect(() => techniqueFromId(0x1e)).toThrow('Not implemented name: GEIS');
+    expect(techniqueFromId(0x1e).name).toBe('GEIS');
   });
   it('ZIR', () => {
     expect(techniqueFromId(0x32).name).toBe('ZIR');

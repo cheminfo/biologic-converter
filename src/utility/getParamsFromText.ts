@@ -16,7 +16,7 @@ export interface OutParams {
 }
 
 export type GetParams = (
-  technique: Technique,
+  metaParams: Technique['preParameters'],
   lines: string[],
   i: number,
 ) => [OutParams, number];
@@ -27,8 +27,7 @@ export type GetParams = (
  * @param i - index to start reading
  * @return `[params, newIndex]`, `boolean` indicates whether is a known technique
  */
-export const getParams: GetParams = function getParams(technique, lines, i) {
-  const { preParameters: metaParams } = technique;
+export const getParams: GetParams = function getParams(metaParams, lines, i) {
   let params: OutParams = {};
 
   if (lines[i].startsWith('Ns ')) {

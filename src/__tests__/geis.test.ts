@@ -1,10 +1,9 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-import { MPT, parseMPT } from '../../mpt/parseMPT';
-import { parseMPR } from '../parseMPR';
+import { parseMPR, parseMPT } from '../index';
 
-const testFiles = join(__dirname, '/../../__tests__/data/all/geis');
+const testFiles = join(__dirname, 'data/all/geis');
 
 describe('parse geis data', () => {
   it('parse geis data', () => {
@@ -14,10 +13,10 @@ describe('parse geis data', () => {
     const mpr = parseMPR(mprBuffer);
     const variables = mpr.data.variables;
 
-    const mpt = parseMPT(mptBuffer) as Required<MPT>;
+    const mpt = parseMPT(mptBuffer) as Required<ReturnType<typeof parseMPT>>;
     const mptVariables = mpt.data?.variables;
     expect(variables).toBeDefined();
     expect(mptVariables).toBeDefined();
-    console.log(variables, mptVariables);
+    //console.log(variables, mptVariables);
   });
 });
