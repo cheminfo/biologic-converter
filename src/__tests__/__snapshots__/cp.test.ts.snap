@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`compare parsers compare parsers cp.[mpt,mpr] 1`] = `
+exports[`parse CP file compare parsers cp.[mpt,mpr] 1`] = `
 {
   "data": {
     "header": {
@@ -905,7 +905,7 @@ exports[`compare parsers compare parsers cp.[mpt,mpr] 1`] = `
         ],
         "isDependent": true,
         "label": "Ns",
-        "units": "",
+        "units": "flag",
       },
       "h": {
         "data": Float64Array [
@@ -1801,7 +1801,7 @@ exports[`compare parsers compare parsers cp.[mpt,mpr] 1`] = `
         ],
         "isDependent": true,
         "label": "half cycle",
-        "units": "",
+        "units": "flag",
       },
       "o": {
         "data": Float64Array [
@@ -2057,7 +2057,7 @@ exports[`compare parsers compare parsers cp.[mpt,mpr] 1`] = `
         ],
         "isDependent": true,
         "label": "I Range",
-        "units": "",
+        "units": "flag",
       },
       "q": {
         "data": Float64Array [
@@ -2244,7 +2244,7 @@ exports[`compare parsers compare parsers cp.[mpt,mpr] 1`] = `
         "Bandwidth": 8,
         "E range max": 10,
         "E range min": -10,
-        "EM": NaN,
+        "EM": "pass",
         "I Range": "1 A",
         "Is": -100,
         "Is vs.": 2,

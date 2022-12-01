@@ -19,7 +19,7 @@ exports[`Compare the technique (settings only) cp meta 1`] = `
     "Bandwidth": 8,
     "E range max": 10,
     "E range min": -10,
-    "EM": NaN,
+    "EM": "pass",
     "I Range": "1 A",
     "Is": -100,
     "Is vs.": 2,

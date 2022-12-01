@@ -42,7 +42,7 @@ console.log(result);
 <details>
 
 <summary>
-**Sample output**
+Sample output
 </summary>
 
 ```text

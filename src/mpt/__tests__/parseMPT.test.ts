@@ -36,7 +36,7 @@ describe('parseMPT', () => {
     //some props in vars
     expect(data.variables.c).toMatchObject({
       label: 'error',
-      units: '',
+      units: 'flag',
       isDependent: true,
     });
   });

@@ -42,7 +42,7 @@ export function getTechniqueParameters(
         //apparently
         // if name in limits list and NaN then set to "pass"
         const val = pValue(buffer, pReadType);
-        if (['Imax', 'Imin', 'EL'].includes(pName) && Number.isNaN(val)) {
+        if (['Imax', 'Imin', 'EL', 'EM'].includes(pName) && Number.isNaN(val)) {
           parameters[pName] = 'pass';
           continue;
         }

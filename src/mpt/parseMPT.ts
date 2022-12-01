@@ -53,8 +53,9 @@ export function parseMPT(data: TextData): MPT {
     result = { name, nbOfHeaderLines, log, settings, data };
   } else {
     //"data only" files
+    // do not depend on `mode` because it is not always present
     for (let i = 0; i < lines.length; i++) {
-      if (lines[i].startsWith('mode')) {
+      if (lines[i].endsWith('\t')) {
         result.data = { variables: parseData(lines.slice(i + 1)) };
         break;
       }

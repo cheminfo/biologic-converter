@@ -65,7 +65,7 @@ export const getParams: GetParams = function getParams(metaParams, lines, i) {
     }
     i++;
   }
-  return [params, i++];
+  return [params, i - 1];
 };
 
 /**
