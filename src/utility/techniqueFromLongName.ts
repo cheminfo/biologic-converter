@@ -20,7 +20,7 @@ export function techniqueFromLongName(id: string): Technique {
     case 'Wait':
       return { name: 'WAIT', preParameters: preParamsLookUp.waitParams };
     case 'Potentio Electrochemical Impedance Spectroscopy':
-      throw new Error('Not implemented name: PEIS');
+      return { name: 'PEIS', preParameters: preParamsLookUp.peisParams };
     case 'Galvano Electrochemical Impedance Spectroscopy':
       return { name: 'GEIS', preParameters: preParamsLookUp.geisParams };
     case 'IR compensation (PEIS)':

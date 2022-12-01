@@ -20,7 +20,7 @@ describe('techniqueFromId', () => {
     expect(techniqueFromId(0x1c).name).toBe('WAIT');
   });
   it('PEIS', () => {
-    expect(() => techniqueFromId(0x1d)).toThrow('Not implemented name: PEIS');
+    expect(techniqueFromId(0x1d).name).toBe('PEIS');
   });
   it('GEIS', () => {
     expect(techniqueFromId(0x1e).name).toBe('GEIS');

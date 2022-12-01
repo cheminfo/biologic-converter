@@ -73,9 +73,11 @@ describe('techniqueFromLongName', () => {
     );
   });
   it('PEIS', () => {
-    expect(() =>
-      techniqueFromLongName('Potentio Electrochemical Impedance Spectroscopy'),
-    ).toThrow('Not implemented name: PEIS');
+    const { name, preParameters } = techniqueFromLongName(
+      'Potentio Electrochemical Impedance Spectroscopy',
+    );
+    expect(name).toBe('PEIS');
+    expect(preParameters).toHaveLength(52);
   });
   it('unknown', () => {
     expect(() => techniqueFromLongName('Morabi')).toThrow(

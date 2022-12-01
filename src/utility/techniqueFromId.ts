@@ -18,11 +18,6 @@ export function techniqueFromId(id: number): Technique {
       return { name: 'CV', preParameters: preParamsLookUp.cvParams };
     case 0xb:
       return { name: 'OCV', preParameters: preParamsLookUp.ocvParams };
-    /**
-     * can add SOCV ("Special OCV") once we know the code and have a file to test.
-    case 0xb:
-      return { name: 'OCV', preParameters: preParamsLookUp.ocvParams };
-      */
     case 0x18:
       return { name: 'CA', preParameters: preParamsLookUp.caParams };
     case 0x19:
@@ -30,7 +25,7 @@ export function techniqueFromId(id: number): Technique {
     case 0x1c:
       return { name: 'WAIT', preParameters: preParamsLookUp.waitParams };
     case 0x1d:
-      throw new Error(`Not implemented name: PEIS`);
+      return { name: 'PEIS', preParameters: preParamsLookUp.peisParams };
     case 0x1e:
       return { name: 'GEIS', preParameters: preParamsLookUp.geisParams };
     case 0x32:
