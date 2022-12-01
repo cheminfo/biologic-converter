@@ -43,7 +43,7 @@ console.log(result);
 
 <summary>
 **Sample output**
-</summary<
+</summary>
 
 ```text
 {
