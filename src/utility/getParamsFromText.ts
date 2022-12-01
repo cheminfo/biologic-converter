@@ -2,11 +2,6 @@ import { Param as InParam } from './preParamsLookUp';
 import { Technique } from './techniqueFromId';
 
 /**
- * Object with this type helps to produce the out parameters
- */
-type MetaParams = Technique['preParameters'];
-
-/**
  * Each parameter object
  */
 interface OutParam {
@@ -21,49 +16,66 @@ export interface OutParams {
 }
 
 export type GetParams = (
-  metaParams: MetaParams,
+  technique: Technique,
   lines: string[],
   i: number,
 ) => [OutParams, number];
 
 /**
- * Parses technique from the _.mps_ file
+ * Parses technique from text file
  * @param lines - lines to read
  * @param i - index to start reading
  * @return `[params, newIndex]`, `boolean` indicates whether is a known technique
  */
-export const getParams: GetParams = function getParams(metaParams, lines, i) {
+export const getParams: GetParams = function getParams(technique, lines, i) {
+  const { preParameters: metaParams } = technique;
   let params: OutParams = {};
 
-  const initAt = i;
   if (lines[i].startsWith('Ns ')) {
     metaParams.unshift({
       name: 'Ns',
       textReadType: 'int',
       mprReadType: 'Uint8',
+      optional: false,
     });
   }
-  for (let j = 0; j < metaParams.length; j++) {
-    const paramLine = lines[j + initAt].trim();
+  for (const thisParam of metaParams) {
+    const paramLine = lines[i].trim();
     if (paramLine === '') break;
 
     const [longParameterName, ...paramValues] = paramLine.split(/\s{2,}/); //weak regex but seems ok.
 
     if (!longParameterName || !paramValues) {
       throw new Error('expected at least 2 values.');
-    } else {
+    } else if (!thisParam.optional) {
       /*order params in text file is === as in index `j`*/
-      params[metaParams[j].name] = setThisParameter(
-        metaParams[j],
+      params[thisParam.name] = setThisParameter(
+        thisParam,
         longParameterName,
         paramValues,
       );
+    } else if (paramLine.startsWith(thisParam.name)) {
+      /*order params in text file is === as in index `j`*/
+      params[thisParam.name] = setThisParameter(
+        thisParam,
+        longParameterName,
+        paramValues,
+      );
+    } else {
+      continue;
     }
     i++;
   }
-  return [params, i - 1];
+  return [params, i++];
 };
 
+/**
+ *
+ * @param metaParam
+ * @param longParameterName
+ * @param paramValues
+ * @returns
+ */
 function setThisParameter(
   metaParam: InParam,
   longParameterName: string,

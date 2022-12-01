@@ -288,7 +288,7 @@ export const preParamsLookUp: TechniquesToParams = {
       mprReadType: 'Float32',
       textReadType: 'float',
       regexUnits: /Ei \((?<units>.*)\)/,
-      ptional: false,
+      optional: false,
     },
     {
       name: 'Ei vs.',

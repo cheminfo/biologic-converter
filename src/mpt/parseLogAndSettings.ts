@@ -78,11 +78,7 @@ export function parseLogAndSettings(
       addKVToObject(result[logOrSettings].variables, newKey, newVal);
     } else if (regex.isParameters.test(currentLine)) {
       /* Special key parsing */
-      const [params, lastLineRead] = getParams(
-        technique.preParameters,
-        lines,
-        i,
-      );
+      const [params, lastLineRead] = getParams(technique, lines, i);
       result.settings.variables.params = params || {};
       i = lastLineRead;
     } else {

@@ -32,7 +32,7 @@ export function techniqueFromId(id: number): Technique {
     case 0x1d:
       throw new Error(`Not implemented name: PEIS`);
     case 0x1e:
-      throw new Error(`Not implemented name: GEIS`);
+      return { name: 'GEIS', preParameters: preParamsLookUp.geisParams };
     case 0x32:
       return { name: 'ZIR', preParameters: preParamsLookUp.zirParams };
     case 0x6c:
