@@ -12,10 +12,12 @@ interface TechniquesToParams {
 }
 
 /**
- * The values are ordered in the way they appear in the binary and text file,
- * names are similar but not the same (they aren't the same even across techniques)
- * The parameter `Ns` is complicated it is inferred at parsing time, not here are as
- * all the other parameters.
+ * The values are ordered in the way they appear in the binary file,
+ * So this means that we use this arrays but slightly modify them when we
+ * read text. For this to work, the names must be the same than the ones in the
+ * text file.
+ * Also, the text parameter `Ns` inferred at parsing time, it does not appear in the
+ * binary file.
  * For description of parameters see the manuals
  * in the GH repo at `/docs`.
  */
@@ -467,5 +469,87 @@ export const preParamsLookUp: TechniquesToParams = {
       textReadType: 'float',
       regexUnits: / \((?<units>.*)\)/,
     },
+  ],
+  geisParams: [
+    { name: 'Mode', mprReadType: 'Uint8', textReadType: 'string' },
+    { name: 'Is', mprReadType: 'Float32', textReadType: 'float' },
+    { name: 'unit Is', mprReadType: 'Uint8', textReadType: 'string' },
+    { name: 'Is vs.', mprReadType: 'Uint8', textReadType: 'string' },
+    {
+      name: 'tIs',
+      mprReadType: 'Float32',
+      textReadType: 'float',
+      regexUnits: / \((?<units>.*)\)/,
+    },
+    { name: 'record', mprReadType: 'Uint8', textReadType: 'int|string' },
+    {
+      name: 'dE',
+      mprReadType: 'Float32',
+      textReadType: 'float',
+      regexUnits: / \((?<units>.*)\)/,
+    },
+    {
+      name: 'dt',
+      mprReadType: 'Float32',
+      textReadType: 'float',
+      regexUnits: / \((?<units>.*)\)/,
+    },
+    { name: 'fi', mprReadType: 'Float32', textReadType: 'float' },
+    { name: 'unit fi', mprReadType: 'Uint8', textReadType: 'string' },
+    { name: 'ff', mprReadType: 'Float32', textReadType: 'float' },
+    { name: 'unit ff', mprReadType: 'Uint8', textReadType: 'string' },
+    { name: 'Nd', mprReadType: 'Uint32', textReadType: 'int' },
+    { name: 'Points', mprReadType: 'Uint8', textReadType: 'string' },
+    { name: 'spacing', mprReadType: 'Uint8', textReadType: 'string' },
+    { name: 'Ia/Va', mprReadType: 'Uint8', textReadType: 'string' },
+    { name: 'Ia', mprReadType: 'Float32', textReadType: 'float' },
+    { name: 'unit Ia', mprReadType: 'Uint8', textReadType: 'string' },
+    { name: 'va pourcent', mprReadType: 'Float32', textReadType: 'float' },
+    { name: 'pw', mprReadType: 'Float32', textReadType: 'float' },
+    { name: 'Na', mprReadType: 'Uint32', textReadType: 'int' },
+    { name: 'corr', mprReadType: 'Uint8', textReadType: 'string' },
+    { name: 'lim nb', mprReadType: 'Uint8', textReadType: 'string' },
+    { name: 'limit type1', mprReadType: 'Uint8', textReadType: 'string' },
+    { name: 'limit comp1', mprReadType: 'Uint8', textReadType: 'string' },
+    { name: 'limit value1', mprReadType: 'Float32', textReadType: 'float' },
+    { name: 'limit unit1', mprReadType: 'Uint8', textReadType: 'string' },
+    { name: 'limit type2', mprReadType: 'Uint8', textReadType: 'string' },
+    { name: 'limit comp2', mprReadType: 'Uint8', textReadType: 'string' },
+    { name: 'limit value2', mprReadType: 'Float32', textReadType: 'float' },
+    { name: 'limit unit2', mprReadType: 'Uint8', textReadType: 'string' },
+    { name: 'limit type3', mprReadType: 'Uint8', textReadType: 'string' },
+    { name: 'limit comp3', mprReadType: 'Uint8', textReadType: 'string' },
+    { name: 'limit value3', mprReadType: 'Float32', textReadType: 'float' },
+    { name: 'limit unit3', mprReadType: 'Uint8', textReadType: 'string' },
+    { name: 'limit type4', mprReadType: 'Uint8', textReadType: 'string' },
+    { name: 'limit comp4', mprReadType: 'Uint8', textReadType: 'string' },
+    { name: 'limit value4', mprReadType: 'Float32', textReadType: 'float' },
+    { name: 'limit unit4', mprReadType: 'Uint8', textReadType: 'string' },
+    { name: 'limit type5', mprReadType: 'Uint8', textReadType: 'string' },
+    { name: 'limit comp5', mprReadType: 'Uint8', textReadType: 'string' },
+    { name: 'limit value5', mprReadType: 'Float32', textReadType: 'float' },
+    { name: 'limit unit5', mprReadType: 'Uint8', textReadType: 'string' },
+    { name: 'limit type6', mprReadType: 'Uint8', textReadType: 'string' },
+    { name: 'limit comp6', mprReadType: 'Uint8', textReadType: 'string' },
+    { name: 'limit value6', mprReadType: 'Float32', textReadType: 'float' },
+    { name: 'limit unit6', mprReadType: 'Uint8', textReadType: 'string' },
+    {
+      name: 'E range min',
+      mprReadType: 'Float32',
+      textReadType: 'float',
+      regexUnits: / \((?<units>.*)\)/,
+    },
+    {
+      name: 'E range max',
+      mprReadType: 'Float32',
+      textReadType: 'float',
+      regexUnits: / \((?<units>.*)\)/,
+    },
+    { name: 'I Range', mprReadType: 'Uint8', textReadType: 'string' },
+    { name: 'Bandwidth', mprReadType: 'Uint8', textReadType: 'int' },
+    { name: 'nc cycles', mprReadType: 'Uint32', textReadType: 'int' },
+    { name: 'goto Ns', mprReadType: 'Uint32', textReadType: 'string' },
+    { name: 'nr cycles', mprReadType: 'Uint32', textReadType: 'int' },
+    { name: 'inc. cycle', mprReadType: 'Uint32', textReadType: 'int' },
   ],
 };

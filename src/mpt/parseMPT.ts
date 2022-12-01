@@ -47,6 +47,7 @@ export function parseMPT(data: TextData): MPT {
       technique,
     );
     const dataStartsIndex = nbOfHeaderLines - 1;
+    // do not depend on `mode` because it is not always present
     const data = { variables: parseData(lines.slice(dataStartsIndex)) };
 
     result = { name, nbOfHeaderLines, log, settings, data };
