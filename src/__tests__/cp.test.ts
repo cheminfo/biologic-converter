@@ -34,7 +34,11 @@ describe('parse CP file', () => {
     expect(e1.value).toBeCloseTo(mprSettings?.electrodeSurfaceArea);
     expect(c1.value).toBeCloseTo(mprSettings?.characteristicMass);
 
-    console.log(mpr.data, mpt.data);
-    expect(mpr).toMatchSnapshot();
+    const variables = mpr.data.variables;
+    const mptVariables = mpt.data.variables;
+    expect(Object.keys(variables).length).toBeLessThanOrEqual(
+      Object.keys(mptVariables).length,
+    );
+    expect(variables.a.data[0]).toBeCloseTo(mptVariables.a.data[0]);
   });
 });
