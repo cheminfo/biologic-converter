@@ -1,6 +1,3 @@
-import { Param as InParam } from './preParamsLookUp';
-import { Technique } from './techniqueFromId';
-
 /**
  * Each parameter object
  */
@@ -18,7 +15,6 @@ export interface OutParams {
  * This are values that the user inputs in a dialog box, as parameters of the technique.
  */
 export type GetTechniqueParameters = (
-  metaParams: Technique['preParameters'],
   lines: string[],
   i: number,
 ) => [OutParams, number];
@@ -29,86 +25,38 @@ export type GetTechniqueParameters = (
  * @param i - index to start reading
  * @return `[params, newIndex]`, `boolean` indicates whether is a known technique
  */
-export const getParams: GetTechniqueParameters = function getParams(
-  metaParams,
-  lines,
-  i,
-) {
+export const getParams: GetTechniqueParameters = function getParams(lines, i) {
   let params: OutParams = {};
-
-  if (lines[i].startsWith('Ns ')) {
-    metaParams.unshift({
-      name: 'Ns',
-      textReadType: 'int',
-      mprReadType: 'Uint8',
-      optional: false,
-    });
-  }
-  for (const thisParam of metaParams) {
+  do {
     const paramLine = lines[i].trim();
-    if (paramLine === '') break;
-
     const [longParameterName, ...paramValues] = paramLine.split(/\s{2,}/);
-    if (!longParameterName || !paramValues) {
-      throw new Error('expected at least 2 values.');
-    } else if (!thisParam.optional) {
-      params[thisParam.name] = setThisParameter(
-        thisParam,
-        longParameterName,
-        paramValues,
-      );
-    } else if (paramLine.startsWith(thisParam.name)) {
-      params[thisParam.name] = setThisParameter(
-        thisParam,
-        longParameterName,
-        paramValues,
-      );
-    } else {
-      continue;
-    }
+    //mutates object
+    addCleanParam(params, longParameterName, paramValues);
     i++;
-  }
+  } while (/\s{3,}$/.test(lines[i + 1]));
   return [params, i];
 };
-
 /**
  *
- * @param metaParam
  * @param longParameterName
  * @param paramValues
  * @returns
  */
-function setThisParameter(
-  metaParam: InParam,
+function addCleanParam(
+  params: OutParams,
   longParameterName: string,
   paramValues: string[],
-): OutParam {
-  const { regexUnits, textReadType } = metaParam;
+): void {
+  const nameUnits = /(?<pName>.*) \((?<units>.*)\)/;
+  const result = nameUnits.exec(longParameterName.trim());
+  const name: string = result?.groups?.pName || longParameterName;
+  const units: string | undefined = result?.groups?.units;
 
-  let param: Partial<OutParam> = {};
+  params[name] = {
+    value: paramValues.length === 1 ? paramValues[0] : paramValues,
+  };
 
-  if (regexUnits) {
-    //units from name
-    const result = regexUnits.exec(longParameterName.trim());
-    if (result?.groups?.units) {
-      param.units = result.groups.units;
-    }
+  if (units) {
+    params[name].units = units;
   }
-
-  if (textReadType === 'string') {
-    param.value = paramValues.length === 1 ? paramValues[0] : paramValues;
-  } else if (textReadType === 'float' || textReadType === 'float|string') {
-    const result = paramValues.map((v) => {
-      const n = Number.parseFloat(v);
-      return Number.isNaN(n) ? v : n;
-    });
-    param.value = result.length === 1 ? result[0] : result;
-  } else if (textReadType === 'int' || textReadType === 'int|string') {
-    const result = paramValues.map((v) => {
-      const n = Number.parseInt(v, 10);
-      return Number.isNaN(n) ? v : n;
-    });
-    param.value = result.length === 1 ? result[0] : result;
-  }
-  return param as OutParam;
 }

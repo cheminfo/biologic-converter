@@ -1,6 +1,6 @@
 import { OutParams, getParams } from '../utility/getParamsFromText';
 import { normalizeFlag, normalizeKeyValue } from '../utility/normalize';
-import type { Technique } from '../utility/techniqueFromId';
+import { techniqueFromLongName } from '../utility/techniqueFromLongName';
 
 import { addKVToObject } from './utility/addKeyWithoutOverwrite';
 
@@ -34,9 +34,9 @@ export interface LogAndSettings {
  */
 export function parseLogAndSettings(
   lines: string[],
-  technique: Technique,
+  technique: string,
 ): LogAndSettings {
-  const result: LogAndSettings = makeBaseObject(technique.name);
+  const result: LogAndSettings = makeBaseObject(technique);
 
   const regex = {
     isEmpty: /^\s*$/,
@@ -65,21 +65,13 @@ export function parseLogAndSettings(
     } else if (regex.isParameters.test(currentLine)) {
       const currentVariables = result.settings.variables;
       if (Object.keys(currentVariables.params).length === 0) {
-        const [params, lastLineRead] = getParams(
-          technique.preParameters,
-          lines,
-          i,
-        );
+        const [params, lastLineRead] = getParams(lines, i);
         currentVariables.params = params;
         i = lastLineRead;
       } else {
         const modified = lines[i - 1].match(/Modify on : (?<date>.*)/);
         if (modified?.groups?.date) {
-          const [newParams, lastLineRead] = getParams(
-            technique.preParameters,
-            lines,
-            i,
-          );
+          const [newParams, lastLineRead] = getParams(lines, i);
           currentVariables.modified.push({
             on: modified.groups.date,
             newParams,
@@ -105,7 +97,7 @@ function makeBaseObject(techniqueName: string) {
   return {
     settings: {
       variables: {
-        technique: techniqueName,
+        technique: techniqueFromLongName(techniqueName),
         params: {},
         flags: [],
         modified: [],

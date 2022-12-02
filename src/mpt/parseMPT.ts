@@ -1,8 +1,6 @@
 import { MeasurementVariable, TextData } from 'cheminfo-types';
 import { ensureString } from 'ensure-string';
 
-import { techniqueFromLongName } from '../utility/techniqueFromLongName';
-
 import { parseData } from './parseData';
 import { LogAndSettings, parseLogAndSettings } from './parseLogAndSettings';
 import { getNbOfHeaderLines } from './utility/getNbOfHeaderLines';
@@ -37,7 +35,7 @@ export function parseMPT(data: TextData): MPT {
 
   if (name === 'EC-Lab ASCII FILE') {
     const nbOfHeaderLines = getNbOfHeaderLines(lines[1]);
-    const technique = techniqueFromLongName(lines[3].trim());
+    const technique = lines[3].trim();
 
     const headerStartsIndex = 4;
     const headerEndsIndex = nbOfHeaderLines - 1;

@@ -2,86 +2,61 @@ import { techniqueFromLongName } from '../techniqueFromLongName';
 
 describe('techniqueFromLongName', () => {
   it('GCPL', () => {
-    const { name, preParameters } = techniqueFromLongName(
+    const result = techniqueFromLongName(
       'Galvanostatic Cycling with Potential Limitation',
     );
-    expect(name).toBe('GCPL');
-    expect(preParameters).toHaveLength(32);
+    expect(result).toBe('GCPL');
   });
   it('CV', () => {
-    const { name, preParameters } = techniqueFromLongName('Cyclic Voltammetry');
-    expect(name).toBe('CV');
-    expect(preParameters).toHaveLength(21);
+    const result = techniqueFromLongName('Cyclic Voltammetry');
+    expect(result).toBe('CV');
   });
   it('OCV', () => {
-    const { name, preParameters } = techniqueFromLongName(
-      'Open Circuit Voltage',
-    );
-    expect(name).toBe('OCV');
-    expect(preParameters).toHaveLength(7);
+    const result = techniqueFromLongName('Open Circuit Voltage');
+    expect(result).toBe('OCV');
   });
   it('CA', () => {
-    const { name, preParameters } = techniqueFromLongName(
+    const result = techniqueFromLongName(
       'Chronoamperometry / Chronocoulometry',
     );
-    expect(name).toBe('CA');
-    expect(preParameters).toHaveLength(25);
+    expect(result).toBe('CA');
   });
   it('CP', () => {
-    const { name, preParameters } = techniqueFromLongName(
-      'Chronopotentiometry',
-    );
-    expect(name).toBe('CP');
-    expect(preParameters).toHaveLength(16);
+    const result = techniqueFromLongName('Chronopotentiometry');
+    expect(result).toBe('CP');
   });
   it('WAIT', () => {
-    const { name, preParameters } = techniqueFromLongName('Wait');
-    expect(name).toBe('WAIT');
-    expect(preParameters).toHaveLength(11);
+    const result = techniqueFromLongName('Wait');
+    expect(result).toBe('WAIT');
   });
   it('GEIS', () => {
-    const { name, preParameters } = techniqueFromLongName(
+    const result = techniqueFromLongName(
       'Galvano Electrochemical Impedance Spectroscopy',
     );
-    expect(name).toBe('GEIS');
-    expect(preParameters).toHaveLength(55);
+    expect(result).toBe('GEIS');
   });
   it('ZIR', () => {
-    const { name, preParameters } = techniqueFromLongName(
-      'IR compensation (PEIS)',
-    );
-    expect(name).toBe('ZIR');
-    expect(preParameters).toHaveLength(14);
+    const result = techniqueFromLongName('IR compensation (PEIS)');
+    expect(result).toBe('ZIR');
   });
   it('LSV', () => {
-    const { name, preParameters } = techniqueFromLongName(
-      'Linear Sweep Voltammetry',
-    );
-    expect(name).toBe('LSV');
-    expect(preParameters).toHaveLength(23);
+    const result = techniqueFromLongName('Linear Sweep Voltammetry');
+    expect(result).toBe('LSV');
   });
   it('MIR', () => {
-    const { name, preParameters } = techniqueFromLongName(
-      'Manual IR compensation',
-    );
-    expect(name).toBe('MIR');
-    expect(preParameters).toHaveLength(4);
+    const result = techniqueFromLongName('Manual IR compensation');
+    expect(result).toBe('MIR');
   });
   it('MB', () => {
-    expect(() => techniqueFromLongName('Modulo Bat')).toThrow(
-      'Not implemented technique: MB',
-    );
+    expect(techniqueFromLongName('Modulo Bat')).toBe('MB');
   });
   it('PEIS', () => {
-    const { name, preParameters } = techniqueFromLongName(
+    const result = techniqueFromLongName(
       'Potentio Electrochemical Impedance Spectroscopy',
     );
-    expect(name).toBe('PEIS');
-    expect(preParameters).toHaveLength(52);
+    expect(result).toBe('PEIS');
   });
   it('unknown', () => {
-    expect(() => techniqueFromLongName('Morabi')).toThrow(
-      'Unknown technique: Morabi',
-    );
+    expect(techniqueFromLongName('Morabi')).toBe('Morabi');
   });
 });

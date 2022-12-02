@@ -1,37 +1,35 @@
-import { preParamsLookUp } from './preParamsLookUp';
-import { Technique } from './techniqueFromId';
 /**
  * maps the text in the MPT/MPS file to the corresponding technique and parameters
  * @param id - id of the technique
  * @returns - technique name and parameters
  */
-export function techniqueFromLongName(id: string): Technique {
+export function techniqueFromLongName(id: string): string {
   switch (id) {
     case 'Galvanostatic Cycling with Potential Limitation':
-      return { name: 'GCPL', preParameters: preParamsLookUp.gcplParams };
+      return 'GCPL';
     case 'Cyclic Voltammetry':
-      return { name: 'CV', preParameters: preParamsLookUp.cvParams };
+      return 'CV';
     case 'Open Circuit Voltage':
-      return { name: 'OCV', preParameters: preParamsLookUp.ocvParams };
+      return 'OCV';
     case 'Chronoamperometry / Chronocoulometry':
-      return { name: 'CA', preParameters: preParamsLookUp.caParams };
+      return 'CA';
     case 'Chronopotentiometry':
-      return { name: 'CP', preParameters: preParamsLookUp.cpParams };
+      return 'CP';
     case 'Wait':
-      return { name: 'WAIT', preParameters: preParamsLookUp.waitParams };
+      return 'WAIT';
     case 'Potentio Electrochemical Impedance Spectroscopy':
-      return { name: 'PEIS', preParameters: preParamsLookUp.peisParams };
+      return 'PEIS';
     case 'Galvano Electrochemical Impedance Spectroscopy':
-      return { name: 'GEIS', preParameters: preParamsLookUp.geisParams };
+      return 'GEIS';
     case 'IR compensation (PEIS)':
-      return { name: 'ZIR', preParameters: preParamsLookUp.zirParams };
+      return 'ZIR';
     case 'Linear Sweep Voltammetry':
-      return { name: 'LSV', preParameters: preParamsLookUp.lsvParams };
+      return 'LSV';
     case 'Modulo Bat':
-      throw new Error('Not implemented technique: MB');
+      return 'MB';
     case 'Manual IR compensation': //this technique isn't listed anywhere else
-      return { name: 'MIR', preParameters: preParamsLookUp.mirParams };
+      return 'MIR';
     default:
-      throw new Error(`Unknown technique: ${id}`);
+      return id;
   }
 }
