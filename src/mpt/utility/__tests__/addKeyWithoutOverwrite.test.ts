@@ -9,6 +9,7 @@ describe('test both utilities', () => {
           params: {},
           flags: [],
           technique: 'test',
+          modified: [],
         },
       },
     };

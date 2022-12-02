@@ -3,8 +3,8 @@
  */
 export interface Param {
   name: string;
-  mprReadType: string;
-  textReadType: string;
+  mprReadType: 'Uint8' | 'Uint16' | 'Uint32' | 'Float32' | 'Float64' | 'string';
+  textReadType: 'string' | 'int' | 'float' | 'int|string' | 'float|string';
   regexUnits?: RegExp; //to unit extracts from name
   optional: boolean;
 }
@@ -15,7 +15,7 @@ interface TechniquesToParams {
 /**
  * Parameters ordered in the way they appear in the binary file,
  * `optional` is to help the text parsing.
- * For this to work in the text files, `name` must be name in the MPT file.
+ * `name` should be the name in the MPT file.
  * The text-only parameter `Ns` appended at parsing time (it does not appear in the
  * binary file.)
  * For description of parameters see the manuals

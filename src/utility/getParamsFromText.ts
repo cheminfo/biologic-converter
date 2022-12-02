@@ -14,8 +14,10 @@ interface OutParam {
 export interface OutParams {
   [name: string]: OutParam;
 }
-
-export type GetParams = (
+/**
+ * This are values that the user inputs in a dialog box, as parameters of the technique.
+ */
+export type GetTechniqueParameters = (
   metaParams: Technique['preParameters'],
   lines: string[],
   i: number,
@@ -27,7 +29,11 @@ export type GetParams = (
  * @param i - index to start reading
  * @return `[params, newIndex]`, `boolean` indicates whether is a known technique
  */
-export const getParams: GetParams = function getParams(metaParams, lines, i) {
+export const getParams: GetTechniqueParameters = function getParams(
+  metaParams,
+  lines,
+  i,
+) {
   let params: OutParams = {};
 
   if (lines[i].startsWith('Ns ')) {
@@ -42,19 +48,16 @@ export const getParams: GetParams = function getParams(metaParams, lines, i) {
     const paramLine = lines[i].trim();
     if (paramLine === '') break;
 
-    const [longParameterName, ...paramValues] = paramLine.split(/\s{2,}/); //weak regex but seems ok.
-
+    const [longParameterName, ...paramValues] = paramLine.split(/\s{2,}/);
     if (!longParameterName || !paramValues) {
       throw new Error('expected at least 2 values.');
     } else if (!thisParam.optional) {
-      /*order params in text file is === as in index `j`*/
       params[thisParam.name] = setThisParameter(
         thisParam,
         longParameterName,
         paramValues,
       );
     } else if (paramLine.startsWith(thisParam.name)) {
-      /*order params in text file is === as in index `j`*/
       params[thisParam.name] = setThisParameter(
         thisParam,
         longParameterName,
@@ -65,7 +68,7 @@ export const getParams: GetParams = function getParams(metaParams, lines, i) {
     }
     i++;
   }
-  return [params, i - 1];
+  return [params, i];
 };
 
 /**

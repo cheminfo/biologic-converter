@@ -11,6 +11,7 @@ export interface LogAndSettings {
       technique: string;
       params: OutParams;
       flags: string[];
+      modified: { on: string; newParams: OutParams }[];
       /* looking for a better definition */
       [key: string]: any;
     };
@@ -35,28 +36,13 @@ export function parseLogAndSettings(
   lines: string[],
   technique: Technique,
 ): LogAndSettings {
-  const result: LogAndSettings = {
-    settings: {
-      variables: {
-        technique: technique.name,
-        params: {},
-        flags: [],
-      },
-    },
-    log: {
-      variables: {
-        flags: [],
-      },
-    },
-  };
+  const result: LogAndSettings = makeBaseObject(technique.name);
 
   const regex = {
     isEmpty: /^\s*$/,
     isKeyValue: / : | :$/,
     isMultiline: /^[\t ]/,
-    //detect parameter and parse it
     isParameters: /\s{3,}$/,
-    //parameter end of line
   };
 
   for (let i = 0; i < lines.length; i++) {
@@ -77,14 +63,30 @@ export function parseLogAndSettings(
       const [newKey, logOrSettings, newVal] = normalizeKeyValue(key, val);
       addKVToObject(result[logOrSettings].variables, newKey, newVal);
     } else if (regex.isParameters.test(currentLine)) {
-      /* Special key parsing */
-      const [params, lastLineRead] = getParams(
-        technique.preParameters,
-        lines,
-        i,
-      );
-      result.settings.variables.params = params || {};
-      i = lastLineRead;
+      const currentVariables = result.settings.variables;
+      if (Object.keys(currentVariables.params).length === 0) {
+        const [params, lastLineRead] = getParams(
+          technique.preParameters,
+          lines,
+          i,
+        );
+        currentVariables.params = params;
+        i = lastLineRead;
+      } else {
+        const modified = lines[i - 1].match(/Modify on : (?<date>.*)/);
+        if (modified?.groups?.date) {
+          const [newParams, lastLineRead] = getParams(
+            technique.preParameters,
+            lines,
+            i,
+          );
+          currentVariables.modified.push({
+            on: modified.groups.date,
+            newParams,
+          });
+          i = lastLineRead;
+        }
+      }
     } else {
       const [theKey, logOrSettings, theValue] = normalizeFlag(
         currentLine.trim(),
@@ -97,4 +99,22 @@ export function parseLogAndSettings(
     }
   }
   return result;
+}
+
+function makeBaseObject(techniqueName: string) {
+  return {
+    settings: {
+      variables: {
+        technique: techniqueName,
+        params: {},
+        flags: [],
+        modified: [],
+      },
+    },
+    log: {
+      variables: {
+        flags: [],
+      },
+    },
+  };
 }
