@@ -1,7 +1,9 @@
 import { IOBuffer } from 'iobuffer';
 
+import { oleToUTCDate as oleToDate } from './utility/oleToDate';
+
 export interface ParseLogs {
-  oleTimestamp: number;
+  oleAsDate: Date;
   filename: string;
   host: string;
   address: string;
@@ -17,8 +19,6 @@ export interface ParseLogs {
  * Most files have logs, this parses logs
  * buffer - IOBuffer
  * @returns the header as a JSON-like object
- *    filename
- *    eweControlRange
  */
 
 export function parseLogs(buffer: IOBuffer): ParseLogs {
@@ -34,7 +34,8 @@ export function parseLogs(buffer: IOBuffer): ParseLogs {
   const eweControlMax = buffer.readFloat32();
   object.eweControlRange = { min: eweControlMin, max: eweControlMax }; //is it always same units (V) ?
   buffer.offset = zero + 0x249;
-  object.oleTimestamp = buffer.readFloat64();
+  //ms from 12/30/1899
+  object.oleAsDate = oleToDate(buffer.readFloat64());
   object.filename = buffer.decodeText(buffer.readUint8(), 'windows-1252');
   buffer.offset = zero + 0x351;
   object.host = buffer.decodeText(buffer.readUint8(), 'windows-1252');
