@@ -39,7 +39,7 @@ describe('parse CP file', () => {
     expect(Object.keys(variables).length).toBeLessThanOrEqual(
       Object.keys(mptVariables).length,
     );
-    console.log(variables.a.data[0], mptVariables.a.data[0]);
     expect(variables.a.data[0]).toBeCloseTo(mptVariables.a.data[0]);
+    expect(mpr).toMatchSnapshot();
   });
 });

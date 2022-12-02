@@ -18,7 +18,7 @@ describe('techniqueFromLongName', () => {
       'Open Circuit Voltage',
     );
     expect(name).toBe('OCV');
-    expect(preParameters).toHaveLength(6);
+    expect(preParameters).toHaveLength(7);
   });
   it('CA', () => {
     const { name, preParameters } = techniqueFromLongName(

@@ -20,9 +20,10 @@ export interface Parameters {
  */
 export function getTechniqueParameters(
   buffer: IOBuffer,
-  preParameters: Technique['preParameters'],
+  technique: Technique,
   zero: number,
 ): Parameters {
+  const { name, preParameters } = technique;
   const parameters: Parameters = {};
   // Parameters can start at either 0x572, 0x1845 or 0x1846
   for (const off of [0x572, 0x1845, 0x1846]) {
@@ -30,13 +31,14 @@ export function getTechniqueParameters(
     buffer.offset = zero + off;
     if (buffer.readUint16() !== 0) {
       const nParams = buffer.readUint16();
-      /*
-       * not sure whether next line is correct
-       * see https://github.com/dgbowl/yadg/blob/075f1708d03bdd4c4324871cc7bd4b1ffb7e1ccf/src/yadg/parsers/electrochem/eclabmpr.py#L501
-       * update: for now we are parsing a subset this would fail
-       * https://github.com/dgbowl/yadg/blob/075f1708d03bdd4c4324871cc7bd4b1ffb7e1ccf/src/yadg/parsers/electrochem/eclabtechniques.py#L701
-       */
-      for (let i = 0; i < Math.min(preParameters.length, nParams); i++) {
+      if (name === 'OCV' && nParams < preParameters.length) {
+        const recordIndex = 2;
+        preParameters.splice(recordIndex, 1);
+      }
+      if (preParameters.length !== nParams) {
+        throw new Error(`The number of parameters is not correct for ${name}`);
+      }
+      for (let i = 0; i < nParams; i++) {
         const { name: pName, mprReadType: pReadType } = preParameters[i];
         //if (param[1] === 'Pascal') parameters[param[0]] = pascalString(buffer); //we not using it
         //apparently

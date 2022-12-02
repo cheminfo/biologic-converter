@@ -963,6 +963,13 @@ export const preParamsLookUp: TechniquesToParams = {
       optional: false,
     },
     {
+      name: 'record',
+      mprReadType: 'Uint8',
+      textReadType: 'int',
+      optional: true,
+    },
+
+    {
       name: 'dER',
       mprReadType: 'Float32',
       textReadType: 'float',

@@ -32,8 +32,8 @@ export interface ParseSettings {
 export function parseSettings(buffer: IOBuffer) {
   let object: Partial<ParseSettings> = {};
   const zero = buffer.offset;
-  const { name: technique, preParameters } = techniqueFromId(buffer.readByte());
-  object.technique = technique;
+  const technique = techniqueFromId(buffer.readByte());
+  object.technique = technique.name;
   object.comments = buffer.decodeText(buffer.readUint8(), 'windows-1252');
   buffer.offset = zero + 0x107;
   object.activeMaterialMass = buffer.readFloat32();
@@ -59,7 +59,7 @@ export function parseSettings(buffer: IOBuffer) {
   object.characteristicMass = buffer.readFloat32();
   object.batteryCapacity = buffer.readFloat32();
   object.batteryCapacityUnit = buffer.readByte();
-  object.params = getTechniqueParameters(buffer, preParameters, zero);
+  object.params = getTechniqueParameters(buffer, technique, zero);
 
   return object as ParseSettings;
 }
