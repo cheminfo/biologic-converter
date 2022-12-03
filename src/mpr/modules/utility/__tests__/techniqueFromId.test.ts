@@ -32,11 +32,13 @@ describe('techniqueFromId', () => {
     expect(techniqueFromId(0x6c).name).toBe('LSV');
   });
   it('MB', () => {
-    expect(() => techniqueFromId(0x7f)).toThrow('Not implemented name: MB');
+    expect(techniqueFromId(0x7f).name).toBe(
+      'Params not implemented for MB (id: 127)',
+    );
   });
   it('unknown', () => {
-    expect(() => techniqueFromId(0x123)).toThrow(
-      'Not implemented name: unknown (0x123)',
+    expect(techniqueFromId(0x123).name).toBe(
+      'Params not implemented for id: 291',
     );
   });
 });

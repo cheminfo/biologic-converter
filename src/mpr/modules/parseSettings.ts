@@ -1,8 +1,7 @@
 import { IOBuffer } from 'iobuffer';
 
-import { techniqueFromId } from '../../utility/techniqueFromId';
-
 import { Parameters, getTechniqueParameters } from './utility/getParameters';
+import { techniqueFromId } from './utility/techniqueFromId';
 
 export interface ParseSettings {
   technique: string; // Unique technique ID.
@@ -59,7 +58,8 @@ export function parseSettings(buffer: IOBuffer) {
   object.characteristicMass = buffer.readFloat32();
   object.batteryCapacity = buffer.readFloat32();
   object.batteryCapacityUnit = buffer.readByte();
-  object.params = getTechniqueParameters(buffer, technique, zero);
+  object.params =
+    technique?.preParameters && getTechniqueParameters(buffer, technique, zero);
 
   return object as ParseSettings;
 }

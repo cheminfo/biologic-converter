@@ -2,7 +2,7 @@ import { Param, preParamsLookUp } from './preParamsLookUp';
 
 export interface Technique {
   name: string; //technique name
-  preParameters: Param[]; //an object helper to parse the parameters
+  preParameters?: Param[]; //an object helper to parse the parameters
 }
 
 /**
@@ -33,8 +33,12 @@ export function techniqueFromId(id: number): Technique {
     case 0x6c:
       return { name: 'LSV', preParameters: preParamsLookUp.lsvParams };
     case 0x7f:
-      throw new Error(`Not implemented name: MB`);
+      return {
+        name: `Params not implemented for MB (id: ${id})`,
+      };
     default:
-      throw new Error(`Not implemented name: unknown (0x${id.toString(16)})`);
+      return {
+        name: `Params not implemented for id: ${id}`,
+      };
   }
 }

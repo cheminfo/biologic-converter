@@ -1,9 +1,8 @@
 import { IOBuffer } from 'iobuffer';
 
-import { Technique } from '../../../utility/techniqueFromId';
-
 import { unitsScale } from './mapIRangeToMPT';
 import { readType as pValue } from './readType';
+import { Technique } from './techniqueFromId';
 
 /*
  * the binary is way less informative than the MPT file so
@@ -25,6 +24,8 @@ export function getTechniqueParameters(
 ): Parameters {
   const { name, preParameters } = technique;
   const parameters: Parameters = {};
+  if (!preParameters) return parameters;
+
   // Parameters can start at either 0x572, 0x1845 or 0x1846
   for (const off of [0x572, 0x1845, 0x1846]) {
     //byte flags params' start
