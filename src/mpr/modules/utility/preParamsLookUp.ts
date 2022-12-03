@@ -4,7 +4,7 @@
 export interface Param {
   name: string;
   mprReadType: 'Uint8' | 'Uint16' | 'Uint32' | 'Float32' | 'Float64' | 'string';
-   //to unit extracts from name
+  //to unit extracts from name
   optional: boolean;
 }
 interface TechniquesToParams {
@@ -265,7 +265,7 @@ export const preParamsLookUp: TechniquesToParams = {
       mprReadType: 'Uint8',
       optional: false,
     },
-    { name: 'N', mprReadType: 'Uint32',  optional: false },
+    { name: 'N', mprReadType: 'Uint32', optional: false },
     {
       name: 'E range min',
       mprReadType: 'Float32',
@@ -570,7 +570,7 @@ export const preParamsLookUp: TechniquesToParams = {
       mprReadType: 'Uint8',
       optional: false,
     },
-    { name: 'N', mprReadType: 'Uint32',  optional: false },
+    { name: 'N', mprReadType: 'Uint32', optional: false },
     {
       name: 'E range min',
       mprReadType: 'Float32',
@@ -695,7 +695,7 @@ export const preParamsLookUp: TechniquesToParams = {
       mprReadType: 'Float32',
       optional: false,
     },
-    { name: 'Na', mprReadType: 'Uint32',  optional: false },
+    { name: 'Na', mprReadType: 'Uint32', optional: false },
     {
       name: 'E range min',
       mprReadType: 'Float32',
@@ -852,7 +852,7 @@ export const preParamsLookUp: TechniquesToParams = {
       mprReadType: 'Uint8',
       optional: false,
     },
-    { name: 'Nd', mprReadType: 'Uint32',  optional: false },
+    { name: 'Nd', mprReadType: 'Uint32', optional: false },
     {
       name: 'Points',
       mprReadType: 'Uint8',
@@ -888,7 +888,7 @@ export const preParamsLookUp: TechniquesToParams = {
       mprReadType: 'Float32',
       optional: false,
     },
-    { name: 'Na', mprReadType: 'Uint32',  optional: false },
+    { name: 'Na', mprReadType: 'Uint32', optional: false },
     {
       name: 'corr',
       mprReadType: 'Uint8',
@@ -1121,7 +1121,7 @@ export const preParamsLookUp: TechniquesToParams = {
       mprReadType: 'Uint8',
       optional: false,
     },
-    { name: 'Nd', mprReadType: 'Uint32',  optional: false },
+    { name: 'Nd', mprReadType: 'Uint32', optional: false },
     {
       name: 'Points',
       mprReadType: 'Uint8',
@@ -1142,7 +1142,7 @@ export const preParamsLookUp: TechniquesToParams = {
       mprReadType: 'Float32',
       optional: false,
     },
-    { name: 'Na', mprReadType: 'Uint32',  optional: false },
+    { name: 'Na', mprReadType: 'Uint32', optional: false },
     {
       name: 'corr',
       mprReadType: 'Uint8',
