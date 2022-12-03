@@ -58,8 +58,7 @@ export function parseSettings(buffer: IOBuffer) {
   object.characteristicMass = buffer.readFloat32();
   object.batteryCapacity = buffer.readFloat32();
   object.batteryCapacityUnit = buffer.readByte();
-  object.params =
-    technique?.preParameters && getTechniqueParameters(buffer, technique, zero);
+  object.params = getTechniqueParameters(buffer, technique, zero);
 
   return object as ParseSettings;
 }
