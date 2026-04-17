@@ -1,4 +1,6 @@
-import { getOneLetter } from '../getOneLetter';
+import { expect, test } from 'vitest';
+
+import { getOneLetter } from '../getOneLetter.ts';
 
 test('getOneLetter', () => {
   expect(getOneLetter(0)).toBe('a');

@@ -1,4 +1,4 @@
-import { IOBuffer } from 'iobuffer';
+import type { IOBuffer } from 'iobuffer';
 
 export interface ParseLoop {
   numIndexes: number;
@@ -10,9 +10,9 @@ export interface ParseLoop {
  * buffer - IOBuffer
  * @returns the header as a JSON-like object
  */
-export function parseLoop(buffer: IOBuffer) {
-  const object: Partial<ParseLoop> = {};
-  object.numIndexes = buffer.readUint32();
-  object.indexes = buffer.readUint32();
-  return object as ParseLoop;
+export function parseLoop(buffer: IOBuffer): ParseLoop {
+  return {
+    numIndexes: buffer.readUint32(),
+    indexes: buffer.readUint32(),
+  };
 }

@@ -7,7 +7,6 @@
 
 Convert BioLogic file format.
 
-
 There are 3 possible extensions:
 
 - .mpr : _Raw_ binary file containing the data
@@ -30,14 +29,14 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
 // import the parser you need
-import { parseMPR, /*parseMPT, parseMPS*/ } from 'biologic-converter';
+import { parseMPR /*parseMPT, parseMPS*/ } from 'biologic-converter';
 
 // build the path
-const __dirname = dirname(fileURLToPath(import.meta.url))
+const __dirname = dirname(fileURLToPath(import.meta.url));
 // get buffer
 const mpr = rfs(join(__dirname, 'testDirectory/ca/ca.mpr'));
 const result = parseMPR(mpr); //JSON-like object
-console.log(result)
+console.log(result);
 ```
 
 <details>
@@ -101,6 +100,7 @@ console.log(result)
   }
 }
 ```
+
 </details>
 
 ## License

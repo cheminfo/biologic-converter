@@ -1,5 +1,5 @@
-import { preParamsLookUp } from './preParamsLookUp';
-import { Technique } from './techniqueFromId';
+import { preParamsLookUp } from './preParamsLookUp.ts';
+import type { Technique } from './techniqueFromId.ts';
 /**
  * maps the text in the MPT/MPS file to the corresponding technique and parameters
  * @param id - id of the technique

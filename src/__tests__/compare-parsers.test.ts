@@ -1,8 +1,10 @@
 import { readFileSync as rfs } from 'node:fs';
 import { join } from 'node:path';
 
-import { parseMPR } from '../mpr/parseMPR';
-import { parseMPT } from '../mpt/parseMPT';
+import { describe, expect, it } from 'vitest';
+
+import { parseMPR } from '../mpr/parseMPR.ts';
+import { parseMPT } from '../mpt/parseMPT.ts';
 
 const testFiles = join(__dirname, 'data');
 describe('compare parsers', () => {

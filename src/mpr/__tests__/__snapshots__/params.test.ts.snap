@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Compare the technique (settings only) cp meta 1`] = `
+exports[`Compare the technique (settings only) > cp meta 1`] = `
 {
   "acquisitionStart": 0,
   "activeMaterialMass": 0.0010000000474974513,

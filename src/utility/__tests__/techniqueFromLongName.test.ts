@@ -1,4 +1,6 @@
-import { techniqueFromLongName } from '../techniqueFromLongName';
+import { describe, expect, it } from 'vitest';
+
+import { techniqueFromLongName } from '../techniqueFromLongName.ts';
 
 describe('techniqueFromLongName', () => {
   it('GCPL', () => {

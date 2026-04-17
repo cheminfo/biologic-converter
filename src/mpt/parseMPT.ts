@@ -1,11 +1,12 @@
-import { MeasurementVariable, TextData } from 'cheminfo-types';
+import type { MeasurementVariable, TextData } from 'cheminfo-types';
 import { ensureString } from 'ensure-string';
 
-import { techniqueFromLongName } from '../utility/techniqueFromLongName';
+import { techniqueFromLongName } from '../utility/techniqueFromLongName.ts';
 
-import { parseData } from './parseData';
-import { LogAndSettings, parseLogAndSettings } from './parseLogAndSettings';
-import { getNbOfHeaderLines } from './utility/getNbOfHeaderLines';
+import { parseData } from './parseData.ts';
+import type { LogAndSettings } from './parseLogAndSettings.ts';
+import { parseLogAndSettings } from './parseLogAndSettings.ts';
+import { getNbOfHeaderLines } from './utility/getNbOfHeaderLines.ts';
 
 /**
  * some files may only store data

@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`compare parsers compare parsers cp.[mpt,mpr] 1`] = `
+exports[`compare parsers > compare parsers cp.[mpt,mpr] 1`] = `
 {
   "data": {
     "header": {

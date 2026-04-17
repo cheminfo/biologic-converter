@@ -1,5 +1,7 @@
-import type { LogAndSettings as PLS } from '../../parseLogAndSettings';
-import { addKVToObject } from '../addKeyWithoutOverwrite';
+import { describe, expect, it } from 'vitest';
+
+import type { LogAndSettings as PLS } from '../../parseLogAndSettings.ts';
+import { addKVToObject } from '../addKeyWithoutOverwrite.ts';
 
 describe('test both utilities', () => {
   it('addKVToObject', () => {

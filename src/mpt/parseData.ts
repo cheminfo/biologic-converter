@@ -1,11 +1,9 @@
-import { MeasurementVariable } from 'cheminfo-types';
+import type { MeasurementVariable } from 'cheminfo-types';
 
-import { getOneLetter } from '../utility/getOneLetter';
-import { dataColumnsByName } from '../utility/ids';
+import { getOneLetter } from '../utility/getOneLetter.ts';
+import { dataColumnsByName } from '../utility/ids.ts';
 
-interface Data {
-  [variableName: string]: MeasurementVariable;
-}
+type Data = Record<string, MeasurementVariable>;
 /**
  * Parses the data from the MPT file, which is a matrix of data.
  * @param data - string[] sliced where data starts

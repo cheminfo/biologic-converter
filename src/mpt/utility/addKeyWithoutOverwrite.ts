@@ -1,5 +1,5 @@
-import type { NormalizeKeyValue } from '../../utility/normalize';
-import type { LogAndSettings } from '../parseLogAndSettings';
+import type { NormalizeKeyValue } from '../../utility/normalize.ts';
+import type { LogAndSettings } from '../parseLogAndSettings.ts';
 
 type LogOrSettingVarsObject =
   | LogAndSettings['settings']['variables']

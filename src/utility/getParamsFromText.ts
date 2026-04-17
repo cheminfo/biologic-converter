@@ -1,5 +1,5 @@
-import { Param as InParam } from './preParamsLookUp';
-import { Technique } from './techniqueFromId';
+import type { Param as InParam } from './preParamsLookUp.ts';
+import type { Technique } from './techniqueFromId.ts';
 
 /**
  * Object with this type helps to produce the out parameters
@@ -10,15 +10,13 @@ type MetaParams = Technique['preParameters'];
  * Each parameter object
  */
 interface OutParam {
-  value: string | number | (string | number)[];
+  value: string | number | Array<string | number>;
   units?: string;
 }
 /**
  * Stores all parameters with value and optionally units
  */
-export interface OutParams {
-  [name: string]: OutParam;
-}
+export type OutParams = Record<string, OutParam>;
 
 export type GetParams = (
   metaParams: MetaParams,
@@ -33,7 +31,7 @@ export type GetParams = (
  * @return `[params, newIndex]`, `boolean` indicates whether is a known technique
  */
 export const getParams: GetParams = function getParams(metaParams, lines, i) {
-  let params: OutParams = {};
+  const params: OutParams = {};
 
   const initAt = i;
   if (lines[i].startsWith('Ns ')) {
@@ -71,7 +69,7 @@ function setThisParameter(
 ): OutParam {
   const { regexUnits, textReadType } = metaParam;
 
-  let param: Partial<OutParam> = {};
+  const param: Partial<OutParam> = {};
 
   if (regexUnits) {
     //units from name

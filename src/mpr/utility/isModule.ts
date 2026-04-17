@@ -1,4 +1,4 @@
-import { IOBuffer } from 'iobuffer';
+import type { IOBuffer } from 'iobuffer';
 /**
  * Tests if the upcoming data is from a module or not
  * buffer - the IOBuffer object;

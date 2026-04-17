@@ -1,7 +1,7 @@
-import { getParams } from '../../utility/getParamsFromText';
-import { normalizeKeyValue } from '../../utility/normalize';
-import { techniqueFromLongName } from '../../utility/techniqueFromLongName';
-import { MPS } from '../parseMPS';
+import { getParams } from '../../utility/getParamsFromText.ts';
+import { normalizeKeyValue } from '../../utility/normalize.ts';
+import { techniqueFromLongName } from '../../utility/techniqueFromLongName.ts';
+import type { MPS } from '../parseMPS.ts';
 
 /**
  * Adds key value pair to result object

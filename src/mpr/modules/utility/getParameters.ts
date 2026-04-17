@@ -1,17 +1,15 @@
-import { IOBuffer } from 'iobuffer';
+import type { IOBuffer } from 'iobuffer';
 
-import { Technique } from '../../../utility/techniqueFromId';
+import type { Technique } from '../../../utility/techniqueFromId.ts';
 
-import { unitsScale } from './mapIRangeToMPT';
-import { readType as pValue } from './readType';
+import { unitsScale } from './mapIRangeToMPT.ts';
+import { readType as pValue } from './readType.ts';
 
 /*
  * the binary is way less informative than the MPT file so
  * we use a map to get the information from the MPT file
  */
-export interface Parameters {
-  [name: string]: string | number;
-}
+export type Parameters = Record<string, string | number>;
 /**
  * Parses current technique (type of experiment carried out.)
  * @param buffer - our data at an expected offset
@@ -50,8 +48,8 @@ export function getTechniqueParameters(
           pName === 'I_range'
             ? unitsScale('I_range', val + 1)
             : pName === 'Is_unit'
-            ? unitsScale('Is_unit', val)
-            : val;
+              ? unitsScale('Is_unit', val)
+              : val;
       }
       return parameters;
     }

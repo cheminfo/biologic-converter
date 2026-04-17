@@ -1,4 +1,5 @@
-import { Param, preParamsLookUp } from './preParamsLookUp';
+import type { Param } from './preParamsLookUp.ts';
+import { preParamsLookUp } from './preParamsLookUp.ts';
 
 export interface Technique {
   name: string; //technique name

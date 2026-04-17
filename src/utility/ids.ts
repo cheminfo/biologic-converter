@@ -3,9 +3,7 @@
  * @description this module contains the ids of the mpr and also
  * some mappings that make mpt, mpr output similar.
  */
-interface FlagColumns {
-  [key: number]: { bitMask: number; name: string };
-}
+type FlagColumns = Record<number, { bitMask: number; name: string }>;
 /**
  * flag column ID bytes to the corresponding bitmask and name
  * As different from column IDs, flag column IDs don't need to be
@@ -20,9 +18,10 @@ export const flagColumns: FlagColumns = {
   0x41: { bitMask: 0b10000000, name: 'counter inc.' },
 };
 
-interface DataColumns {
-  [columnId: number]: { dType: string; name: string; unit: string };
-}
+type DataColumns = Record<
+  number,
+  { dType: string; name: string; unit: string }
+>;
 /**
  * data columns look-up table by Id
  */
@@ -126,9 +125,10 @@ export const dataColumns: DataColumns = {
   0x1f7: { dType: 'Float32', name: '|Ece h7|', unit: 'V' },
 };
 
-export interface DataColumnsByName {
-  [MPTName: string]: { [mprName: string]: string; unit: string };
-}
+export type DataColumnsByName = Record<
+  string,
+  { [mprName: string]: string; unit: string }
+>;
 /**
  * Map MPT to same MPR Type, plus add unit and more concise names
  * the unit will be taken from the original MPT file, and it may help

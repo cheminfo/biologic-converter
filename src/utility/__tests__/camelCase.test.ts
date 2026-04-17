@@ -1,4 +1,6 @@
-import { camelCase } from '../camelCase';
+import { expect, test } from 'vitest';
+
+import { camelCase } from '../camelCase.ts';
 
 test('camelCase', () => {
   expect(camelCase('helloWorld')).toBe('helloworld'); //single word
