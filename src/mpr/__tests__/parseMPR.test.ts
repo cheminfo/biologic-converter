@@ -1,8 +1,11 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-import { MPT, parseMPT } from '../../mpt/parseMPT';
-import { parseMPR } from '../parseMPR';
+import { describe, expect, it } from 'vitest';
+
+import type { MPT } from '../../mpt/parseMPT.ts';
+import { parseMPT } from '../../mpt/parseMPT.ts';
+import { parseMPR } from '../parseMPR.ts';
 
 const testFiles = join(__dirname, '/../../__tests__/data/all/zir');
 

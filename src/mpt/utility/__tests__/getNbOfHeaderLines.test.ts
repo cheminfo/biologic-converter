@@ -1,4 +1,6 @@
-import { getNbOfHeaderLines } from '../getNbOfHeaderLines';
+import { describe, expect, it } from 'vitest';
+
+import { getNbOfHeaderLines } from '../getNbOfHeaderLines.ts';
 
 describe('getNbOfHeaderLines', () => {
   it('should return the number of header lines', () => {

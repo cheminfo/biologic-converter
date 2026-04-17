@@ -1,9 +1,12 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-import { MPT, parseMPT } from '../parseMPT';
+import { describe, expect, it } from 'vitest';
 
-const dataFiles = join(__dirname, '../../__tests__/data/all/');
+import type { MPT } from '../parseMPT.ts';
+import { parseMPT } from '../parseMPT.ts';
+
+const dataFiles = join(import.meta.dirname, '../../__tests__/data/all/');
 
 describe('parseMPT', () => {
   it('test file', () => {

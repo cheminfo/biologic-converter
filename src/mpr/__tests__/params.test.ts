@@ -1,7 +1,9 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-import { parseMPR } from '../parseMPR';
+import { describe, expect, it } from 'vitest';
+
+import { parseMPR } from '../parseMPR.ts';
 
 const data = join(__dirname, '/../../__tests__/data/all/');
 // test a few different keys from each file,

@@ -1,4 +1,4 @@
-import { camelCase } from './camelCase';
+import { camelCase } from './camelCase.ts';
 /**
  * @module
  * Tries to make MPS and MPT settings and log module
@@ -59,7 +59,7 @@ const normalizeNumVal: Record<string, { type: string }> = {
 export type NormalizeKeyValue = [
   string, //camelCase key
   'log' | 'settings', //where to put it
-  string | number | { [key: string]: string | number }, //value
+  string | number | Record<string, string | number>, //value
 ];
 /**
  * Parse every key

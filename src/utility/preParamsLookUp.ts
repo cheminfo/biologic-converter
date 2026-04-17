@@ -7,9 +7,8 @@ export interface Param {
   textReadType: string;
   regexUnits?: RegExp; //to extract units from name
 }
-interface TechniquesToParams {
-  [techniqueName: string]: Param[];
-}
+
+type TechniquesToParams = Record<string, Param[]>;
 
 /**
  * The values are ordered in the way they appear both

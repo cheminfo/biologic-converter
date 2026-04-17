@@ -1,10 +1,10 @@
-import { TextData } from 'cheminfo-types';
+import type { TextData } from 'cheminfo-types';
 import { ensureString } from 'ensure-string';
 
-import { ComplexObject } from '../Types';
-import { normalizeFlag } from '../utility/normalize';
+import type { ComplexObject } from '../Types.ts';
+import { normalizeFlag } from '../utility/normalize.ts';
 
-import { addKeyValueToResult } from './utility/addKeyValueToResult';
+import { addKeyValueToResult } from './utility/addKeyValueToResult.ts';
 
 export interface MPS {
   name: string;

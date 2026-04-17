@@ -1,7 +1,9 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-import { parseMPS } from '../parseMPS';
+import { describe, expect, it } from 'vitest';
+
+import { parseMPS } from '../parseMPS.ts';
 
 const data = join(__dirname, '/../../__tests__/data/all/');
 describe('parseMPS', () => {
@@ -46,8 +48,7 @@ describe('parseMPS', () => {
       },
       log: {
         variables: {
-          filename:
-            'Z:\\Data group member\\Anna\\EC\\2021-10-20_AL0006_SolGel4_EC1_-0.5V_ref1021_1\\CA_AL0006_.mps',
+          filename: String.raw`Z:\Data group member\Anna\EC\2021-10-20_AL0006_SolGel4_EC1_-0.5V_ref1021_1\CA_AL0006_.mps`,
           device: 'SP-200',
         },
       },

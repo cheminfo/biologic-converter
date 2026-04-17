@@ -1,4 +1,6 @@
-import { techniqueFromId } from '../techniqueFromId';
+import { describe, expect, it } from 'vitest';
+
+import { techniqueFromId } from '../techniqueFromId.ts';
 
 describe('techniqueFromId', () => {
   it('GCPL', () => {

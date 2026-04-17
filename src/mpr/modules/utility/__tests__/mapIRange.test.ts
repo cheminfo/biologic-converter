@@ -1,4 +1,6 @@
-import { mapIRangeToMPT } from '../mapIRangeToMPT';
+import { describe, expect, it } from 'vitest';
+
+import { mapIRangeToMPT } from '../mapIRangeToMPT.ts';
 
 describe('mapIRangeToString', () => {
   it('should return the I Range as a string', () => {

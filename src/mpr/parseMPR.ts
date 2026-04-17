@@ -1,12 +1,17 @@
-import { BinaryData } from 'cheminfo-types';
+import type { BinaryData } from 'cheminfo-types';
 import { IOBuffer } from 'iobuffer';
 
-import { parseData, ParseData } from './modules/parseData';
-import { parseLogs, ParseLogs } from './modules/parseLogs';
-import { parseLoop, ParseLoop } from './modules/parseLoop';
-import { parseModuleHeader, ModuleHeader } from './modules/parseModuleHeader';
-import { parseSettings, ParseSettings } from './modules/parseSettings';
-import { isModule } from './utility/isModule';
+import type { ParseData } from './modules/parseData.ts';
+import { parseData } from './modules/parseData.ts';
+import type { ParseLogs } from './modules/parseLogs.ts';
+import { parseLogs } from './modules/parseLogs.ts';
+import type { ParseLoop } from './modules/parseLoop.ts';
+import { parseLoop } from './modules/parseLoop.ts';
+import type { ModuleHeader } from './modules/parseModuleHeader.ts';
+import { parseModuleHeader } from './modules/parseModuleHeader.ts';
+import type { ParseSettings } from './modules/parseSettings.ts';
+import { parseSettings } from './modules/parseSettings.ts';
+import { isModule } from './utility/isModule.ts';
 
 export interface MPR {
   name: string /** a string in the first line */;
@@ -23,14 +28,13 @@ export interface MPR {
  */
 export function parseMPR(mprData: BinaryData): MPR {
   const buffer = new IOBuffer(mprData);
-  const mpr: Partial<MPR> = {};
-
-  // top level properties
-  mpr.name = buffer
-    .readUtf8(0x34)
-    // eslint-disable-next-line no-control-regex
-    .replace(/\u001A|\u0000/g, '')
-    .trim();
+  const mpr: Partial<MPR> = {
+    name: buffer
+      .readUtf8(0x34)
+      // eslint-disable-next-line no-control-regex
+      .replaceAll(/\u001A|\u0000/g, '')
+      .trim(),
+  };
 
   while (isModule(buffer)) {
     const header = parseModuleHeader(buffer); //this is added to the objects below

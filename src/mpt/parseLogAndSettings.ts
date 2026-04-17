@@ -1,8 +1,9 @@
-import { OutParams, getParams } from '../utility/getParamsFromText';
-import { normalizeFlag, normalizeKeyValue } from '../utility/normalize';
-import type { Technique } from '../utility/techniqueFromId';
+import type { OutParams } from '../utility/getParamsFromText.ts';
+import { getParams } from '../utility/getParamsFromText.ts';
+import { normalizeFlag, normalizeKeyValue } from '../utility/normalize.ts';
+import type { Technique } from '../utility/techniqueFromId.ts';
 
-import { addKVToObject } from './utility/addKeyWithoutOverwrite';
+import { addKVToObject } from './utility/addKeyWithoutOverwrite.ts';
 
 export interface LogAndSettings {
   settings: {

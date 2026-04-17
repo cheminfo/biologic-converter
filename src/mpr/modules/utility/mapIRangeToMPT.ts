@@ -1,4 +1,4 @@
-import { MeasurementVariable } from 'cheminfo-types';
+import type { MeasurementVariable } from 'cheminfo-types';
 /**
  * MPT returns I Range as a string, and it seems that the number
  * returned in the binary (MPR) parser maps to it.
@@ -8,7 +8,7 @@ import { MeasurementVariable } from 'cheminfo-types';
  * @returns - the map to I Range as a string[]
  */
 export function mapIRangeToMPT(experData: MeasurementVariable): string[] {
-  let res: string[] = [];
+  const res: string[] = [];
   if (experData.label === 'I Range') {
     for (const v of experData.data) {
       res.push(unitsScale('I_range', v));

@@ -1,3 +1,0 @@
-extends:
-  - cheminfo-typescript
-  - cheminfo-typescript/unicorn

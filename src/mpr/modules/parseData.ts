@@ -1,11 +1,11 @@
-import { MeasurementVariable } from 'cheminfo-types';
-import { IOBuffer } from 'iobuffer';
+import type { MeasurementVariable } from 'cheminfo-types';
+import type { IOBuffer } from 'iobuffer';
 
-import { getOneLetter } from '../../utility/getOneLetter';
-import { flagColumns, dataColumns } from '../../utility/ids';
+import { getOneLetter } from '../../utility/getOneLetter.ts';
+import { dataColumns, flagColumns } from '../../utility/ids.ts';
 
-import { ModuleHeader } from './parseModuleHeader';
-import { readType } from './utility/readType';
+import type { ModuleHeader } from './parseModuleHeader.ts';
+import { readType } from './utility/readType.ts';
 
 export type ParseData = Record<string, MeasurementVariable>;
 
@@ -63,12 +63,12 @@ export function parseData(buffer: IOBuffer, header: ModuleHeader): ParseData {
         }
         //mutates the variable object
         const newValue = (bitMask & flagByte) >> shift;
-        variables[varName].data[i] = Number(newValue);
+        variables[varName].data[i] = newValue;
       } else if (dataColumns[id] !== undefined) {
         const { name: varName, dType } = dataColumns[id];
         const read = readType(buffer, dType);
         //mutates the variable object
-        variables[varName].data[i] = Number(read);
+        variables[varName].data[i] = read;
       }
     }
   }

@@ -1,4 +1,6 @@
-import { normalizeFlag, normalizeKeyValue } from '../normalize';
+import { describe, expect, it } from 'vitest';
+
+import { normalizeFlag, normalizeKeyValue } from '../normalize.ts';
 
 describe('individual key value', () => {
   it('Run on channel key-value pair', () => {

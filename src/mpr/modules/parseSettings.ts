@@ -1,8 +1,9 @@
-import { IOBuffer } from 'iobuffer';
+import type { IOBuffer } from 'iobuffer';
 
-import { techniqueFromId } from '../../utility/techniqueFromId';
+import { techniqueFromId } from '../../utility/techniqueFromId.ts';
 
-import { Parameters, getTechniqueParameters } from './utility/getParameters';
+import type { Parameters } from './utility/getParameters.ts';
+import { getTechniqueParameters } from './utility/getParameters.ts';
 
 export interface ParseSettings {
   technique: string; // Unique technique ID.
@@ -30,7 +31,7 @@ export interface ParseSettings {
  * bc these are experiment settings should this converge to MPS? (working on it.)
  */
 export function parseSettings(buffer: IOBuffer) {
-  let object: Partial<ParseSettings> = {};
+  const object: Partial<ParseSettings> = {};
   const zero = buffer.offset;
   const { name: technique, preParameters } = techniqueFromId(buffer.readByte());
   object.technique = technique;
