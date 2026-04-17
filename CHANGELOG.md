@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.0.0](https://github.com/cheminfo/biologic-converter/compare/v0.6.0...v1.0.0) (2026-04-17)
+
+
+### ⚠ BREAKING CHANGES
+
+* migrate to ESM-only ([#39](https://github.com/cheminfo/biologic-converter/issues/39))
+
+### Features
+
+* migrate to ESM-only ([#39](https://github.com/cheminfo/biologic-converter/issues/39)) ([3a5338d](https://github.com/cheminfo/biologic-converter/commit/3a5338d4d7c12461150a4598f0d79ebdfac728cb))
+
 ## [0.6.0](https://github.com/cheminfo/biologic-converter/compare/v0.5.0...v0.6.0) (2022-11-21)
 
 
