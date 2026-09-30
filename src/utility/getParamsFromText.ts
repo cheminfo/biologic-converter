@@ -1,3 +1,4 @@
+import { durationToSeconds } from './durationToSeconds.ts';
 import type { Param as InParam } from './preParamsLookUp.ts';
 import type { Technique } from './techniqueFromId.ts';
 
@@ -77,6 +78,14 @@ function setThisParameter(
     if (result?.groups?.units) {
       param.units = result.groups.units;
     }
+  }
+
+  if (param.units === 'h:m:s') {
+    // A duration is not a number: read as one it keeps only its hours.
+    const seconds = paramValues.map((v) => durationToSeconds(v) ?? v);
+    param.value = seconds.length === 1 ? seconds[0] : seconds;
+    param.units = 's';
+    return param as OutParam;
   }
 
   if (textReadType === 'string') {

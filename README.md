@@ -76,10 +76,10 @@ console.log(result);
       date: '04/29/19'
     },
     variables: {
-      z: [Object],
-      y: [Object],
-      x: [Object],
-      w: [Object],
+      time: [Object],
+      '<Ewe>': [Object],
+      I: [Object],
+      'I Range': [Object],
       //...
     }
   },
@@ -102,6 +102,26 @@ console.log(result);
 ```
 
 </details>
+
+## Data columns are keyed by their label
+
+`data.variables` is keyed by the name the instrument gives each column —
+`time`, `<Ewe>`, `I Range` — so a measurement can be read without knowing
+where it sat in the record, and an `.mpr` and the `.mpt` of the same
+experiment line up key for key.
+
+Before 2.0.0 the columns were renamed to `a`..`z` then `A`..`Z` by position,
+which capped a file at 52 columns: a GEIS or PEIS record has 53 and could not
+be read at all. Where two ids share a label, the later one carries its id —
+`<Ewe> (0xae)`.
+
+## A record that does not add up is refused
+
+The width of a record is the sum of its columns', and it is checked against
+the module's own declared length before any value is read. A column id the
+table does not know is refused for the same reason: an unknown id consumes no
+bytes, so every field after it would be read from the wrong offset and the
+file would decode into plausible numbers rather than into an error.
 
 ## License
 

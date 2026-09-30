@@ -28,14 +28,16 @@ describe('techniqueFromLongName', () => {
     expect(techniqueFromLongName('Wait').name).toBe('WAIT');
   });
   it('PEIS', () => {
-    expect(() =>
-      techniqueFromLongName('Potentio Electrochemical Impedance Spectroscopy'),
-    ).toThrow('Not implemented name: PEIS');
+    expect(
+      techniqueFromLongName('Potentio Electrochemical Impedance Spectroscopy')
+        .name,
+    ).toBe('PEIS');
   });
   it('GEIS', () => {
-    expect(() =>
-      techniqueFromLongName('Galvano Electrochemical Impedance Spectroscopy'),
-    ).toThrow('Not implemented name: GEIS');
+    expect(
+      techniqueFromLongName('Galvano Electrochemical Impedance Spectroscopy')
+        .name,
+    ).toBe('GEIS');
   });
   it('ZIR', () => {
     expect(techniqueFromLongName('IR compensation (PEIS)').name).toBe('ZIR');
@@ -44,9 +46,7 @@ describe('techniqueFromLongName', () => {
     expect(techniqueFromLongName('Linear Sweep Voltammetry').name).toBe('LSV');
   });
   it('MB', () => {
-    expect(() => techniqueFromLongName('Modulo Bat')).toThrow(
-      'Not implemented technique: MB',
-    );
+    expect(techniqueFromLongName('Modulo Bat').name).toBe('MB');
   });
   it('MIR', () => {
     expect(techniqueFromLongName('Manual IR compensation').name).toBe('MIR');

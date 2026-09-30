@@ -3,7 +3,12 @@ import { preParamsLookUp } from './preParamsLookUp.ts';
 
 export interface Technique {
   name: string; //technique name
-  preParameters: Param[]; //an object helper to parse the parameters
+  /**
+   * How to read the technique's parameter block. Empty for a technique whose
+   * block has not been mapped yet: the technique is still named and its data
+   * still read, and only `params` comes back empty.
+   */
+  preParameters: Param[];
 }
 
 /**
@@ -31,15 +36,15 @@ export function techniqueFromId(id: number): Technique {
     case 0x1c:
       return { name: 'WAIT', preParameters: preParamsLookUp.waitParams };
     case 0x1d:
-      throw new Error(`Not implemented name: PEIS`);
+      return { name: 'PEIS', preParameters: [] };
     case 0x1e:
-      throw new Error(`Not implemented name: GEIS`);
+      return { name: 'GEIS', preParameters: [] };
     case 0x32:
       return { name: 'ZIR', preParameters: preParamsLookUp.zirParams };
     case 0x6c:
       return { name: 'LSV', preParameters: preParamsLookUp.lsvParams };
     case 0x7f:
-      throw new Error(`Not implemented name: MB`);
+      return { name: 'MB', preParameters: [] };
     default:
       throw new Error(`Not implemented name: unknown (0x${id.toString(16)})`);
   }

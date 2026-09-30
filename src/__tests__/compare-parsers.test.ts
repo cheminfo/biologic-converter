@@ -77,8 +77,8 @@ describe('compare parsers', () => {
 
     expect(e1.value).toBeCloseTo(mprSettings?.electrodeSurfaceArea);
     expect(c1.value).toBeCloseTo(mprSettings?.characteristicMass);
-    const mprTime = mpr.data.variables.c;
-    const mptTime = mpt.data.variables.c;
+    const mprTime = mpr.data.variables.time;
+    const mptTime = mpt.data.variables.time;
     expect(mprTime.data).toHaveLength(mptTime.data.length);
     expect(mprTime.data[123]).toBeCloseTo(mptTime.data[123]);
     expect(mprTime.data[128]).toBeCloseTo(mptTime.data[128]);

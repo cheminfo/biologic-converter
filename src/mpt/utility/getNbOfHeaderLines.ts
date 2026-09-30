@@ -6,7 +6,7 @@ export function getNbOfHeaderLines(headerLine: string): number {
   if (!headerLine.startsWith('Nb header lines')) {
     throw new Error('Missing header line.');
   }
-  const val = Number.parseInt(headerLine.split(' : ')[1].trim(), 10);
+  const val = Number.parseInt(headerLine.split(' : ', 2)[1].trim(), 10);
   if (Number.isNaN(val)) {
     throw new Error(
       'Can not find a numeric value for the number of lines. Aborting.',

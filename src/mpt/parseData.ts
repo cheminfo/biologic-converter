@@ -1,11 +1,13 @@
 import type { MeasurementVariable } from 'cheminfo-types';
 
-import { getOneLetter } from '../utility/getOneLetter.ts';
 import { dataColumnsByName } from '../utility/ids.ts';
 
 type Data = Record<string, MeasurementVariable>;
 /**
  * Parses the data from the MPT file, which is a matrix of data.
+ *
+ * Keyed by the column's label, the same way the MPR parser keys its own, so a
+ * measurement can be compared between the two exports of one experiment.
  * @param data - string[] sliced where data starts
  * @returns - the data as an object, keys are the names of the data-fields
  */
@@ -20,9 +22,9 @@ export function parseData(data: string[]): Data {
   for (let i = 0; i < fields.length; i++) {
     const fieldName = fields[i];
     if (fieldName === '') continue;
-    const oneLetter = getOneLetter(i);
     const { name, unit } = mptNameToMPRName(fieldName);
-    variables[oneLetter] = {
+    const key = variables[name] === undefined ? name : `${name} (${i})`;
+    variables[key] = {
       label: name,
       units: unit,
       isDependent: fieldName !== 'time/s',

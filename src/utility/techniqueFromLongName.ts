@@ -20,15 +20,15 @@ export function techniqueFromLongName(id: string): Technique {
     case 'Wait':
       return { name: 'WAIT', preParameters: preParamsLookUp.waitParams };
     case 'Potentio Electrochemical Impedance Spectroscopy':
-      throw new Error('Not implemented name: PEIS');
+      return { name: 'PEIS', preParameters: [] };
     case 'Galvano Electrochemical Impedance Spectroscopy':
-      throw new Error('Not implemented name: GEIS');
+      return { name: 'GEIS', preParameters: [] };
     case 'IR compensation (PEIS)':
       return { name: 'ZIR', preParameters: preParamsLookUp.zirParams };
     case 'Linear Sweep Voltammetry':
       return { name: 'LSV', preParameters: preParamsLookUp.lsvParams };
     case 'Modulo Bat':
-      throw new Error('Not implemented technique: MB');
+      return { name: 'MB', preParameters: [] };
     case 'Manual IR compensation': //this technique isn't listed anywhere else
       return { name: 'MIR', preParameters: preParamsLookUp.mirParams };
     default:

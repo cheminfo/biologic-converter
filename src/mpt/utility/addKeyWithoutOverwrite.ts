@@ -2,8 +2,7 @@ import type { NormalizeKeyValue } from '../../utility/normalize.ts';
 import type { LogAndSettings } from '../parseLogAndSettings.ts';
 
 type LogOrSettingVarsObject =
-  | LogAndSettings['settings']['variables']
-  | LogAndSettings['log']['variables'];
+  LogAndSettings['settings']['variables'] | LogAndSettings['log']['variables'];
 
 export function addKVToObject(
   parentObject: LogOrSettingVarsObject,

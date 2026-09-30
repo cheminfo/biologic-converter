@@ -37,7 +37,7 @@ describe('parseMPT', () => {
     });
 
     //some props in vars
-    expect(data.variables.c).toMatchObject({
+    expect(data.variables.error).toMatchObject({
       label: 'error',
       units: '',
       isDependent: true,
@@ -75,12 +75,12 @@ describe('parseMPT', () => {
       interpreterVersion: 'v11.12',
     });
     expect(Object.keys(data.variables || {})).toHaveLength(12);
-    expect(data?.variables.f).toMatchObject({
+    expect(data?.variables.time).toMatchObject({
       label: 'time',
       units: 's',
       isDependent: false,
     });
-    expect(Object.keys(data.variables.f.data || {})).toHaveLength(5103);
+    expect(Object.keys(data.variables.time.data || {})).toHaveLength(5103);
   });
 
   it('empty file throws', () => {

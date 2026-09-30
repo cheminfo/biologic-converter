@@ -24,10 +24,14 @@ describe('techniqueFromId', () => {
     expect(techniqueFromId(0x1c).name).toBe('WAIT');
   });
   it('PEIS', () => {
-    expect(() => techniqueFromId(0x1d)).toThrow('Not implemented name: PEIS');
+    // Named, with no parameter block mapped yet: the data is still read.
+    expect(techniqueFromId(0x1d).name).toBe('PEIS');
+    expect(techniqueFromId(0x1d).preParameters).toStrictEqual([]);
   });
   it('GEIS', () => {
-    expect(() => techniqueFromId(0x1e)).toThrow('Not implemented name: GEIS');
+    // Named, with no parameter block mapped yet: the data is still read.
+    expect(techniqueFromId(0x1e).name).toBe('GEIS');
+    expect(techniqueFromId(0x1e).preParameters).toStrictEqual([]);
   });
   it('ZIR', () => {
     expect(techniqueFromId(0x32).name).toBe('ZIR');
@@ -36,7 +40,9 @@ describe('techniqueFromId', () => {
     expect(techniqueFromId(0x6c).name).toBe('LSV');
   });
   it('MB', () => {
-    expect(() => techniqueFromId(0x7f)).toThrow('Not implemented name: MB');
+    // Named, with no parameter block mapped yet: the data is still read.
+    expect(techniqueFromId(0x7f).name).toBe('MB');
+    expect(techniqueFromId(0x7f).preParameters).toStrictEqual([]);
   });
   it('unknown', () => {
     expect(() => techniqueFromId(0x123)).toThrow(
